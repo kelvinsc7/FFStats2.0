@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FFStats.Domain\FFStats.Domain.csproj" />
+    <ProjectReference Include="..\FFStats.Persistence\FFStats.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

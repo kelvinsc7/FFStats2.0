@@ -1,0 +1,33 @@
+<H2>Partidas</H2>
+<hr>
+<form action="" class="form-inline">
+  <div class="form-group mb-2">
+    <input type="text" class="form-control mr-2" placeholder="Buscar">
+    <button class="btn btn-outline-success">Buscar</button>
+  </div>
+</form>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Descrição</th>
+      <th>Treino</th>
+      <th>Mapa</th>
+      <th>Call</th>
+      <th>Modo</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of partidas">
+      <th>{{item.partidaId}}</th>
+      <th>{{item.partidaDescricao}}</th>
+      <th>{{item.treinoId}}</th>
+      <th>{{item.mapaId}}</th>
+      <th>{{item.callId}}</th>
+      <th>{{item.modoid}}</th>
+      <th>{{item.partidaData}}</th>
+    </tr>
+  </tbody>
+</table>
+
