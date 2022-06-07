@@ -1,0 +1,56 @@
+<app-Titulo [titulo]="'Call'"></app-Titulo>
+<div class="form-inline">
+  <button type="button" class="btn btn-success btn-sm mr-2">
+    <i class=" fa fa-add"></i>
+    Nova call
+  </button>
+  <div class="form-group mb-2 ">
+    <label class="mr-2">Filtro: </label>
+    <input type="text" class="form-control mr-2 " placeholder="Buscar" [(ngModel)]="filtroCall">
+  </div>
+</div>
+<hr>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Call</th>
+      <th>Mapa</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="Calls && Calls.length">
+    <tr *ngFor="let item of CallFiltrada">
+      <th>{{item.id}}</th>
+      <th>{{item.callCidade}}</th>
+      <th>{{item.mapa.mapaNome}}</th>
+      <th>
+        <button type="button" class="btn btn-success btn-sm mr-2" tooltip="Ver">
+          <i class=" fa fa-eye"></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
+          <i class=" fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+          <i class=" fa fa-trash"></i>
+        </button>
+      </th>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!CallFiltrada.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhhuma call encontrada!</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Deseja realmente efetuar a exclusão?</p>
+    <button type="button" class="btn btn-primary mr-3" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-danger" (click)="decline()" >Não</button>
+  </div>
+</ng-template>

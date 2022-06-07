@@ -17,7 +17,8 @@ namespace FFStats.Persistence.Persistences
 
         public async Task<Treino[]> GetAllTreinoAsync(bool IncludePartidas)
         {
-            IQueryable<Treino> query = _context.Treinos;
+            IQueryable<Treino> query = _context.Treinos
+                                .Include(t => t.Partidas);
             if(IncludePartidas)
             {
                 query = query.AsNoTracking().Include(t=> t.Partidas);

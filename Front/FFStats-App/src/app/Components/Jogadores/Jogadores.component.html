@@ -1,0 +1,64 @@
+<app-Titulo [titulo]="'Jogadores'"></app-Titulo>
+<div class="form-inline">
+  <button type="button" class="btn btn-success btn-sm mr-2">
+    <i class=" fa fa-add"></i>
+    Novo Jogador
+  </button>
+  <div class="form-group mb-2 ">
+    <label class="mr-2">Filtro: </label>
+    <input type="text" class="form-control mr-2 " placeholder="Buscar" [(ngModel)]="filtroLista">
+  </div>
+</div>
+<hr>
+<table class="table table-striped text-center">
+  <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Nome</th>
+      <th>Nick</th>
+      <th>Id</th>
+      <th>Qtde. Partidas</th>
+      <th>Kills</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="jogadores && jogadores.length">
+    <tr *ngFor="let item of jogadoresFiltrados">
+      <th>{{item.id}}</th>
+      <th>{{item.jogadorNome | titlecase }}</th>
+      <th>{{item.jogadorNick | titlecase }}</th>
+      <th>000000000</th>
+      <th>{{item.partidasJogadores.length}}</th>
+      <th>53</th>
+      <th>
+        <button type="button" class="btn btn-success btn-sm mr-2" tooltip="Ver">
+          <i class=" fa fa-eye"></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
+          <i class=" fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+          <i class=" fa fa-trash"></i>
+        </button>
+      </th>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!jogadoresFiltrados.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhhum Jogador encontrado!</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Deseja realmente efetuar a exclusão?</p>
+    <button type="button" class="btn btn-primary mr-3" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-danger" (click)="decline()" >Não</button>
+  </div>
+</ng-template>
+
+

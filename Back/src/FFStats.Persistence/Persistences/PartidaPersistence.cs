@@ -18,7 +18,12 @@ namespace FFStats.Persistence.Persistences
         //Partida
         public async Task<Partida[]> GetAllPartidasAsync(bool IncludeJogador = false)
         {
-            IQueryable<Partida> query = _context.Partidas;
+            IQueryable<Partida> query = _context.Partidas
+                            .Include(p => p.treino)
+                            .Include(p => p.mapa)
+                            .Include(p => p.call)
+                            .Include(p => p.modo)
+                            .Include(p => p.sumodo);
             if(IncludeJogador)
             {
                 query = query.AsNoTracking().Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
@@ -28,7 +33,12 @@ namespace FFStats.Persistence.Persistences
         }
         public async Task<Partida> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false)
         {
-            IQueryable<Partida> query = _context.Partidas;
+            IQueryable<Partida> query = _context.Partidas
+                            .Include(p => p.treino)
+                            .Include(p => p.mapa)
+                            .Include(p => p.call)
+                            .Include(p => p.modo)
+                            .Include(p => p.sumodo);
             if(IncludeJogador)
             {
                 query = query.Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
@@ -38,7 +48,12 @@ namespace FFStats.Persistence.Persistences
         }
         public async Task<Partida[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false)
         {
-            IQueryable<Partida> query = _context.Partidas;
+            IQueryable<Partida> query = _context.Partidas
+                            .Include(p => p.treino)
+                            .Include(p => p.mapa)
+                            .Include(p => p.call)
+                            .Include(p => p.modo)
+                            .Include(p => p.sumodo);    
             if(IncludeJogador)
             {
                 query = query.AsNoTracking().Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
