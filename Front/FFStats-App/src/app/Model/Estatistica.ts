@@ -2,15 +2,15 @@ import { Jogador } from "./Jogador";
 import { Partida } from "./Partida";
 
 export interface Estatistica {
-  id: Number;
-  partidaId: Number;
+  id: number;
+  partidaId: number;
   partida: Partida[];
-  jogadorId: Number;
+  jogadorId: number;
   jogador: Jogador[];
-  kill: Number;
-  dano: Number;
-  tempo: Number;
-  assistencia: Number;
-  ressucitado: Number;
-  salvador: Number;
+  kill: number;
+  dano: number;
+  tempo: number;
+  assistencia: number;
+  ressucitado: number;
+  salvador: number;
 }

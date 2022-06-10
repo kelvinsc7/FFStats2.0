@@ -1,7 +1,7 @@
 import { Call } from "./Call";
 
 export interface Mapa {
-  id: Number;
+  id: number;
   mapaNome: string ;
   calls: Call[];
 }

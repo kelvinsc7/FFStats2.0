@@ -1,8 +1,8 @@
 import { Mapa } from "./Mapa";
 
 export interface Call {
-  id: Number;
+  id: number;
   callCidade: string;
-  mapaId: Number;
+  mapaId: number;
   mapa: Mapa;
 }

@@ -115,5 +115,19 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false)
+        {
+            try
+            {
+                var partidas = await _partidaPersistence.GetPartidasByMapaIdAsync(id,IncludeJogador);
+                if(partidas == null) return null;
+
+                return partidas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

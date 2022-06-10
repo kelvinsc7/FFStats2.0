@@ -8,6 +8,8 @@
 
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+@import "../node_modules/bootswatch/dist/spacelab/bootstrap.min.css";
+
 
 /*Imports de spiners*/
 @import "../node_modules/ngx-spinner/animations/ball-8bits.css";

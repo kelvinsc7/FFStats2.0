@@ -4,6 +4,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Treino } from '../../Model/Treino';
 import { TreinoService } from '../../Services/treino.service';
+import { Modo } from 'src/app/Model/Modo';
+import { ModoService } from 'src/app/Services/modo.service';
+import { Partida } from 'src/app/Model/Partida';
 @Component({
   selector: 'app-Treino',
   templateUrl: './Treino.component.html',
@@ -15,6 +18,14 @@ export class TreinoComponent implements OnInit {
   public treinos: Treino[] = [];
   public treinoFiltrada : Treino[] = [];
   private _filtrotreino: string = '';
+  private modo :Modo  []=[];
+  private _desc : Modo []= []
+
+  public get desc()
+  {
+    return this._desc
+  }
+
   public get filtrotreino()
   {
     return this._filtrotreino;
@@ -35,19 +46,19 @@ export class TreinoComponent implements OnInit {
     private treinoService: TreinoService,
     private modalService : BsModalService,
     private toastr: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private modoService : ModoService,
   ) { }
 
   ngOnInit() {
     this.spinner.show();
+    this.getModos();
     this.getTreinos();
   }
-  public getTreinos(): void{
-    this.treinoService.getTreinos().subscribe({
-      next: (_treino: Treino[]) =>{
-        this.treinos = _treino
-        this.treinoFiltrada = _treino
-
+  public getModos(): void{
+    this.modoService.getModos().subscribe({
+      next: (modo: Modo[]) =>{
+        this.modo = modo
       },
       error: (error: any)=>{
         this.spinner.hide(),
@@ -56,6 +67,30 @@ export class TreinoComponent implements OnInit {
       complete: () => this.spinner.hide()
     })
   }
+  public getTreinos(): void{
+    this.treinoService.getTreinos().subscribe({
+      next: (_treino: Treino[]) =>{
+        this.treinos = _treino
+        this.treinoFiltrada = _treino
+        this.atibuiModo()
+      },
+      error: (error: any)=>{
+        this.spinner.hide(),
+        this.toastr.error("Erro ao carregar Treinos","Erro!")
+      },
+      complete: () => this.spinner.hide()
+    })
+  }
+  public atibuiModo():void
+  {
+    for(let i =0;i<=this.treinoFiltrada.length;i++)
+    {
+      var j : number = this.treinoFiltrada[0].partidas[0].modoId
+      this._desc = this.modo.filter(
+        m => m.id == j)
+    }
+  }
+
   public openModal(template: TemplateRef<any>): void {
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }

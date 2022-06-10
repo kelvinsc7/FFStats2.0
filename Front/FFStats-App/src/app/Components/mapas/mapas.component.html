@@ -1,54 +1,74 @@
-<app-Titulo [titulo]="'Mapas'"></app-Titulo>
-<div class="form-inline">
-  <button type="button" class="btn btn-success btn-sm mr-2">
-    <i class=" fa fa-add"></i>
-    Novo Mapa
-  </button>
-  <div class="form-group mb-2 ">
-    <label class="mr-2">Filtro: </label>
-    <input type="text" class="form-control mr-2 " placeholder="Buscar" [(ngModel)]="filtromapa">
+<app-Titulo [titulo]="'Mapas'" [iconclass]="'fa-solid fa-map'"></app-Titulo>
+
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class=" mr-5">
+      <a href="#" type="button" class="btn btn-success d-flex">
+        <i class=" fa fa-plus-circle my-1"></i>
+        <b class="ml-1 d-none d-sm-block">Novo Mapa</b>
+      </a>
+    </div>
+    <div class="flex-fill">
+      <div class="input-group mb-2 ">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Filtro: </div>
+        </div>
+        <input type="text" class="form-control" placeholder="Filtrar por Mapa" [(ngModel)]="filtromapa">
+      </div>
+    </div>
+  </div>
+  <div class="mt-3">
+    <table class="table table-striped text-center">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Mapa</th>
+          <th>Cidades</th>
+          <th>Qtde. Partidas</th>
+          <th>Booyah</th>
+          <th>Kills</th>
+          <th>Melhor Jogador</th>
+          <th>Maior Call</th>
+          <th>Opções</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="mapas && mapas.length">
+        <tr *ngFor="let item of mapaFiltrada; let i = index">
+          <th>{{item.id}}</th>
+          <th>{{item.mapaNome}}</th>
+          <th>
+            <b *ngFor="let c of item.calls">
+              {{c.callCidade}} |
+            </b>
+          </th>
+          <th>{{qtdePardida[i+1]}}</th>
+          <th>{{booyahh[i+1]}}</th>
+          <th>530</th>
+          <th>Vrt Bliminha</th>
+          <th>Brasilia</th>
+          <th>
+            <button type="button" class="btn btn-success btn-sm mr-2" tooltip="Ver">
+              <i class=" fa fa-eye"></i>
+            </button>
+            <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
+              <i class=" fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+              <i class=" fa fa-trash"></i>
+            </button>
+          </th>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="!mapaFiltrada.length">
+        <tr>
+          <td colspan="8" class="text-center">
+            <h4>Nenhhuma mapa encontrada!</h4>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   </div>
 </div>
-<hr>
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th>#</th>
-      <th>Mapa</th>
-      <th>Calls</th>
-      <th>Opções</th>
-    </tr>
-  </thead>
-  <tbody *ngIf="mapas && mapas.length">
-    <tr *ngFor="let item of mapaFiltrada">
-      <th>{{item.id}}</th>
-      <th>{{item.mapaNome}}</th>
-      <th>
-        <b *ngFor="let c of item.calls">
-          {{c.callCidade}} |
-        </b>
-      </th>
-      <th>
-        <button type="button" class="btn btn-success btn-sm mr-2" tooltip="Ver">
-          <i class=" fa fa-eye"></i>
-        </button>
-        <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
-          <i class=" fa fa-edit"></i>
-        </button>
-        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
-          <i class=" fa fa-trash"></i>
-        </button>
-      </th>
-    </tr>
-  </tbody>
-  <tfoot *ngIf="!mapaFiltrada.length">
-    <tr>
-      <td colspan="8" class="text-center">
-        <h4>Nenhhuma mapa encontrada!</h4>
-      </td>
-    </tr>
-  </tfoot>
-</table>
 
 
 <ng-template #template>

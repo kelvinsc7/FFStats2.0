@@ -2,8 +2,8 @@ import { Jogador } from "./Jogador";
 import { Partida } from "./Partida";
 
 export interface PartidaJogador {
-  jogadorId: Number;
+  jogadorId: number;
   jogador: Jogador[];
-  partidaId: Number;
+  partidaId: number;
   partida: Partida[];
 }

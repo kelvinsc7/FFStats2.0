@@ -8,20 +8,20 @@ import { Treino } from "./Treino";
 
 export interface Partida {
 
-  id: Number;
+  id: number;
   partidaDescricao: string;
-  treinoId: Number;
+  treinoId: number;
   treino: Treino;
-  mapaId: Number;
+  mapaId: number;
   mapa: Mapa;
-  callId: Number;
+  callId: number;
   call: Call;
-  modoId: Number;
+  modoId: number;
   modo: Modo;
-  submodoId: Number;
+  submodoId: number;
   sumodo: Submodo;
   partidaData?: Date;
-  posicao: Number;
+  posicao: number;
   partidasJogadores: Jogador[];
   estatisticas: Estatistica[];
 

@@ -1,7 +1,7 @@
 import { Partida } from "./Partida";
 
 export interface Jogador {
-  id: Number;
+  id: number;
   jogadorNome: string;
   jogadorNick: string;
   partidasJogadores: Partida[];

@@ -18,13 +18,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './shared/nav/nav.component';
 import { TituloComponent } from './shared/Titulo/Titulo.component';
+import { FooterComponent } from './shared/footer/footer.component';
 import { CallComponent } from './Components/Call/Call.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { JogadoresComponent } from './Components/Jogadores/Jogadores.component';
 import { MapasComponent } from './Components/mapas/mapas.component';
 import { ModoComponent } from './Components/Modo/Modo.component';
 import { PartidasComponent } from './Components/partidas/partidas.component';
-import { PerfilComponent } from './Components/Perfil/Perfil.component';
+import { PerfilComponent } from './Components/user/Perfil/Perfil.component';
 import { TreinoComponent } from './Components/Treino/Treino.component';
 
 import { PartidaService } from './Services/partida.service';
@@ -35,6 +36,14 @@ import { TreinoService } from './Services/treino.service';
 import { MapaService } from './Services/mapa.service';
 import { CallService } from './Services/call.service';
 import { ModoService } from './Services/modo.service';
+import { EstatisticaService } from './Services/estatistica.service';
+import { JogadoresListaComponent } from './Components/Jogadores/jogadores-lista/jogadores-lista.component';
+import { JogadoresDetalhesComponent } from './Components/Jogadores/jogadores-detalhes/jogadores-detalhes.component';
+import { UserComponent } from './Components/user/user.component';
+import { LoginComponent } from './Components/user/login/login.component';
+import { RegistrationComponent } from './Components/user/registration/registration.component';
+
+
 
 @NgModule({
   declarations: [
@@ -44,12 +53,18 @@ import { ModoService } from './Services/modo.service';
     CallComponent,
     DashboardComponent,
     JogadoresComponent,
+    JogadoresListaComponent,
+    JogadoresDetalhesComponent,
     MapasComponent,
     ModoComponent,
     PartidasComponent,
     PerfilComponent,
     TreinoComponent,
-    DateTimeFormatPipe
+    FooterComponent,
+    DateTimeFormatPipe,
+    UserComponent,
+    LoginComponent,
+    RegistrationComponent,
    ],
   imports: [
     BrowserModule,
@@ -76,6 +91,7 @@ import { ModoService } from './Services/modo.service';
     MapaService,
     CallService,
     ModoService,
+    EstatisticaService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
