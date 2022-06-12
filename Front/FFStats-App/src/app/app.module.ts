@@ -1,11 +1,12 @@
+//Area Angular
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, TemplateRef } from '@angular/core';
 
-
+//Area NGX
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -14,34 +15,64 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
+//Area APP
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+//Area Shared
 import { NavComponent } from './shared/nav/nav.component';
 import { TituloComponent } from './shared/Titulo/Titulo.component';
 import { FooterComponent } from './shared/footer/footer.component';
+
+//Area Call Componet
 import { CallComponent } from './Components/Call/Call.component';
-import { DashboardComponent } from './Components/dashboard/dashboard.component';
-import { JogadoresComponent } from './Components/Jogadores/Jogadores.component';
-import { MapasComponent } from './Components/mapas/mapas.component';
-import { ModoComponent } from './Components/Modo/Modo.component';
-import { PartidasComponent } from './Components/partidas/partidas.component';
-import { PerfilComponent } from './Components/user/Perfil/Perfil.component';
-import { TreinoComponent } from './Components/Treino/Treino.component';
-
-import { PartidaService } from './Services/partida.service';
-import { JogadorService } from './Services/jogador.service';
-
-import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
-import { TreinoService } from './Services/treino.service';
-import { MapaService } from './Services/mapa.service';
+import { CallDetalhesComponent } from './Components/Call/call-detalhes/call-detalhes.component';
+import { CallListasComponent } from './Components/Call/call-listas/call-listas.component';
 import { CallService } from './Services/call.service';
-import { ModoService } from './Services/modo.service';
-import { EstatisticaService } from './Services/estatistica.service';
+
+//Area Jogadores Components
+import { JogadoresComponent } from './Components/Jogadores/Jogadores.component';
 import { JogadoresListaComponent } from './Components/Jogadores/jogadores-lista/jogadores-lista.component';
 import { JogadoresDetalhesComponent } from './Components/Jogadores/jogadores-detalhes/jogadores-detalhes.component';
+import { JogadorService } from './Services/jogador.service';
+
+//Area Dashboard Components
+import { DashboardComponent } from './Components/dashboard/dashboard.component';
+
+//Area Mapas Components
+import { MapasComponent } from './Components/mapas/mapas.component';
+import { MapaDetalhesComponent } from './Components/mapas/mapa-detalhes/mapa-detalhes.component';
+import { MapaListaComponent } from './Components/mapas/mapa-lista/mapa-lista.component';
+import { MapaService } from './Services/mapa.service';
+
+//area modo Components
+import { ModoComponent } from './Components/Modo/Modo.component';
+import { ModoService } from './Services/modo.service';
+
+//Area Partida Components
+import { PartidasComponent } from './Components/partidas/partidas.component';
+import { PartidasDetalhesComponent} from './Components/partidas/partidas-detalhes/partidas-detalhes.component'
+import { PartidasListaComponent } from './Components/partidas/partidas-lista/partidas-lista.component';
+import { PartidaService } from './Services/partida.service';
+
+//Area Perfil Components
+import { PerfilComponent } from './Components/user/Perfil/Perfil.component';
 import { UserComponent } from './Components/user/user.component';
 import { LoginComponent } from './Components/user/login/login.component';
 import { RegistrationComponent } from './Components/user/registration/registration.component';
+
+//Area Treino Components
+import { TreinoComponent } from './Components/Treino/Treino.component';
+import { TreinoDetalhesComponent } from './Components/Treino/treino-detalhes/treino-detalhes.component';
+import { TreinoListaComponent } from './Components/Treino/treino-lista/treino-lista.component';
+import { TreinoService } from './Services/treino.service';
+
+//Area Estatisticas Components
+import { EstatisticaService } from './Services/estatistica.service';
+
+//Area Pipes
+import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
+
 
 
 
@@ -51,15 +82,23 @@ import { RegistrationComponent } from './Components/user/registration/registrati
     NavComponent,
     TituloComponent,
     CallComponent,
+    CallDetalhesComponent,
+    CallListasComponent,
     DashboardComponent,
     JogadoresComponent,
     JogadoresListaComponent,
     JogadoresDetalhesComponent,
     MapasComponent,
+    MapaDetalhesComponent,
+    MapaListaComponent,
     ModoComponent,
     PartidasComponent,
+    PartidasListaComponent,
+    PartidasDetalhesComponent,
     PerfilComponent,
     TreinoComponent,
+    TreinoDetalhesComponent,
+    TreinoListaComponent,
     FooterComponent,
     DateTimeFormatPipe,
     UserComponent,
@@ -73,6 +112,7 @@ import { RegistrationComponent } from './Components/user/registration/registrati
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
     FormsModule,
+    ReactiveFormsModule,
     TooltipModule.forRoot(),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),

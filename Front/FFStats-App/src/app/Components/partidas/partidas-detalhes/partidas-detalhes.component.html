@@ -1,0 +1,75 @@
+<div class="card rounded shadow-md">
+  <form [formGroup]="form">
+     <div class="p-3">
+       <div class="form-row">
+         <div class="form-group col-md-6">
+           <label><strong>Descrição</strong></label>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.descricao.errors && f.descricao.touched}" formControlName="descricao" placeholder="Insira a descrição da partida">
+           <div *ngIf="f.descricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.descricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.descricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
+         </div>
+         <div class="form-group col-md-3">
+          <label><strong>Data:</strong></label>
+          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.data.errors && f.data.touched}" formControlName="data" bsDatepicker placeholder="Selecione a data">
+          <div *ngIf="f.data.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+          <div *ngIf="f.data.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+          <div *ngIf="f.data.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+        </div>
+        <div class="form-group col-md-3">
+          <label><strong>Posição</strong></label>
+          <input type="number" class="form-control is-invalid" [ngClass]="{'is-invalid': f.posicao.errors && f.posicao.touched}" formControlName="posicao" placeholder="Insira a descrição da partida">
+          <div *ngIf="f.posicao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+          <div *ngIf="f.posicao.errors?.min" class="invalid-feedback"> Necessario valor entre 1 e 55</div>
+          <div *ngIf="f.posicao.errors?.maxlength" class="invalid-feedback"> Necessario valor entre 1 e 55</div>
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group col-md-4">
+          <label><strong>Treino</strong></label>
+          <select type="multiselect" class="form-control form-select">
+            <option selected>Selecione o Treino</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label><strong>Mapa</strong></label>
+          <select type="multiselect" class="form-control form-select">
+            <option selected>Selecione o Mapa</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label><strong>Call</strong></label>
+          <select type="multiselect" class="form-control form-select">
+            <option selected>Selecione a call</option>
+          </select>
+        </div>
+       </div>
+       <div class="form-row">
+
+        <div class="form-group col-md-4">
+         <label><strong>Modo:</strong></label>
+         <select type="multiselect" class="form-control form-select">
+          <option selected>Selecione o Modo</option>
+        </select>
+       </div>
+       <div class="form-group col-md-4">
+        <label><strong>Sub-Modo:</strong></label>
+        <select type="multiselect" class="form-control form-select">
+          <option selected>Selecione o Sub-Modo</option>
+        </select>
+      </div>
+      </div>
+     </div>
+     <div class="card-footer">
+       <div class="d-flex">
+         <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
+           Cancelar Alteração
+         </button>
+         <button class="btn btn-success" [disabled]="!form.valid">
+           <span class="spinner-border spinner-border-sm mr-1"></span>
+           Salvar Evento
+         </button>
+       </div>
+     </div>
+   </form>
+</div>

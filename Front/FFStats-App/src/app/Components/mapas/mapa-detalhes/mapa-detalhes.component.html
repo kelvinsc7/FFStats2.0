@@ -1,0 +1,26 @@
+<div class="card rounded shadow-md">
+  <form [formGroup]="form">
+     <div class="p-3">
+       <div class="form-row">
+         <div class="form-group col-md-12">
+           <label><strong>Nome do Mapa</strong></label>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}" formControlName="nome" placeholder="Insira o Nome">
+           <div *ngIf="f.nome.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
+         </div>
+       </div>
+     </div>
+     <div class="card-footer">
+       <div class="d-flex">
+         <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
+           Cancelar Alteração
+         </button>
+         <button class="btn btn-success" [disabled]="!form.valid">
+           <span class="spinner-border spinner-border-sm mr-1"></span>
+           Salvar Evento
+         </button>
+       </div>
+     </div>
+   </form>
+</div>

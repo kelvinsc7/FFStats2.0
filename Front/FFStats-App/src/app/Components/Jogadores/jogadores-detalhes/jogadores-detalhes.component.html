@@ -1,43 +1,44 @@
 <div class="card rounded shadow-md">
-  <form>
+  <form [formGroup]="form">
      <div class="p-3">
        <div class="form-row">
-         <div class="form-group col-md-12">
-           <label>Tema</label>
-           <input type="text" class="form-control" placeholder="Insira o Tema">
-         </div>
-       </div>
-       <div class="form-row">
-         <div class="form-group col-md-8">
-           <label>Local</label>
-           <input type="text" class="form-control" placeholder="">
-         </div>
-         <div class="form-group col-md-4">
-           <label>Data e Hora</label>
-           <input type="datetime" class="form-control" placeholder="">
-         </div>
-       </div>
-       <div class="form-row">
-         <div class="form-group col-md-2">
-           <label>Qtd Pessoas</label>
-           <input type="text" class="form-control is-invalid" placeholder="">
-         </div>
-         <div class="form-group col-md-4">
-           <label>Telefone</label>
-           <input type="text" class="form-control" placeholder="(000) 90000-0000">
+         <div class="form-group col-md-6">
+           <label><strong>Nome do Jogador</strong></label>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}" formControlName="nome" placeholder="Insira o Nome">
+           <div *ngIf="f.nome.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
          </div>
          <div class="form-group col-md-6">
-           <label>Email</label>
-           <input type="text" class="form-control" placeholder="e-mail">
+          <label><strong>Nick do Jogo</strong></label>
+          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nick.errors && f.nick.touched}" formControlName="nick" placeholder="Insira o NickName">
+          <div *ngIf="f.nick.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+          <div *ngIf="f.nick.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+          <div *ngIf="f.nick.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+        </div>
+       </div>
+       <div class="form-row">
+         <div class="form-group col-md-6">
+           <label><strong>Id do Jogo</strong> </label>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.idjogo.errors && f.idjogo.touched}" formControlName="idjogo" placeholder="Insira o Id">
+           <div *ngIf="f.idjogo.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.idjogo.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.idjogo.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
          </div>
+         <div class="form-group col-md-6">
+          <label><strong>Selecione a Line</strong></label>
+          <select type="multiselect" class="form-control form-select">
+            <option selected>Selecione uma Line</option>
+          </select>
+        </div>
        </div>
      </div>
      <div class="card-footer">
        <div class="d-flex">
-         <button class="btn btn-outline-secondary mr-auto border">
+         <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success">
+         <button class="btn btn-success" [disabled]="!form.valid">
            <span class="spinner-border spinner-border-sm mr-1"></span>
            Salvar Evento
          </button>

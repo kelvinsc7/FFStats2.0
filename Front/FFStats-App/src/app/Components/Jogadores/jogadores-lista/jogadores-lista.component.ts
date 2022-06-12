@@ -105,4 +105,8 @@ export class JogadoresListaComponent implements OnInit {
   {
     this.router.navigate([`jogadores/detalhes/${id}`]);
   }
+  calculaKD(a: number, b: number):number
+  {
+    return b/a;
+  }
 }

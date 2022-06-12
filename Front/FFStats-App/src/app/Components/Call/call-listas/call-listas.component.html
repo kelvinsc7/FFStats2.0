@@ -1,9 +1,9 @@
 <div class="card rounded shadow-sm p-3">
   <div class="d-flex">
     <div class=" mr-5">
-      <a routerLink="/jogadores/detalhes" type="button" class="btn btn-success d-flex" >
+      <a routerLink="/call/detalhes" type="button" class="btn btn-success d-flex">
         <i class=" fa fa-plus-circle my-1"></i>
-        <b class="ml-1 d-none d-sm-block">Novo Jogador</b>
+        <b class="ml-1 d-none d-sm-block">Nova Call</b>
       </a>
     </div>
     <div class="flex-fill">
@@ -11,7 +11,7 @@
         <div class="input-group-prepend">
           <div class="input-group-text">Filtro: </div>
         </div>
-        <input type="text" class="form-control" placeholder="Filtrar por Nome ou Nick" [(ngModel)]="filtroLista">
+        <input type="text" class="form-control" placeholder="Filtrar por Cidade" [(ngModel)]="filtroCall">
       </div>
     </div>
   </div>
@@ -20,26 +20,26 @@
       <thead class="thead-dark">
         <tr>
           <th class="d-none d-md-table-cell">#</th>
-          <th>Nome</th>
-          <th>Nick</th>
-          <th class="d-none d-md-table-cell">Id</th>
-          <th class="d-none d-md-table-cell">Line</th>
+          <th>Call</th>
+          <th>Mapa</th>
           <th>Qtde. Partidas</th>
-          <th>Kills</th>
-          <th class="d-none d-md-table-cell">KD</th>
+          <th>Booyah</th>
+          <th class="d-none d-md-table-cell">Kills</th>
+          <th class="d-none d-md-table-cell">Melhor Jogador</th>
+          <th class="d-none d-md-table-cell">Ultima Vez</th>
           <th>Opções</th>
         </tr>
       </thead>
-      <tbody *ngIf="jogadores && jogadores.length">
-        <tr *ngFor="let item of jogadoresFiltrados;" (click)="detalheJogador(item.id)" style="cursor: pointer;">
+      <tbody *ngIf="Calls && Calls.length">
+        <tr *ngFor="let item of CallFiltrada" (click)="detalheCall(item.id)" style="cursor: pointer;">
           <th class="d-none d-md-table-cell">{{item.id}}</th>
-          <th>{{item.jogadorNome | titlecase }}</th>
-          <th>{{item.jogadorNick | titlecase }}</th>
-          <th class="d-none d-md-table-cell">000000000</th><!--Local onde ira colocar o id do jogo -->
-          <th class="d-none d-md-table-cell">Line Principal</th>
-          <th>{{item.partidasJogadores.length}}</th><!--  -->
-          <th>{{totalKill[item.id]}}</th><!--Local onde ira colocar a quantidade de Kills  -->
-          <th class="d-none d-md-table-cell">{{totalKill[item.id]/item.partidasJogadores.length}}</th><!-- Kill / Partida -->
+          <th>{{item.callCidade}}</th>
+          <th>{{item.mapa.mapaNome}}</th>
+          <th>30</th>
+          <th>2</th>
+          <th class="d-none d-md-table-cell">30</th>
+          <th class="d-none d-md-table-cell">Vrt Bliminha</th>
+          <th class="d-none d-md-table-cell">07/06/2022</th>
           <th>
             <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal(template)">
               <i class=" fa fa-trash"></i>
@@ -47,10 +47,10 @@
           </th>
         </tr>
       </tbody>
-      <tfoot *ngIf="!jogadoresFiltrados.length">
+      <tfoot *ngIf="!CallFiltrada.length">
         <tr>
           <td colspan="9" class="text-center">
-            <h4>Nenhum Jogador encontrado!</h4>
+            <h4>Nenhhuma call encontrada!</h4>
           </td>
         </tr>
       </tfoot>
