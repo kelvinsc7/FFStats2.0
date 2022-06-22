@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FFStats.Application.Contratos;
-using FFStats.Domain.Models;
+using FFStats.Application.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace FFStats.API.Controllers
 {
@@ -81,7 +79,7 @@ namespace FFStats.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Partida model)
+        public async Task<IActionResult> Post(partidaDto model)
         {
             try
             {
@@ -95,7 +93,7 @@ namespace FFStats.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Partida model)
+        public async Task<IActionResult> Put(int id, partidaDto model)
         {
             try
             {

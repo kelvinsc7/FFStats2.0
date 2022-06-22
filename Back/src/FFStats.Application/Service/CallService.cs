@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
 
@@ -10,20 +12,26 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly ICallPersistence _CallPersistence;
-        public CallService(IGeralPersistence geralPersistence, ICallPersistence CallPersistence)
+        public IMapper _mapper { get; }
+        public CallService(IGeralPersistence geralPersistence, ICallPersistence CallPersistence, IMapper mapper)
         {
+            this._mapper = mapper;
             this._CallPersistence = CallPersistence;
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<Call> AddCalls(Call model)
+        public async Task<callDto> AddCalls(callDto model)
         {
             try
             {
-                _geralPersistence.Add<Call>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var call = _mapper.Map<Call>(model);
+
+                _geralPersistence.Add<Call>(call);
+
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _CallPersistence.GetAllCallByIdAsync(model.Id, false);
+                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(call.Id, false);
+                    return _mapper.Map<callDto>(callRetorno);
                 }
                 return null;
             }
@@ -33,19 +41,22 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Call> UpdateCalls(int CallId, Call model)
+        public async Task<callDto> UpdateCalls(int CallId, callDto model)
         {
             try
             {
                 var Call = await _CallPersistence.GetAllCallByIdAsync(CallId, false);
-                if(Call == null) return null;
+                if (Call == null) return null;
 
                 model.Id = Call.Id;
-                
-                _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+
+                _mapper.Map(model, Call);
+
+                _geralPersistence.Update<Call>(Call);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _CallPersistence.GetAllCallByIdAsync(model.Id, false);
+                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(Call.Id, false);
+                    return _mapper.Map<callDto>(callRetorno);
                 }
                 return null;
             }
@@ -60,7 +71,7 @@ namespace FFStats.Application.Service
             try
             {
                 var Call = await _CallPersistence.GetAllCallByIdAsync(CallId, false);
-                if(Call == null) throw new Exception ("Erro: Call nao encontrado para ser deletado!");
+                if (Call == null) throw new Exception("Erro: Call nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Call);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +82,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Call[]> GetAllCallsAsync(bool IncludeJogador = false)
+        public async Task<callDto[]> GetAllCallsAsync(bool IncludeJogador = false)
         {
             try
             {
                 var Calls = await _CallPersistence.GetAllCallAsync(IncludeJogador);
-                if(Calls == null) return null;
+                if (Calls == null) return null;
 
-                return Calls;
+                var resultado = _mapper.Map<callDto[]>(Calls);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +99,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Call[]> GetAllCallsByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<callDto[]> GetAllCallsByDescAsync(string Desc, bool IncludeJogador = false)
         {
             try
             {
                 var Calls = await _CallPersistence.GetAllCallByNomeAsync(Desc, IncludeJogador);
-                if(Calls == null) return null;
+                if (Calls == null) return null;
 
-                return Calls;
+                var resultado = _mapper.Map<callDto[]>(Calls);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,14 +116,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Call> GetCallsByIdAsync(int CallId, bool IncludeJogador = false)
+        public async Task<callDto> GetCallsByIdAsync(int CallId, bool IncludeJogador = false)
         {
             try
             {
                 var Calls = await _CallPersistence.GetAllCallByIdAsync(CallId, IncludeJogador);
-                if(Calls == null) return null;
+                if (Calls == null) return null;
 
-                return Calls;
+                var resultado = _mapper.Map<callDto>(Calls);
+
+                return resultado;
             }
             catch (Exception ex)
             {

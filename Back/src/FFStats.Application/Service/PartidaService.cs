@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
+using AutoMapper;
 
 namespace FFStats.Application.Service
 {
@@ -10,20 +12,26 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly IPartidaPersistence _partidaPersistence;
-        public PartidaService(IGeralPersistence geralPersistence, IPartidaPersistence partidaPersistence)
+        private readonly IMapper _mapper;
+        public PartidaService(IGeralPersistence geralPersistence, IPartidaPersistence partidaPersistence, IMapper mapper)
         {
             this._partidaPersistence = partidaPersistence;
             this._geralPersistence = geralPersistence;
+            this._mapper = mapper;
 
         }
-        public async Task<Partida> AddPartidas(Partida model)
+        public async Task<partidaDto> AddPartidas(partidaDto model)
         {
             try
             {
-                _geralPersistence.Add<Partida>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var partida = _mapper.Map<Partida>(model);
+
+                _geralPersistence.Add<Partida>(partida);
+
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _partidaPersistence.GetPartidasByIdAsync(model.Id, false);
+                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.Id, false);
+                    return _mapper.Map<partidaDto>(partidaRetorno); 
                 }
                 return null;
             }
@@ -33,19 +41,22 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Partida> UpdatePartidas(int partidaId, Partida model)
+        public async Task<partidaDto> UpdatePartidas(int partidaId, partidaDto model)
         {
             try
             {
                 var partida = await _partidaPersistence.GetPartidasByIdAsync(partidaId, false);
-                if(partida == null) return null;
+                if (partida == null) return null;
 
                 model.Id = partida.Id;
-                
-                _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+
+                _mapper.Map(model, partida);
+
+                _geralPersistence.Update<Partida>(partida);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _partidaPersistence.GetPartidasByIdAsync(model.Id, false);
+                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.Id, false);
+                    return _mapper.Map<partidaDto>(partidaRetorno); 
                 }
                 return null;
             }
@@ -60,7 +71,7 @@ namespace FFStats.Application.Service
             try
             {
                 var partida = await _partidaPersistence.GetPartidasByIdAsync(partidaId, false);
-                if(partida == null) throw new Exception ("Erro: Partida nao encontrado para ser deletado!");
+                if (partida == null) throw new Exception("Erro: Partida nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(partida);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +82,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Partida[]> GetAllPartidasAsync(bool IncludeJogador = false)
+        public async Task<partidaDto[]> GetAllPartidasAsync(bool IncludeJogador = false)
         {
             try
             {
                 var partidas = await _partidaPersistence.GetAllPartidasAsync(IncludeJogador);
-                if(partidas == null) return null;
+                if (partidas == null) return null;
 
-                return partidas;
+                var resultado = _mapper.Map<partidaDto[]>(partidas);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +99,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Partida[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<partidaDto[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false)
         {
             try
             {
                 var partidas = await _partidaPersistence.GetAllPartidasByDescAsync(Desc, IncludeJogador);
-                if(partidas == null) return null;
+                if (partidas == null) return null;
 
-                return partidas;
+                var resultado = _mapper.Map<partidaDto[]>(partidas);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,28 +116,31 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Partida> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false)
+        public async Task<partidaDto> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false)
         {
             try
             {
                 var partidas = await _partidaPersistence.GetPartidasByIdAsync(PartidaId, IncludeJogador);
-                if(partidas == null) return null;
+                if (partidas == null) return null;
+                var resultado = _mapper.Map<partidaDto>(partidas);
 
-                return partidas;
+                return resultado;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false)
+        public async Task<partidaDto[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false)
         {
             try
             {
-                var partidas = await _partidaPersistence.GetPartidasByMapaIdAsync(id,IncludeJogador);
-                if(partidas == null) return null;
+                var partidas = await _partidaPersistence.GetPartidasByMapaIdAsync(id, IncludeJogador);
+                if (partidas == null) return null;
 
-                return partidas;
+                var resultado = _mapper.Map<partidaDto[]>(partidas);
+
+                return resultado;
             }
             catch (Exception ex)
             {

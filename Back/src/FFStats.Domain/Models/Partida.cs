@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
+    [Table("tb_partida")]
     public class Partida
     {
         public int Id { get; set; }

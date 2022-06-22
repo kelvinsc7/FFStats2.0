@@ -1,16 +1,16 @@
 using System.Threading.Tasks;
-using FFStats.Domain.Models;
+using FFStats.Application.Dtos;
 
 namespace FFStats.Application.Contratos
 {
     public interface IPartidaService
     {
-         Task<Partida> AddPartidas(Partida model);
-         Task<Partida> UpdatePartidas(int partidaId, Partida model);
+         Task<partidaDto> AddPartidas(partidaDto model);
+         Task<partidaDto> UpdatePartidas(int partidaId, partidaDto model);
          Task<bool> DeletePartida(int partidaId);
-         Task<Partida[]> GetAllPartidasAsync(bool IncludeJogador = false);
-         Task<Partida> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false);
-         Task<Partida[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false);
-         Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false);
+         Task<partidaDto[]> GetAllPartidasAsync(bool IncludeJogador = false);
+         Task<partidaDto> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false);
+         Task<partidaDto[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false);
+         Task<partidaDto[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false);
     }
 }

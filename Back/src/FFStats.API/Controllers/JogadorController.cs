@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +67,7 @@ namespace FFStats.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Jogador model)
+        public async Task<IActionResult> Post(jogadoresDto model)
         {
             try
             {
@@ -80,7 +81,7 @@ namespace FFStats.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Jogador model)
+        public async Task<IActionResult> Put(int id, jogadoresDto model)
         {
             try
             {

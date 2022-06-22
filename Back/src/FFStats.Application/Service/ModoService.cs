@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
 
@@ -10,20 +12,24 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly IModoPersistence _ModoPersistence;
-        public ModoService(IGeralPersistence geralPersistence, IModoPersistence ModoPersistence)
+        private readonly IMapper _mapper;
+        public ModoService(IGeralPersistence geralPersistence, IModoPersistence ModoPersistence, IMapper mapper)
         {
+            this._mapper = mapper;
             this._ModoPersistence = ModoPersistence;
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<Modo> AddModos(Modo model)
+        public async Task<modoDto> AddModos(modoDto model)
         {
             try
             {
-                _geralPersistence.Add<Modo>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var modo = _mapper.Map<Modo>(model);
+                _geralPersistence.Add<Modo>(modo);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _ModoPersistence.GetAllModoByIdAsync(model.Id, false);
+                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.Id, false);
+                    return _mapper.Map<modoDto>(modoRetorno);
                 }
                 return null;
             }
@@ -33,19 +39,20 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Modo> UpdateModos(int ModoId, Modo model)
+        public async Task<modoDto> UpdateModos(int ModoId, modoDto model)
         {
             try
             {
-                var Modo = await _ModoPersistence.GetAllModoByIdAsync(ModoId, false);
-                if(Modo == null) return null;
+                var modo = await _ModoPersistence.GetAllModoByIdAsync(ModoId, false);
+                if (modo == null) return null;
 
-                model.Id = Modo.Id;
-                
+                model.Id = modo.Id;
+                _mapper.Map(modo, model);
                 _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _ModoPersistence.GetAllModoByIdAsync(model.Id, false);
+                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.Id, false);
+                    return _mapper.Map<modoDto>(modoRetorno);
                 }
                 return null;
             }
@@ -60,7 +67,7 @@ namespace FFStats.Application.Service
             try
             {
                 var Modo = await _ModoPersistence.GetAllModoByIdAsync(ModoId, false);
-                if(Modo == null) throw new Exception ("Erro: Modo nao encontrado para ser deletado!");
+                if (Modo == null) throw new Exception("Erro: Modo nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Modo);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +78,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Modo[]> GetAllModosAsync(bool IncludeSub = false)
+        public async Task<modoDto[]> GetAllModosAsync(bool IncludeSub = false)
         {
             try
             {
-                var Modos = await _ModoPersistence.GetAllModoAsync(IncludeSub);
-                if(Modos == null) return null;
+                var modos = await _ModoPersistence.GetAllModoAsync(IncludeSub);
+                if (modos == null) return null;
 
-                return Modos;
+                var resultado = _mapper.Map<modoDto[]>(modos);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +95,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Modo[]> GetAllModosByDescAsync(string Desc, bool IncludeSub = false)
+        public async Task<modoDto[]> GetAllModosByDescAsync(string Desc, bool IncludeSub = false)
         {
             try
             {
-                var Modos = await _ModoPersistence.GetAllModoByNomeAsync(Desc, IncludeSub);
-                if(Modos == null) return null;
+                var modos = await _ModoPersistence.GetAllModoByNomeAsync(Desc, IncludeSub);
+                if (modos == null) return null;
 
-                return Modos;
+                var resultado = _mapper.Map<modoDto[]>(modos);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,14 +112,16 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Modo> GetModosByIdAsync(int ModoId, bool IncludeSub = false)
+        public async Task<modoDto> GetModosByIdAsync(int ModoId, bool IncludeSub = false)
         {
             try
             {
-                var Modos = await _ModoPersistence.GetAllModoByIdAsync(ModoId, IncludeSub);
-                if(Modos == null) return null;
+                var modos = await _ModoPersistence.GetAllModoByIdAsync(ModoId, IncludeSub);
+                if (modos == null) return null;
 
-                return Modos;
+                var resultado = _mapper.Map<modoDto>(modos);
+
+                return resultado;
             }
             catch (Exception ex)
             {

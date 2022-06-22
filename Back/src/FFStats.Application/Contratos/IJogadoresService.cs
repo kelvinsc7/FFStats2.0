@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 
 namespace FFStats.Application.Contratos
 {
     public interface IJogadoresService
     {
-         Task<Jogador> AddJogadoress(Jogador model);
-         Task<Jogador> UpdateJogadoress(int JogadoresId, Jogador model);
+         Task<jogadoresDto> AddJogadoress(jogadoresDto model);
+         Task<jogadoresDto> UpdateJogadoress(int JogadoresId, jogadoresDto model);
          Task<bool> DeleteJogador(int JogadorId);
-         Task<Jogador[]> GetAllJogadoresAsync(bool IncludePartidas = false);
-         Task<Jogador> GetJogadoresByIdAsync(int JogadoresId, bool IncludePartidas = false);
-         Task<Jogador[]> GetAllJogadoresByDescAsync(string Desc, bool IncludePartidas = false);
+         Task<jogadoresDto[]> GetAllJogadoresAsync(bool IncludePartidas = false);
+         Task<jogadoresDto> GetJogadoresByIdAsync(int JogadoresId, bool IncludePartidas = false);
+         Task<jogadoresDto[]> GetAllJogadoresByDescAsync(string Desc, bool IncludePartidas = false);
     }
 }

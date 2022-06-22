@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
 
@@ -10,20 +12,24 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly ITreinoPersistence _TreinoPersistence;
-        public TreinoService(IGeralPersistence geralPersistence, ITreinoPersistence TreinoPersistence)
+        private readonly IMapper _mapper;
+        public TreinoService(IGeralPersistence geralPersistence, ITreinoPersistence TreinoPersistence, IMapper mapper)
         {
+            this._mapper = mapper;
             this._TreinoPersistence = TreinoPersistence;
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<Treino> AddTreinos(Treino model)
+        public async Task<treinoDto> AddTreinos(treinoDto model)
         {
             try
             {
-                _geralPersistence.Add<Treino>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var treino = _mapper.Map<Treino>(model);
+                _geralPersistence.Add<Treino>(treino);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _TreinoPersistence.GetAllTreinoByIdAsync(model.treinoId, false);
+                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.treinoId, false);
+                    return _mapper.Map<treinoDto>(treinoRetorno);
                 }
                 return null;
             }
@@ -33,19 +39,21 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Treino> UpdateTreinos(int TreinoId, Treino model)
+        public async Task<treinoDto> UpdateTreinos(int TreinoId, treinoDto model)
         {
             try
             {
-                var Treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, false);
-                if(Treino == null) return null;
+                var treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, false);
+                if (treino == null) return null;
 
-                model.treinoId = Treino.treinoId;
+                model.treinoId = treino.treinoId;
                 
-                _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                _mapper.Map(model, treino);
+                _geralPersistence.Update(treino);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _TreinoPersistence.GetAllTreinoByIdAsync(model.treinoId, false);
+                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.treinoId, false);
+                    return _mapper.Map<treinoDto>(treinoRetorno);
                 }
                 return null;
             }
@@ -60,7 +68,7 @@ namespace FFStats.Application.Service
             try
             {
                 var Treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, false);
-                if(Treino == null) throw new Exception ("Erro: Treino nao encontrado para ser deletado!");
+                if (Treino == null) throw new Exception("Erro: Treino nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Treino);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +79,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Treino[]> GetAllTreinosAsync(bool IncludeJogador = false)
+        public async Task<treinoDto[]> GetAllTreinosAsync(bool IncludeJogador = false)
         {
             try
             {
-                var Treinos = await _TreinoPersistence.GetAllTreinoAsync(IncludeJogador);
-                if(Treinos == null) return null;
+                var treino = await _TreinoPersistence.GetAllTreinoAsync(IncludeJogador);
+                if (treino == null) return null;
 
-                return Treinos;
+                var resultado = _mapper.Map<treinoDto[]>(treino);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +95,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Treino[]> GetAllTreinosByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<treinoDto[]> GetAllTreinosByDescAsync(string Desc, bool IncludeJogador = false)
         {
             try
             {
-                var Treinos = await _TreinoPersistence.GetAllTreinoByNomeAsync(Desc, IncludeJogador);
-                if(Treinos == null) return null;
+                var treino = await _TreinoPersistence.GetAllTreinoByNomeAsync(Desc, IncludeJogador);
+                if (treino == null) return null;
 
-                return Treinos;
+                var resultado = _mapper.Map<treinoDto[]>(treino);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,14 +111,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Treino> GetTreinosByIdAsync(int TreinoId, bool IncludeJogador = false)
+        public async Task<treinoDto> GetTreinosByIdAsync(int TreinoId, bool IncludeJogador = false)
         {
             try
             {
-                var Treinos = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, IncludeJogador);
-                if(Treinos == null) return null;
+                var treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, IncludeJogador);
+                if (treino == null) return null;
 
-                return Treinos;
+                var resultado = _mapper.Map<treinoDto>(treino);
+                return resultado;
             }
             catch (Exception ex)
             {

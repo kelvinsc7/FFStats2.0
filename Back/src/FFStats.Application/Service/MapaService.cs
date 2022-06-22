@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
 
@@ -10,20 +12,24 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly IMapaPersistence _MapaPersistence;
-        public MapaService(IGeralPersistence geralPersistence, IMapaPersistence MapaPersistence)
+        public IMapper _mapper { get; }
+        public MapaService(IGeralPersistence geralPersistence, IMapaPersistence MapaPersistence, IMapper mapper)
         {
+            this._mapper = mapper;
             this._MapaPersistence = MapaPersistence;
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<Mapa> AddMapas(Mapa model)
+        public async Task<mapaDto> AddMapas(mapaDto model)
         {
             try
             {
-                _geralPersistence.Add<Mapa>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var mapa = _mapper.Map<Mapa>(model);
+                _geralPersistence.Add<Mapa>(mapa);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _MapaPersistence.GetAllMapaByIdAsync(model.Id, false);
+                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.Id, false);
+                    return _mapper.Map<mapaDto>(mapaRetorno);
                 }
                 return null;
             }
@@ -33,19 +39,20 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Mapa> UpdateMapas(int MapaId, Mapa model)
+        public async Task<mapaDto> UpdateMapas(int MapaId, mapaDto model)
         {
             try
             {
-                var Mapa = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, false);
-                if(Mapa == null) return null;
+                var mapa = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, false);
+                if (mapa == null) return null;
 
-                model.Id = Mapa.Id;
-                
+                model.Id = mapa.Id;
+                _mapper.Map(model, mapa);
                 _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _MapaPersistence.GetAllMapaByIdAsync(model.Id, false);
+                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.Id, false);
+                    return _mapper.Map<mapaDto>(mapaRetorno);
                 }
                 return null;
             }
@@ -60,7 +67,7 @@ namespace FFStats.Application.Service
             try
             {
                 var Mapa = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, false);
-                if(Mapa == null) throw new Exception ("Erro: Mapa nao encontrado para ser deletado!");
+                if (Mapa == null) throw new Exception("Erro: Mapa nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Mapa);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +78,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Mapa[]> GetAllMapasAsync(bool IncludeJogador = false)
+        public async Task<mapaDto[]> GetAllMapasAsync(bool IncludeJogador = false)
         {
             try
             {
-                var Mapas = await _MapaPersistence.GetAllMapaAsync(IncludeJogador);
-                if(Mapas == null) return null;
+                var mapa = await _MapaPersistence.GetAllMapaAsync(IncludeJogador);
+                if (mapa == null) return null;
 
-                return Mapas;
+                var resultado = _mapper.Map<mapaDto[]>(mapa);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +94,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Mapa[]> GetAllMapasByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<mapaDto[]> GetAllMapasByDescAsync(string Desc, bool IncludeJogador = false)
         {
             try
             {
-                var Mapas = await _MapaPersistence.GetAllMapaByNomeAsync(Desc, IncludeJogador);
-                if(Mapas == null) return null;
+                var mapa = await _MapaPersistence.GetAllMapaByNomeAsync(Desc, IncludeJogador);
+                if (mapa == null) return null;
 
-                return Mapas;
+                var resultado = _mapper.Map<mapaDto[]>(mapa);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,14 +110,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Mapa> GetMapasByIdAsync(int MapaId, bool IncludeJogador = false)
+        public async Task<mapaDto> GetMapasByIdAsync(int MapaId, bool IncludeJogador = false)
         {
             try
             {
-                var Mapas = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, IncludeJogador);
-                if(Mapas == null) return null;
+                var mapa = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, IncludeJogador);
+                if (mapa == null) return null;
 
-                return Mapas;
+                var resultado = _mapper.Map<mapaDto>(mapa);
+                return resultado;
             }
             catch (Exception ex)
             {

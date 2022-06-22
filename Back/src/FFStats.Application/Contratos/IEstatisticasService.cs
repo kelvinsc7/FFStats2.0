@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 
 namespace FFStats.Application.Contratos
 {
     public interface IEstatisticasService
     {
-         Task<Estatisticas> AddEstatisticass(Estatisticas model);
-         Task<Estatisticas> UpdateEstatisticass(int EstatisticasId, Estatisticas model);
+         Task<estatisticasDto> AddEstatisticass(estatisticasDto model);
+         Task<estatisticasDto> UpdateEstatisticass(int EstatisticasId, estatisticasDto model);
          Task<bool> DeleteEstatisticas(int EstatisticasId);
-         Task<Estatisticas[]> GetAllEstatisticassAsync(bool InlcudeAll = false);
-         Task<Estatisticas> GetEstatisticassByIdAsync(int EstatisticasId, bool InlcudeAll = false);
-         Task<Estatisticas[]> GetAllEstatisticassByDescAsync(string Desc, bool InlcudeAll = false);
+         Task<estatisticasDto[]> GetAllEstatisticassAsync(bool InlcudeAll = false);
+         Task<estatisticasDto> GetEstatisticassByIdAsync(int EstatisticasId, bool InlcudeAll = false);
+         Task<estatisticasDto[]> GetAllEstatisticassByDescAsync(string Desc, bool InlcudeAll = false);
     }
 }

@@ -10,6 +10,8 @@ using FFStats.Application.Contratos;
 using FFStats.Application.Service;
 using FFStats.Persistence.Contratos;
 using FFStats.Persistence.Persistences;
+using AutoMapper;
+using System;
 
 namespace FFStats.API
 {
@@ -29,6 +31,8 @@ namespace FFStats.API
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
             services.AddControllers().AddNewtonsoftJson( x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<ICallService, CallService>();
             services.AddScoped<IEstatisticasService, EstatisticasService>();

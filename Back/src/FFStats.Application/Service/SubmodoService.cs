@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using FFStats.Application.Contratos;
+using FFStats.Application.Dtos;
 using FFStats.Domain.Models;
 using FFStats.Persistence.Contratos;
 
@@ -10,20 +12,24 @@ namespace FFStats.Application.Service
     {
         private readonly IGeralPersistence _geralPersistence;
         private readonly ISubmodoPersistence _SubmodoPersistence;
-        public SubmodoService(IGeralPersistence geralPersistence, ISubmodoPersistence SubmodoPersistence)
+        private readonly IMapper _mapper;
+        public SubmodoService(IGeralPersistence geralPersistence, ISubmodoPersistence SubmodoPersistence, IMapper mapper)
         {
+            this._mapper = mapper;
             this._SubmodoPersistence = SubmodoPersistence;
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<Submodo> AddSubmodos(Submodo model)
+        public async Task<subModoDto> AddSubmodos(subModoDto model)
         {
             try
             {
-                _geralPersistence.Add<Submodo>(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                var submodo = _mapper.Map<Submodo>(model);
+                _geralPersistence.Add<Submodo>(submodo);
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _SubmodoPersistence.GetAllSubmodoByIdAsync(model.submodoId, false);
+                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.submodoId, false);
+                    return _mapper.Map<subModoDto>(submodoRetorno);
                 }
                 return null;
             }
@@ -33,19 +39,20 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Submodo> UpdateSubmodos(int SubmodoId, Submodo model)
+        public async Task<subModoDto> UpdateSubmodos(int SubmodoId, subModoDto model)
         {
             try
             {
-                var Submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, false);
-                if(Submodo == null) return null;
+                var submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, false);
+                if (submodo == null) return null;
 
-                model.submodoId = Submodo.submodoId;
-                
+                model.submodoId = submodo.submodoId;
+                _mapper.Map(model, submodo);
                 _geralPersistence.Update(model);
-                if(await _geralPersistence.SaveChangeAsync())
+                if (await _geralPersistence.SaveChangeAsync())
                 {
-                    return await _SubmodoPersistence.GetAllSubmodoByIdAsync(model.submodoId, false);
+                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.submodoId, false);
+                    return _mapper.Map<subModoDto>(submodoRetorno);
                 }
                 return null;
             }
@@ -60,7 +67,7 @@ namespace FFStats.Application.Service
             try
             {
                 var Submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, false);
-                if(Submodo == null) throw new Exception ("Erro: Submodo nao encontrado para ser deletado!");
+                if (Submodo == null) throw new Exception("Erro: Submodo nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Submodo);
                 return await _geralPersistence.SaveChangeAsync();
@@ -71,14 +78,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Submodo[]> GetAllSubmodosAsync(bool IncludeJogador = false)
+        public async Task<subModoDto[]> GetAllSubmodosAsync(bool IncludeJogador = false)
         {
             try
             {
-                var Submodos = await _SubmodoPersistence.GetAllSubmodoAsync(IncludeJogador);
-                if(Submodos == null) return null;
+                var submodo = await _SubmodoPersistence.GetAllSubmodoAsync(IncludeJogador);
+                if (submodo == null) return null;
 
-                return Submodos;
+                var resultado = _mapper.Map<subModoDto[]>(submodo);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -86,14 +94,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Submodo[]> GetAllSubmodosByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<subModoDto[]> GetAllSubmodosByDescAsync(string Desc, bool IncludeJogador = false)
         {
             try
             {
-                var Submodos = await _SubmodoPersistence.GetAllSubmodoByNomeAsync(Desc, IncludeJogador);
-                if(Submodos == null) return null;
+                var submodo = await _SubmodoPersistence.GetAllSubmodoByNomeAsync(Desc, IncludeJogador);
+                if (submodo == null) return null;
 
-                return Submodos;
+                var resultado = _mapper.Map<subModoDto[]>(submodo);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,14 +110,15 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<Submodo> GetSubmodosByIdAsync(int SubmodoId, bool IncludeJogador = false)
+        public async Task<subModoDto> GetSubmodosByIdAsync(int SubmodoId, bool IncludeJogador = false)
         {
             try
             {
-                var Submodos = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, IncludeJogador);
-                if(Submodos == null) return null;
+                var submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, IncludeJogador);
+                if (submodo == null) return null;
 
-                return Submodos;
+                var resultado = _mapper.Map<subModoDto>(submodo);
+                return resultado;
             }
             catch (Exception ex)
             {
