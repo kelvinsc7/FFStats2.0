@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,11 +25,11 @@ namespace FFStats.Application.Dtos
         public int submodoId { get; set; }
         public subModoDto sumodo { get; set; }
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
-        public string partidaData { get; set; }
+        public DateTime partidaData { get; set; }
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido"),
          Range(1,54)]
         public int posicao { get; set; }
-        public IEnumerable<jogadoresDto> Jogadores { get; set; }
+        public IEnumerable<partidajogadoresDto> Jogadores { get; set; }
         public IEnumerable<estatisticasDto> Estatisticas { get; set; }
     }
 }

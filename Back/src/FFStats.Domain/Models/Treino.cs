@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
-    [Table("tb_treino")]
+    //[Table("tb_treino")]
     public class Treino
     {
         public int treinoId { get; set; }

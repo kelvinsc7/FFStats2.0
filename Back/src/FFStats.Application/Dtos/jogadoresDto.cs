@@ -10,6 +10,6 @@ namespace FFStats.Application.Dtos
        public string jogadorNome { get; set; }
        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
        public string jogadorNick { get; set; }
-       public IEnumerable<partidaDto> Partidas{ get; set; }
+       public IEnumerable<partidajogadoresDto> PartidasJogadores{ get; set; }
     }
 }

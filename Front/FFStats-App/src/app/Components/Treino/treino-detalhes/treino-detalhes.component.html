@@ -4,10 +4,10 @@
        <div class="form-row">
          <div class="form-group col-md-12">
            <label><strong>Descrição do Treino</strong></label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.descricao.errors && f.descricao.touched}" formControlName="descricao"  placeholder="Insira a Descrição">
-           <div *ngIf="f.descricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-           <div *ngIf="f.descricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-           <div *ngIf="f.descricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.treinoDescricao.errors && f.treinoDescricao.touched}" formControlName="treinoDescricao"  placeholder="Insira a Descrição">
+           <div *ngIf="f.treinoDescricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.treinoDescricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.treinoDescricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
           </div>
        </div>
      </div>
@@ -16,7 +16,7 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid">
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
            <span class="spinner-border spinner-border-sm mr-1"></span>
            Salvar Evento
          </button>

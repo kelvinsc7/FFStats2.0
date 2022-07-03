@@ -19,5 +19,14 @@ export class ModoService {
   getModoById(id: number): Observable<Modo>{
     return this.http.get<Modo>(`${this.baseURL}/${id}`);
   }
+  postModo(modo: Modo): Observable<Modo>{
+    return this.http.post<Modo>(this.baseURL, modo);
+  }
+  putModo(modo: Modo): Observable<Modo>{
+    return this.http.put<Modo>(`${this.baseURL}/${modo.id}`, modo);
+  }
+  deleteModo(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 
 }

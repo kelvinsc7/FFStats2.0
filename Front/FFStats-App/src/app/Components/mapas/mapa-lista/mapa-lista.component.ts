@@ -27,6 +27,7 @@ export class MapaListaComponent implements OnInit {
   private estatistica : Estatistica[]=[];
   private _kill : Number[]=[];
   private partidaEstatistica : Partida[]=[];
+  public mapaId:number = 0;
 
   public get kill()
   {
@@ -152,13 +153,29 @@ export class MapaListaComponent implements OnInit {
     }
   }
 
-  public openModal(template: TemplateRef<any>): void {
+  public openModal(event:any, template: TemplateRef<any>, id: number): void {
+    event.stopPropagation();
+    this.mapaId = id;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   public confirm(): void {
     this.modalRef?.hide();
-    this.toastr.success('Mapa excluida com sucesso!', 'Sucesso!');
+    this.spinner.show();
+    this.mapaService.deleteMapa(this.mapaId).subscribe(
+      (result: any) =>{
+        console.log(result);
+        this.toastr.success('Partida excluida com sucesso!', 'Sucesso!');
+        this.spinner.hide();
+        this.getmapas();
+      },
+      (error: any) =>{
+        //console.error(error);
+        this.toastr.error('Erro ao tentar deletar o Evento', 'Erro:');
+        this.spinner.hide();
+      },
+      () => this.spinner.hide(),
+    );
   }
 
   public decline(): void {

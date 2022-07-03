@@ -19,5 +19,14 @@ export class CallService {
   getCallById(id: number): Observable<Call>{
     return this.http.get<Call>(`${this.baseURL}/${id}`);
   }
+  postCall(call: Call): Observable<Call>{
+    return this.http.post<Call>(this.baseURL, call);
+  }
+  putCall(call: Call): Observable<Call>{
+    return this.http.put<Call>(`${this.baseURL}/${call.id}`, call);
+  }
+  deleteCall(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 
 }

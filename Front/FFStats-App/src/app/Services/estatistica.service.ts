@@ -19,4 +19,13 @@ export class EstatisticaService {
   getEstatisticaById(id: number): Observable<Estatistica>{
     return this.http.get<Estatistica>(`${this.baseURL}/${id}`);
   }
+  postEstatistica(estatistica: Estatistica): Observable<Estatistica>{
+    return this.http.post<Estatistica>(this.baseURL, estatistica);
+  }
+  putEstatistica(estatistica: Estatistica): Observable<Estatistica>{
+    return this.http.put<Estatistica>(`${this.baseURL}/${estatistica.id}`, estatistica);
+  }
+  deleteEstatistica(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 }

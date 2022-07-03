@@ -4,17 +4,17 @@
        <div class="form-row">
          <div class="form-group col-md-6">
            <label><strong>Nome do Jogador</strong></label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}" formControlName="nome" placeholder="Insira o Nome">
-           <div *ngIf="f.nome.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-           <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-           <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.jogadorNome.errors && f.jogadorNome.touched}" formControlName="jogadorNome" placeholder="Insira o nome">
+           <div *ngIf="f.jogadorNome.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.jogadorNome.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.jogadorNome.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
          </div>
          <div class="form-group col-md-6">
           <label><strong>Nick do Jogo</strong></label>
-          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nick.errors && f.nick.touched}" formControlName="nick" placeholder="Insira o NickName">
-          <div *ngIf="f.nick.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-          <div *ngIf="f.nick.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-          <div *ngIf="f.nick.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.jogadorNick.errors && f.jogadorNick.touched}" formControlName="jogadorNick" placeholder="Insira o NickName">
+          <div *ngIf="f.jogadorNick.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+          <div *ngIf="f.jogadorNick.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+          <div *ngIf="f.jogadorNick.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
         </div>
        </div>
        <div class="form-row">
@@ -27,7 +27,7 @@
          </div>
          <div class="form-group col-md-6">
           <label><strong>Selecione a Line</strong></label>
-          <select type="multiselect" class="form-control form-select">
+          <select type="multiselect" class="form-control form-select"  formControlName="idLine">
             <option selected>Selecione uma Line</option>
           </select>
         </div>
@@ -38,7 +38,7 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid">
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
            <span class="spinner-border spinner-border-sm mr-1"></span>
            Salvar Evento
          </button>

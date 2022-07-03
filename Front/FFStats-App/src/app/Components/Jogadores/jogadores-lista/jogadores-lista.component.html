@@ -37,11 +37,11 @@
           <th>{{item.jogadorNick | titlecase }}</th>
           <th class="d-none d-md-table-cell">000000000</th><!--Local onde ira colocar o id do jogo -->
           <th class="d-none d-md-table-cell">Line Principal</th>
-          <th>{{item.partidasJogadores.length}}</th><!--  -->
+          <th>{{item.partidasJogadores?.length}}</th><!--  -->
           <th>{{totalKill[item.id]}}</th><!--Local onde ira colocar a quantidade de Kills  -->
           <th class="d-none d-md-table-cell">{{totalKill[item.id]/item.partidasJogadores.length}}</th><!-- Kill / Partida -->
           <th>
-            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal(template)">
+            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>
             </button>
           </th>

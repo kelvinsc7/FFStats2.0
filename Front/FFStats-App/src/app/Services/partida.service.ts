@@ -23,4 +23,14 @@ export class PartidaService {
     return this.http.get<Partida>(`${this.baseURL}/${id}/mapa`);
   }
 
+  postPartida(partida: Partida): Observable<Partida>{
+    return this.http.post<Partida>(this.baseURL, partida);
+  }
+  putPartida(partida: Partida): Observable<Partida>{
+    return this.http.put<Partida>(`${this.baseURL}/${partida.id}`, partida);
+  }
+  deletePartida(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
+
 }

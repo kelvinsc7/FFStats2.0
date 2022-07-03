@@ -106,14 +106,14 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Atualizar Partida. Erro: {ex.Message}");
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             try
             {
                 return await _partidaService.DeletePartida(Id) ?
-                        Ok("Deletado"):
-                        BadRequest("Partida Não Deletada");
+                        Ok(new {message = "Deletado"} ):
+                        throw new Exception("Ocorreu um erro nao especifico!");
             }
             catch (Exception ex)
             {

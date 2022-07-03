@@ -4,17 +4,21 @@
        <div class="form-row">
          <div class="form-group col-md-6">
            <label><strong>Descrição</strong></label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.descricao.errors && f.descricao.touched}" formControlName="descricao" placeholder="Insira a descrição da partida">
-           <div *ngIf="f.descricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-           <div *ngIf="f.descricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-           <div *ngIf="f.descricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.partidaDescricao.errors && f.partidaDescricao.touched}" formControlName="partidaDescricao" placeholder="Insira a descrição da partida">
+           <div *ngIf="f.partidaDescricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.partidaDescricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.partidaDescricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
          </div>
          <div class="form-group col-md-3">
           <label><strong>Data:</strong></label>
-          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.data.errors && f.data.touched}" formControlName="data" bsDatepicker placeholder="Selecione a data">
-          <div *ngIf="f.data.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-          <div *ngIf="f.data.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-          <div *ngIf="f.data.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.partidaData.errors && f.partidaData.touched}" formControlName="partidaData"
+                 bsDatepicker
+                 value="{{partida.partidaData | DateTimeFormat}}"
+                 [bsConfig]="bsConfig"
+                 placeholder="Selecione a data">
+          <div *ngIf="f.partidaData.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+          <div *ngIf="f.partidaData.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+          <div *ngIf="f.partidaData.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
         </div>
         <div class="form-group col-md-3">
           <label><strong>Posição</strong></label>
@@ -27,20 +31,23 @@
        <div class="form-row">
         <div class="form-group col-md-4">
           <label><strong>Treino</strong></label>
-          <select type="multiselect" class="form-control form-select">
-            <option selected>Selecione o Treino</option>
+          <select type="multiselect" class="form-control form-select" formControlName="treinoId">
+            <option value="0" >Selecione o Treino</option>
+            <option *ngFor="let tre of treino" value={{tre.treinoId}}> {{tre.treinoDescricao}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Mapa</strong></label>
-          <select type="multiselect" class="form-control form-select">
-            <option selected>Selecione o Mapa</option>
+          <select type="multiselect" class="form-control form-select" formControlName="mapaId" >
+            <option value="0">Selecione o Mapa</option>
+            <option *ngFor="let map of mapas" value={{map.id}}> {{map.mapaNome}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Call</strong></label>
-          <select type="multiselect" class="form-control form-select">
-            <option selected>Selecione a call</option>
+          <select type="multiselect" class="form-control form-select" formControlName="callId">
+            <option value="0">Selecione a call</option>
+            <option *ngFor="let c of calls" value={{c.id}}> {{c.callCidade}}</option>
           </select>
         </div>
        </div>
@@ -48,14 +55,16 @@
 
         <div class="form-group col-md-4">
          <label><strong>Modo:</strong></label>
-         <select type="multiselect" class="form-control form-select">
-          <option selected>Selecione o Modo</option>
+         <select type="multiselect" class="form-control form-select" formControlName="modoId">
+          <option value="0">Selecione o Modo</option>
+          <option *ngFor="let m of modos" value={{m.id}}> {{m.modoDescricao}}</option>
         </select>
        </div>
        <div class="form-group col-md-4">
         <label><strong>Sub-Modo:</strong></label>
-        <select type="multiselect" class="form-control form-select">
-          <option selected>Selecione o Sub-Modo</option>
+        <select type="multiselect" class="form-control form-select" formControlName="submodoId">
+          <option value="0">Selecione o Sub-Modo</option>
+          <option *ngFor="let sm of smodos" value={{sm.submodoId}}> {{sm.submodoDescricao}}</option>
         </select>
       </div>
       </div>
@@ -65,8 +74,8 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid">
-           <span class="spinner-border spinner-border-sm mr-1"></span>
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
+           <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
            Salvar Evento
          </button>
        </div>

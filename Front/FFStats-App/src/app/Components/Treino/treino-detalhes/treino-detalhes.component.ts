@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Treino } from '@app/Model/Treino';
+import { TreinoService } from '@app/Services/treino.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-treino-detalhes',
@@ -8,25 +13,72 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class TreinoDetalhesComponent implements OnInit {
 
-  form!:FormGroup;
+    form!:FormGroup;
+    treino ={} as Treino;
+    modeSave = 'postTreino'
 
-  get f():any
-  {
-    return this.form.controls
+    get f():any
+    {
+      return this.form.controls
+    }
+    constructor(private fb:FormBuilder,
+                private router: ActivatedRoute,
+                private treinoService: TreinoService,
+                private spiner: NgxSpinnerService,
+                private toaster: ToastrService) { }
+
+
+    public carregaDados():void{
+      const dadosIdParam = this.router.snapshot.paramMap.get('id');
+    if(dadosIdParam!== null)
+    {
+      this.spiner.show();
+      this.modeSave = 'putTreino';
+      this.treinoService.getTreinoById(+dadosIdParam).subscribe({
+        next:(treino: Treino)=>{
+          this.treino = {...treino};
+          this.form.patchValue(this.treino);
+        },
+        error:()=>{
+          console.error(Error);
+          this.toaster.error('Erro ao carregar treino', 'Erro!')
+          this.spiner.hide();
+        },
+        complete:()=>{ this.spiner.hide();},
+      })
+    }
   }
-  constructor(private fb:FormBuilder) { }
-
   ngOnInit() {
+    this.carregaDados();
     this.validation();
   }
 
   public validation():void{
     this.form = this.fb.group({
-      descricao: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
+      treinoDescricao: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
     });
   }
   public resetForm():void
   {
     this.form.reset();
+  }
+  public salvarAlteracao():void{
+    this.spiner.show();
+    if(this.form.valid)
+    {
+      this.treino =  (this.modeSave === 'postTreino')
+                      ? {... this.form.value}
+                      : {treinoId: this.treino.treinoId,... this.form.value}
+
+        this.treinoService[this.modeSave](this.treino).subscribe(
+        () =>this.toaster.success('Treino Salvo com Sucesso', 'Sucesso!'),
+        (error: any) =>{
+          console.error(error);
+          this.toaster.error('Erro ao salvar a Treino', 'Error');
+        },
+
+    ).add(() =>this.spiner.hide());
+
+    }
   }
 }

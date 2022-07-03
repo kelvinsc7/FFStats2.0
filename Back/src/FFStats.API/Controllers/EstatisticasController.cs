@@ -94,14 +94,14 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Atualizar Estatisticas. Erro: {ex.Message}");
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             try
             {
                 return await _EstatisticasService.DeleteEstatisticas(Id) ?
-                        Ok("Deletado"):
-                        BadRequest("Estatisticas Não Deletada");
+                        Ok(new {message = "Deletado"} ):
+                        throw new Exception("Ocorreu um erro nao especifico!");
             }
             catch (Exception ex)
             {

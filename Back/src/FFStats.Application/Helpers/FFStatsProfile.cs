@@ -16,6 +16,7 @@ namespace FFStats.Application.Helpers
             CreateMap<Partida, partidaDto>().ReverseMap();
             CreateMap<Submodo, subModoDto>().ReverseMap();
             CreateMap<Treino, treinoDto>().ReverseMap();  
+            CreateMap<PartidaJogador, partidajogadoresDto>().ReverseMap();
         }
     }
 }

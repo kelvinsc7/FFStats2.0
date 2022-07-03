@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
-    [Table("tb_partida")]
+    //[Table("tb_partida")]
     public class Partida
     {
         public int Id { get; set; }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
-    [Table("tb_estatistica")]
+    //[Table("tb_estatistica")]
     public class Estatisticas
     {
         public int id { get; set; }

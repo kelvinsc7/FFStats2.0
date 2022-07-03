@@ -4,15 +4,16 @@
        <div class="form-row">
          <div class="form-group col-md-6">
            <label><strong>Nome da Cidade</strong></label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}" formControlName="nome" placeholder="Insira o Nome">
-           <div *ngIf="f.nome.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-           <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-           <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback"> Maximo de 25 Caracteres</div>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.callCidade.errors && f.callCidade.touched}" formControlName="callCidade" placeholder="Insira o Nome">
+           <div *ngIf="f.callCidade.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.callCidade.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.callCidade.errors?.maxlength" class="invalid-feedback"> Maximo de 25 Caracteres</div>
          </div>
          <div class="form-group col-md-6">
           <label><strong>Selecione o mapa</strong></label>
-          <select type="multiselect" class="form-control form-select">
-            <option selected>Selecione uma Line</option>
+          <select type="multiselect" class="form-control form-select" formControlName="mapaId">
+            <option value="0">Selecione uma Line</option>
+            <option *ngFor="let map of mapas" value={{map.id}}> {{map.mapaNome}}</option>
           </select>
         </div>
        </div>
@@ -22,7 +23,7 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid">
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
            <span class="spinner-border spinner-border-sm mr-1"></span>
            Salvar Evento
          </button>

@@ -49,7 +49,7 @@ namespace FFStats.Application.Service
 
                 model.Id = jogador.Id;
                 _mapper.Map(model, jogador);
-                _geralPersistence.Update(model);
+                _geralPersistence.Update<Jogador>(jogador);
                 if(await _geralPersistence.SaveChangeAsync())
                 {
                     var jogadorRetorno =await _JogadoresPersistence.GetAllJogadoresByIdAsync(jogador.Id, false);

@@ -22,6 +22,7 @@ export class TreinoListaComponent implements OnInit {
   private _filtrotreino: string = '';
   private modo :Modo  []=[];
   private _desc : Modo []= []
+  public treinoId:number = 0
 
   public get desc()
   {
@@ -94,13 +95,29 @@ export class TreinoListaComponent implements OnInit {
     }
   }
 
-  public openModal(template: TemplateRef<any>): void {
+  public openModal(event:any, template: TemplateRef<any>, id: number): void {
+    event.stopPropagation();
+    this.treinoId = id;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   public confirm(): void {
     this.modalRef?.hide();
-    this.toastr.success('Treino excluida com sucesso!', 'Sucesso!');
+    this.spinner.show();
+    this.treinoService.deleteTreino(this.treinoId).subscribe(
+      (result: any) =>{
+        console.log(result);
+        this.toastr.success('Partida excluida com sucesso!', 'Sucesso!');
+        this.spinner.hide();
+        this.getTreinos();
+      },
+      (error: any) =>{
+        //console.error(error);
+        this.toastr.error('Erro ao tentar deletar o Evento', 'Erro:');
+        this.spinner.hide();
+      },
+      () => this.spinner.hide(),
+    );
   }
 
   public decline(): void {

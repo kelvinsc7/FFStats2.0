@@ -20,4 +20,13 @@ export class MapaService {
     return this.http.get<Mapa>(`${this.baseURL}/${id}`);
   }
 
+  postMapa(mapa: Mapa): Observable<Mapa>{
+    return this.http.post<Mapa>(this.baseURL, mapa);
+  }
+  putMapa(mapa: Mapa): Observable<Mapa>{
+    return this.http.put<Mapa>(`${this.baseURL}/${mapa.id}`, mapa);
+  }
+  deleteMapa(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 }

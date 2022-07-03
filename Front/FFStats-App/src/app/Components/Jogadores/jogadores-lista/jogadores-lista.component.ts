@@ -20,6 +20,7 @@ export class JogadoresListaComponent implements OnInit {
   private _filtroLista: string = '';
   public estatistica: Estatistica[] = [];
   public totalKill : number[]=[];
+  public JogadorId:number = 0;
 
   public get filtroLista()
   {
@@ -88,13 +89,29 @@ export class JogadoresListaComponent implements OnInit {
       e => e.jogadorId == i).reduce((a,b) => a + b.kill,0);
     }
   }
-  public openModal(template: TemplateRef<any>): void {
+  public openModal(event:any, template: TemplateRef<any>, id: number): void {
+    event.stopPropagation();
+    this.JogadorId = id;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   public confirm(): void {
     this.modalRef?.hide();
-    this.toastr.success('Jogador excluido com sucesso!', 'Sucesso!');
+    this.spinner.show();
+    this.jogadorService.deleteJogador(this.JogadorId).subscribe(
+      (result: any) =>{
+        console.log(result);
+        this.toastr.success('Partida excluida com sucesso!', 'Sucesso!');
+        this.spinner.hide();
+        this.getJogadores();
+      },
+      (error: any) =>{
+        //console.error(error);
+        this.toastr.error('Erro ao tentar deletar o Evento', 'Erro:');
+        this.spinner.hide();
+      },
+      () => this.spinner.hide(),
+    );
   }
 
   public decline(): void {

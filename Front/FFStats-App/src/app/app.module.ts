@@ -14,6 +14,10 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+
 
 //Area APP
 import { AppRoutingModule } from './app-routing.module';
@@ -72,9 +76,10 @@ import { EstatisticaService } from './Services/estatistica.service';
 
 //Area Pipes
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
+import { SubmodoService } from './Services/submodoService.service';
 
 
-
+defineLocale('pt-br', ptBrLocale);
 
 @NgModule({
   declarations: [
@@ -114,6 +119,7 @@ import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
     FormsModule,
     ReactiveFormsModule,
     TooltipModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     ToastrModule.forRoot({
@@ -132,6 +138,7 @@ import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
     CallService,
     ModoService,
     EstatisticaService,
+    SubmodoService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

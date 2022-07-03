@@ -48,7 +48,7 @@ namespace FFStats.Application.Service
 
                 model.Id = mapa.Id;
                 _mapper.Map(model, mapa);
-                _geralPersistence.Update(model);
+                _geralPersistence.Update<Mapa>(mapa);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
                     var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.Id, false);

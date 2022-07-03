@@ -19,5 +19,14 @@ export class TreinoService {
   getTreinoById(id: number): Observable<Treino>{
     return this.http.get<Treino>(`${this.baseURL}/${id}`);
   }
+  postTreino(treino: Treino): Observable<Treino>{
+    return this.http.post<Treino>(this.baseURL, treino);
+  }
+  putTreino(treino: Treino): Observable<Treino>{
+    return this.http.put<Treino>(`${this.baseURL}/${treino.treinoId}`, treino);
+  }
+  deleteTreino(id: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 
 }

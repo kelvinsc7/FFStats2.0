@@ -94,14 +94,14 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Atualizar Mapa. Erro: {ex.Message}");
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             try
             {
                 return await _MapaService.DeleteMapa(Id) ?
-                        Ok("Deletado"):
-                        BadRequest("Mapa Não Deletada");
+                        Ok(new {message = "Deletado"} ):
+                        throw new Exception("Ocorreu um erro nao especifico!");
             }
             catch (Exception ex)
             {

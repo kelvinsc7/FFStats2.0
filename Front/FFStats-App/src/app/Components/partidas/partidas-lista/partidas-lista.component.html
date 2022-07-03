@@ -41,7 +41,7 @@
           <th>{{item.posicao}}</th>
           <th>{{item.partidaData | DateTimeFormat}}</th>
           <th>
-            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal(template)">
+            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>
             </button>
           </th>
@@ -61,7 +61,7 @@
 
 <ng-template #template>
   <div class="modal-body text-center">
-    <p>Deseja realmente efetuar a exclusão?</p>
+    <p>Deseja realmente efetuar a exclusão da partida {{this.partidaId}}?</p>
     <button type="button" class="btn btn-primary mr-3" (click)="confirm()" >Sim</button>
     <button type="button" class="btn btn-danger" (click)="decline()" >Não</button>
   </div>

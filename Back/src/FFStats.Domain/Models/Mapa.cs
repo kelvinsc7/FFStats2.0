@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
-    [Table("tb_mapa")]
+    //[Table("tb_mapa")]
     public class Mapa
     {
         public int Id { get; set; }
