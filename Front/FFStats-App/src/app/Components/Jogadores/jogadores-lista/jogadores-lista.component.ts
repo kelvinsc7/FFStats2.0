@@ -53,7 +53,7 @@ export class JogadoresListaComponent implements OnInit {
 
   public ngOnInit() {
     this.spinner.show();
-    this.getEstatisticas();
+    //this.getEstatisticas();
     this.getJogadores();
   }
   public getJogadores(): void{
@@ -70,18 +70,18 @@ export class JogadoresListaComponent implements OnInit {
       complete: () => this.spinner.hide()
     })
   }
-  public getEstatisticas(): void{
-    this.estatisticaService.getEstatisticas().subscribe({
-      next: (_estatisticas: Estatistica[] ) => {
-        this.estatistica = _estatisticas;
-      },
-      error: (error: any)=> {
-        this.spinner.hide(),
-        this.toastr.error("Erro ao carregar Estatisticaes","Erro!")
-      },
-      complete: () => this.spinner.hide()
-    })
-  }
+  // public getEstatisticas(): void{
+  //   this.estatisticaService.getEstatisticas().subscribe({
+  //     next: (_estatisticas: Estatistica[] ) => {
+  //       this.estatistica = _estatisticas;
+  //     },
+  //     error: (error: any)=> {
+  //       this.spinner.hide(),
+  //       this.toastr.error("Erro ao carregar Estatisticaes","Erro!")
+  //     },
+  //     complete: () => this.spinner.hide()
+  //   })
+  // }
   public carregaKIll() :void {
     for(let i=0;i<=this.estatistica.length;i++)
     {

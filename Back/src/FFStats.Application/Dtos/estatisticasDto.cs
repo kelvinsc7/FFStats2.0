@@ -14,14 +14,20 @@ namespace FFStats.Application.Dtos
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
         public int Kill { get; set; }
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
-        public int Dano { get; set; } 
-        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
-        public int Tempo { get; set; }
+        public int Morte { get; set; }
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
         public int Assistencia { get; set; }
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
-        public int Ressucitado { get; set; }
+        public int Dano { get; set; } 
         [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
-        public int Salvador { get; set; }
+        public int Derrubado { get; set; } 
+        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
+        public int Cura { get; set; } 
+        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
+        public int Levantados { get; set; } 
+        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
+        public int Ressucitou { get; set; }
+        [Required(ErrorMessage ="O campo {0} deve ser um campo valido")]
+        public int Tempo { get; set; }
     }
 }

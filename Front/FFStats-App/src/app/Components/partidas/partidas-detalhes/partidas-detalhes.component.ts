@@ -26,6 +26,7 @@ export class DemoDatepickerBasicComponent {}
   styleUrls: ['./partidas-detalhes.component.scss']
 })
 export class PartidasDetalhesComponent implements OnInit {
+
   mapasel:number = 0;
   treino:Treino[] = [];
   mapas:Mapa[] = [];
@@ -35,9 +36,8 @@ export class PartidasDetalhesComponent implements OnInit {
   partida={} as Partida;
   form!:FormGroup;
   modeSave = 'postPartida';
-  get f():any{
-     return this.form.controls;
-  }
+
+  get f():any{return this.form.controls;}
 
   get bsConfig():any{
     return { isAnimated: true, adaptivePosition: true,
@@ -59,9 +59,7 @@ export class PartidasDetalhesComponent implements OnInit {
               private submodoService: SubmodoService,
               private spiner: NgxSpinnerService,
               private toaster: ToastrService)
-              {
-                this.localeService.use('pt-br');
-              }
+              {this.localeService.use('pt-br');}
 
   public carregaDados():void{
     const dadosIdParam = this.router.snapshot.paramMap.get('id');
@@ -72,80 +70,62 @@ export class PartidasDetalhesComponent implements OnInit {
 
       this.modeSave = 'putPartida';
 
-      this.partidaService.getPartidaById(+dadosIdParam).subscribe({
-        next:(partida: Partida)=>{
+      this.partidaService.getPartidaById(+dadosIdParam).subscribe(
+        (partida: Partida)=>{
           this.partida = {...partida};
           this.form.patchValue(this.partida);
         },
-        error:()=>{
+        ()=>{
           console.error(Error);
           this.toaster.error('Erro ao carregar partida', 'Erro!')
-          this.spiner.hide();
         },
-        complete:()=>{ this.spiner.hide();},
-      })
+      ).add(()=>{ this.spiner.hide();},)
     }
 
   }
   public getCall():void{
-    this.callService.getCalls().subscribe({
-      next: (call: Call[]) =>{
+    this.callService.getCalls().subscribe(
+      (call: Call[]) =>{
         this.calls = call
-
       },
-      error: (error: any)=>{
-
-      },
-      complete: () => {}
-    })
+      (error: any)=>{
+      }
+    )
   }
   public getTreinos(): void{
-    this.treinoService.getTreinos().subscribe({
-      next: (treino: Treino[]) =>{
+    this.treinoService.getTreinos().subscribe(
+      (treino: Treino[]) =>{
         this.treino = treino
-
       },
-      error: (error: any)=>{
-
-      },
-      complete: () => {}
-    })
+      (error: any)=>{},
+    )
   }
   public getMapas(): void{
-    this.mapaService.getMapas().subscribe({
-      next: (mapa: Mapa[]) =>{
+    this.mapaService.getMapas().subscribe(
+      (mapa: Mapa[]) =>{
         this.mapas = mapa
-
       },
-      error: (error: any)=>{
-
+      (error: any)=>{
       },
-      complete: () => {}
-    })
+    )
   }
   public getModo(): void{
-    this.modoService.getModos().subscribe({
-      next: (modo: Modo[]) =>{
+    this.modoService.getModos().subscribe(
+      (modo: Modo[]) =>{
         this.modos = modo
-
       },
-      error: (error: any)=>{
-
+      (error: any)=>{
       },
-      complete: () => {}
-    })
+    )
   }
   public getSubModo(): void{
-    this.submodoService.getSubModos().subscribe({
-      next: (sm: Submodo[]) =>{
+    this.submodoService.getSubModos().subscribe(
+      (sm: Submodo[]) =>{
         this.smodos = sm
-
       },
-      error: (error: any)=>{
-
+      (error: any)=>{
       },
-      complete: () => {}
-    })
+    )
   }
   ngOnInit() {
     this.getTreinos();
@@ -159,7 +139,7 @@ export class PartidasDetalhesComponent implements OnInit {
   public validation():void{
     this.form = this.fb.group({
       partidaDescricao: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
-      partidaData: ['', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]],
+      partidaData: ['', [Validators.required]],
       posicao: ['',[Validators.required, Validators.min(1),Validators.max(55)]],
       treinoId:['',[Validators.required,]],
       mapaId:['',[Validators.required,]],
@@ -167,20 +147,9 @@ export class PartidasDetalhesComponent implements OnInit {
       modoId:['',[Validators.required,]],
       submodoId:['',[Validators.required,]],
     });
-
-
-    // this.mapasel = this.form.get('mapaId')?.valueChanges
-    //   .pipe(
-    //     tap(mapa => console.log('Novo Mapa: ', mapa)),
-    //     map(mapa => this.mapas.filter(m => m.id === mapa)),
-    //     map(mapas => mapas && mapas.length >0? mapas[0].id:empty),
-    //   ).subscribe();
   }
 
-  public resetForm():void
-  {
-    this.form.reset();
-  }
+  public resetForm():void{this.form.reset();}
 
   public salvarAlteracao():void{
     this.spiner.show();
@@ -196,10 +165,7 @@ export class PartidasDetalhesComponent implements OnInit {
           console.error(error);
           this.toaster.error('Erro ao salvar a partida', 'Error');
         },
-
-    ).add(() =>this.spiner.hide());
-
+      ).add(() =>this.spiner.hide());
     }
   }
-
 }

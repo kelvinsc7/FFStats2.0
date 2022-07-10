@@ -73,6 +73,7 @@ import { TreinoService } from './Services/treino.service';
 
 //Area Estatisticas Components
 import { EstatisticaService } from './Services/estatistica.service';
+import { LineService } from './Services/Line.service';
 
 //Area Pipes
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
@@ -139,6 +140,7 @@ defineLocale('pt-br', ptBrLocale);
     ModoService,
     EstatisticaService,
     SubmodoService,
+    LineService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

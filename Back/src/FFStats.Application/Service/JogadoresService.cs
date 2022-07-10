@@ -30,7 +30,7 @@ namespace FFStats.Application.Service
                 _geralPersistence.Add<Jogador>(jogador);
                 if(await _geralPersistence.SaveChangeAsync())
                 {
-                    var jogadorRetorno =await _JogadoresPersistence.GetAllJogadoresByIdAsync(jogador.Id, false);
+                    var jogadorRetorno =await _JogadoresPersistence.GetAllJogadoresByIdAsync(jogador.id, false);
                     return _mapper.Map<jogadoresDto>(jogadorRetorno);
                 }
                 return null;
@@ -47,12 +47,12 @@ namespace FFStats.Application.Service
                 var jogador = await _JogadoresPersistence.GetAllJogadoresByIdAsync(JogadoresId, false);
                 if(jogador == null) return null;
 
-                model.Id = jogador.Id;
+                model.Id = jogador.id;
                 _mapper.Map(model, jogador);
                 _geralPersistence.Update<Jogador>(jogador);
                 if(await _geralPersistence.SaveChangeAsync())
                 {
-                    var jogadorRetorno =await _JogadoresPersistence.GetAllJogadoresByIdAsync(jogador.Id, false);
+                    var jogadorRetorno =await _JogadoresPersistence.GetAllJogadoresByIdAsync(jogador.id, false);
                     return _mapper.Map<jogadoresDto>(jogadorRetorno);
                 }
                 return null;
@@ -79,11 +79,11 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<jogadoresDto[]> GetAllJogadoresAsync(bool IncludeJogadores = false)
+        public async Task<jogadoresDto[]> GetAllJogadoresAsync(bool IncludePartidas = false)
         {
             try
             {
-                var jogadores = await _JogadoresPersistence.GetAllJogadoresAsync(IncludeJogadores);
+                var jogadores = await _JogadoresPersistence.GetAllJogadoresAsync(IncludePartidas);
                 if(jogadores == null) return null;
 
                 var resultado = _mapper.Map<jogadoresDto[]>(jogadores);
@@ -96,11 +96,11 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<jogadoresDto> GetJogadoresByIdAsync(int JogadoresId, bool IncludeJogadores = false)
+        public async Task<jogadoresDto> GetJogadoresByIdAsync(int JogadoresId, bool IncludePartidas = false)
         {
             try
             {
-                var jogadores = await _JogadoresPersistence.GetAllJogadoresByIdAsync(JogadoresId, IncludeJogadores);
+                var jogadores = await _JogadoresPersistence.GetAllJogadoresByIdAsync(JogadoresId, IncludePartidas);
                 if(jogadores == null) return null;
                 var resultado = _mapper.Map<jogadoresDto>(jogadores);
                 return resultado;
@@ -110,11 +110,11 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<jogadoresDto[]> GetAllJogadoresByDescAsync(string Desc, bool IncludeJogadores = false)
+        public async Task<jogadoresDto[]> GetAllJogadoresByDescAsync(string Desc, bool IncludePartidas = false)
         {
             try
             {
-                var jogadores = await _JogadoresPersistence.GetAllJogadoresByNomeAsync(Desc, IncludeJogadores);
+                var jogadores = await _JogadoresPersistence.GetAllJogadoresByNomeAsync(Desc, IncludePartidas);
                 if(jogadores == null) return null;
                 var resultado = _mapper.Map<jogadoresDto[]>(jogadores);
                 return resultado;

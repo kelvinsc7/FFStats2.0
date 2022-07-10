@@ -17,33 +17,33 @@ namespace FFStats.Persistence.Persistences
         //Jogador
         public async Task<Jogador[]> GetAllJogadoresAsync(bool IncludePartidas = false)
         {
-            IQueryable<Jogador> query = _context.Jogadores;
+            IQueryable<Jogador> query = _context.Jogadores.Include(j=>j.Line);
             if(IncludePartidas)
             {
                 query = query.AsNoTracking().Include(J=> J.PartidasJogadores).ThenInclude(PJ =>PJ.Partida);
             }
-            query = query.OrderBy(J => J.Id);
+            query = query.OrderBy(J => J.id);
             return await query.ToArrayAsync();
         }
 
         public async Task<Jogador> GetAllJogadoresByIdAsync(int JogadorId, bool IncludePartidas)
         {
-            IQueryable<Jogador> query = _context.Jogadores;
+            IQueryable<Jogador> query = _context.Jogadores.Include(j=>j.Line);
             if(IncludePartidas)
             {
                 query = query.AsNoTracking().Include(J=> J.PartidasJogadores).ThenInclude(PJ =>PJ.Partida);
             }
-            query = query.OrderBy(J => J.Id).Where(J=> J.Id == JogadorId);
+            query = query.OrderBy(J => J.id).Where(J=> J.id == JogadorId);
             return await query.FirstOrDefaultAsync();
         }
         public async Task<Jogador[]> GetAllJogadoresByNomeAsync(string Nome, bool IncludePartidas = false)
         {
-            IQueryable<Jogador> query = _context.Jogadores;
+            IQueryable<Jogador> query = _context.Jogadores.Include(j=>j.Line);
             if(IncludePartidas)
             {
                 query = query.AsNoTracking().Include(J=> J.PartidasJogadores).ThenInclude(PJ =>PJ.Partida);
             }
-            query = query.OrderBy(J => J.Id).Where(J=> J.jogadorNome.ToLower().Contains(Nome.ToLower()));
+            query = query.OrderBy(J => J.id).Where(J=> J.jogadorNome.ToLower().Contains(Nome.ToLower()));
             return await query.ToArrayAsync();
         }
     }

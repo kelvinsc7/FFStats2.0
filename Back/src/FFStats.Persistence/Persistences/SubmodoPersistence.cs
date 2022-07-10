@@ -22,7 +22,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(sm=> sm.modo);
             }
-            query = query.OrderBy(sm => sm.submodoId);
+            query = query.OrderBy(sm => sm.id);
             return await query.ToArrayAsync();
         }
 
@@ -33,7 +33,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(sm=> sm.modo);
             }
-            query = query.OrderBy(sm => sm.submodoId).Where(sm => sm.submodoId == Id);
+            query = query.OrderBy(sm => sm.id).Where(sm => sm.id == Id);
             return await query.FirstOrDefaultAsync();
         }
 

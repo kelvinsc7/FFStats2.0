@@ -21,12 +21,12 @@ namespace FFStats.API.Controllers
             this._EstatisticasService = EstatisticasService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{partidaId}")]
+        public async Task<IActionResult> Get(int partidaId)
         {
             try
             {
-                var Estatisticass = await _EstatisticasService.GetAllEstatisticassAsync(true);
+                var Estatisticass = await _EstatisticasService.GetEstatisticasByPartidaIdAsync(partidaId);
                 if(Estatisticass == null) return NotFound("Nenhuma Estatisticas Encontrada!");
 
                 return  Ok(Estatisticass);
@@ -36,70 +36,31 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
             }
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
-        {
-            try
-            {
-                var Estatisticas = await _EstatisticasService.GetEstatisticassByIdAsync(id,true);
-                if(Estatisticas == null) return NotFound("Nenhuma Estatisticas Encontrada!");
 
-                return  Ok(Estatisticas);
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
-            }
-        }
-        [HttpGet("{desc}/descricao")]
-        public async Task<IActionResult> GetByDesc(string desc)
-        {
-            try
-            {
-                var Estatisticas = await _EstatisticasService.GetAllEstatisticassByDescAsync(desc, true);
-                if(Estatisticas == null) return NotFound("Nenhuma Estatisticas Encontrada!");
-                return  Ok(Estatisticas);
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
-            }
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(estatisticasDto model)
+        [HttpPut("{partidaId}")]
+        public async Task<IActionResult> SaveEstatisticas(int partidaId, estatisticasDto[] models)
         {
             try
             {
-                var Estatisticas = await _EstatisticasService.AddEstatisticass(model);
-                if(Estatisticas == null) return BadRequest("Erro ao Tentar adicionar Estatisticas");
-                return  Ok(Estatisticas);
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Adicionar Estatisticas. Erro: {ex.Message}");
-            }
-        }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, estatisticasDto model)
-        {
-            try
-            {
-                var Estatisticas = await _EstatisticasService.UpdateEstatisticass(id, model);
+                var Estatisticas = await _EstatisticasService.SaveEstatistica(partidaId, models);
                 if(Estatisticas == null) return BadRequest("Erro ao Tentar Atualizar Estatisticas");
                 return  Ok(Estatisticas);
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Atualizar Estatisticas. Erro: {ex.Message}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Salvar Estatisticas. Erro: {ex.Message}");
             }
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int Id)
+        [HttpDelete("{partidaId}/{estatisticaId}")]
+        public async Task<IActionResult> Delete(int partidaId, int estatisticaId)
         {
             try
             {
-                return await _EstatisticasService.DeleteEstatisticas(Id) ?
+                var estatistica = await _EstatisticasService.GetEstatisticasByIdsAsync(partidaId, estatisticaId);
+                if (estatistica == null) return NoContent();
+
+                return await _EstatisticasService.DeleteEstatisticas(estatistica.partidaId, estatistica.id) ?
                         Ok(new {message = "Deletado"} ):
                         throw new Exception("Ocorreu um erro nao especifico!");
             }

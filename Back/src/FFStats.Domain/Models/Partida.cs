@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FFStats.Domain.Models
 {
-    //[Table("tb_partida")]
+    [Table("tb_partida")]
     public class Partida
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string partidaDescricao { get; set; }
         public int treinoId { get; set; }   
         public Treino treino { get; set; }

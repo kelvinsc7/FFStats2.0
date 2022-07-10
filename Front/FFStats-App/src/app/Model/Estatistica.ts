@@ -8,9 +8,12 @@ export interface Estatistica {
   jogadorId: number;
   jogador: Jogador[];
   kill: number;
-  dano: number;
-  tempo: number;
+  morte: number;
   assistencia: number;
-  ressucitado: number;
-  salvador: number;
+  dano: number;
+  derrubados: number;
+  cura: number;
+  levantados: number;
+  ressucitou: number;
+  tempo: number;
 }

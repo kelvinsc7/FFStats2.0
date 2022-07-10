@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FFStats.Application.Contratos;
@@ -20,18 +21,14 @@ namespace FFStats.Application.Service
             this._geralPersistence = geralPersistence;
 
         }
-        public async Task<estatisticasDto> AddEstatisticass(estatisticasDto model)
+        public async Task AddEstatisticas(int partidaId, estatisticasDto model)
         {
             try
             {
                 var estatistica = _mapper.Map<Estatisticas>(model);
+                estatistica.partidaId = partidaId;
                 _geralPersistence.Add<Estatisticas>(estatistica);
-                if (await _geralPersistence.SaveChangeAsync())
-                {
-                    var estatisticaRetorno = await _EstatisticasPersistence.GetAllEstatisticasByIdAsync(estatistica.id, false);
-                    return _mapper.Map<estatisticasDto>(estatisticaRetorno);
-                }
-                return null;
+                await _geralPersistence.SaveChangeAsync();
             }
             catch (Exception ex)
             {
@@ -39,24 +36,32 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<estatisticasDto> UpdateEstatisticass(int EstatisticasId, estatisticasDto model)
+        public async Task<estatisticasDto[]> SaveEstatistica(int partidaId, estatisticasDto[] models)
         {
             try
             {
-                var estatistica = await _EstatisticasPersistence.GetAllEstatisticasByIdAsync(EstatisticasId, false);
+                var estatistica = await _EstatisticasPersistence.GetEstatisticasByPartidaIdAsync(partidaId);
                 if (estatistica == null) return null;
 
-                model.id = estatistica.id;
-
-                _mapper.Map(model,estatistica);
-
-                _geralPersistence.Update<Estatisticas>(estatistica);
-                if (await _geralPersistence.SaveChangeAsync())
+                foreach (var model in models)
                 {
-                    var estatisticaRetorno = await _EstatisticasPersistence.GetAllEstatisticasByIdAsync(estatistica.id, false);
-                    return _mapper.Map<estatisticasDto>(estatisticaRetorno);
+                    if (model.id == 0)
+                    {
+                        await AddEstatisticas(partidaId, model);
+                    }
+                    else
+                    {
+                        var est = estatistica.FirstOrDefault(est => est.id == model.id);
+                        model.partidaId = partidaId;
+
+                        _mapper.Map(model, est);
+
+                        _geralPersistence.Update<Estatisticas>(est);
+                        await _geralPersistence.SaveChangeAsync();
+                    }                    
                 }
-                return null;
+                var estatisticaRetorno = await _EstatisticasPersistence.GetEstatisticasByPartidaIdAsync(partidaId);
+                return _mapper.Map<estatisticasDto[]>(estatisticaRetorno);
             }
             catch (Exception ex)
             {
@@ -64,11 +69,11 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<bool> DeleteEstatisticas(int EstatisticasId)
+        public async Task<bool> DeleteEstatisticas(int partidaId, int EstatisticasId)
         {
             try
             {
-                var Estatisticas = await _EstatisticasPersistence.GetAllEstatisticasByIdAsync(EstatisticasId, false);
+                var Estatisticas = await _EstatisticasPersistence.GetEstatisticasByIdsAsync(partidaId, EstatisticasId);
                 if (Estatisticas == null) throw new Exception("Erro: Estatisticas nao encontrado para ser deletado!");
 
                 _geralPersistence.Delete(Estatisticas);
@@ -80,11 +85,11 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<estatisticasDto[]> GetAllEstatisticassAsync(bool IncludeJogador = false)
+        public async Task<estatisticasDto[]> GetEstatisticasByPartidaIdAsync(int partidaId)
         {
             try
             {
-                var estatisticas = await _EstatisticasPersistence.GetAllEstatisticasAsync(IncludeJogador);
+                var estatisticas = await _EstatisticasPersistence.GetEstatisticasByPartidaIdAsync(partidaId);
                 if (estatisticas == null) return null;
 
                 var resultado = _mapper.Map<estatisticasDto[]>(estatisticas);
@@ -97,27 +102,11 @@ namespace FFStats.Application.Service
             }
         }
 
-        public async Task<estatisticasDto[]> GetAllEstatisticassByDescAsync(string Desc, bool IncludeJogador = false)
+        public async Task<estatisticasDto> GetEstatisticasByIdsAsync(int EstatisticasId, int estatisticaId)
         {
             try
             {
-                var estatisticas = await _EstatisticasPersistence.GetAllEstatisticasByNomeAsync(Desc, IncludeJogador);
-                if (estatisticas == null) return null;
-
-                var resultado = _mapper.Map<estatisticasDto[]>(estatisticas);
-                return resultado;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<estatisticasDto> GetEstatisticassByIdAsync(int EstatisticasId, bool IncludeJogador = false)
-        {
-            try
-            {
-                var estatisticas = await _EstatisticasPersistence.GetAllEstatisticasByIdAsync(EstatisticasId, IncludeJogador);
+                var estatisticas = await _EstatisticasPersistence.GetEstatisticasByIdsAsync(EstatisticasId, estatisticaId);
                 if (estatisticas == null) return null;
 
                 var resultado = _mapper.Map<estatisticasDto>(estatisticas);

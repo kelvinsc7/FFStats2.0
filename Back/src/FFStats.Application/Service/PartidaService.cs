@@ -30,7 +30,7 @@ namespace FFStats.Application.Service
 
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.Id, false);
+                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.id, false);
                     return _mapper.Map<partidaDto>(partidaRetorno); 
                 }
                 return null;
@@ -48,14 +48,14 @@ namespace FFStats.Application.Service
                 var partida = await _partidaPersistence.GetPartidasByIdAsync(partidaId, false);
                 if (partida == null) return null;
 
-                model.Id = partida.Id;
+                model.Id = partida.id;
 
                 _mapper.Map(model, partida);
 
                 _geralPersistence.Update<Partida>(partida);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.Id, false);
+                    var partidaRetorno = await _partidaPersistence.GetPartidasByIdAsync(partida.id, false);
                     return _mapper.Map<partidaDto>(partidaRetorno); 
                 }
                 return null;

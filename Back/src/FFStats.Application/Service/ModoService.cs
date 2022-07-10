@@ -28,7 +28,7 @@ namespace FFStats.Application.Service
                 _geralPersistence.Add<Modo>(modo);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.Id, false);
+                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.id, false);
                     return _mapper.Map<modoDto>(modoRetorno);
                 }
                 return null;
@@ -46,12 +46,12 @@ namespace FFStats.Application.Service
                 var modo = await _ModoPersistence.GetAllModoByIdAsync(ModoId, false);
                 if (modo == null) return null;
 
-                model.Id = modo.Id;
+                model.Id = modo.id;
                 _mapper.Map(modo, model);
                 _geralPersistence.Update(model);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.Id, false);
+                    var modoRetorno = await _ModoPersistence.GetAllModoByIdAsync(modo.id, false);
                     return _mapper.Map<modoDto>(modoRetorno);
                 }
                 return null;

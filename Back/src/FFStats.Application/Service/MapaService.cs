@@ -28,7 +28,7 @@ namespace FFStats.Application.Service
                 _geralPersistence.Add<Mapa>(mapa);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.Id, false);
+                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.id, false);
                     return _mapper.Map<mapaDto>(mapaRetorno);
                 }
                 return null;
@@ -46,12 +46,12 @@ namespace FFStats.Application.Service
                 var mapa = await _MapaPersistence.GetAllMapaByIdAsync(MapaId, false);
                 if (mapa == null) return null;
 
-                model.Id = mapa.Id;
+                model.Id = mapa.id;
                 _mapper.Map(model, mapa);
                 _geralPersistence.Update<Mapa>(mapa);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.Id, false);
+                    var mapaRetorno = await _MapaPersistence.GetAllMapaByIdAsync(mapa.id, false);
                     return _mapper.Map<mapaDto>(mapaRetorno);
                 }
                 return null;

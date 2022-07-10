@@ -30,7 +30,7 @@ namespace FFStats.Application.Service
 
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(call.Id, false);
+                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(call.id, false);
                     return _mapper.Map<callDto>(callRetorno);
                 }
                 return null;
@@ -48,14 +48,14 @@ namespace FFStats.Application.Service
                 var Call = await _CallPersistence.GetAllCallByIdAsync(CallId, false);
                 if (Call == null) return null;
 
-                model.Id = Call.Id;
+                model.Id = Call.id;
 
                 _mapper.Map(model, Call);
 
                 _geralPersistence.Update<Call>(Call);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(Call.Id, false);
+                    var callRetorno = await _CallPersistence.GetAllCallByIdAsync(Call.id, false);
                     return _mapper.Map<callDto>(callRetorno);
                 }
                 return null;

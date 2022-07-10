@@ -13,39 +13,36 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TreinoDetalhesComponent implements OnInit {
 
-    form!:FormGroup;
-    treino ={} as Treino;
-    modeSave = 'postTreino'
+  form!:FormGroup;
+  treino ={} as Treino;
+  modeSave = 'postTreino'
 
-    get f():any
-    {
-      return this.form.controls
-    }
-    constructor(private fb:FormBuilder,
-                private router: ActivatedRoute,
-                private treinoService: TreinoService,
-                private spiner: NgxSpinnerService,
-                private toaster: ToastrService) { }
+  get f():any{return this.form.controls}
+
+  constructor(private fb: FormBuilder,
+              private router: ActivatedRoute,
+              private treinoService: TreinoService,
+              private spinner: NgxSpinnerService,
+              private toaster: ToastrService) { }
 
 
-    public carregaDados():void{
-      const dadosIdParam = this.router.snapshot.paramMap.get('id');
+  public carregaDados():void{
+    const dadosIdParam = this.router.snapshot.paramMap.get('id');
     if(dadosIdParam!== null)
     {
-      this.spiner.show();
+      this.spinner.show();
       this.modeSave = 'putTreino';
-      this.treinoService.getTreinoById(+dadosIdParam).subscribe({
-        next:(treino: Treino)=>{
+      this.treinoService.getTreinoById(+dadosIdParam).subscribe(
+        (treino: Treino)=>{
           this.treino = {...treino};
           this.form.patchValue(this.treino);
         },
-        error:()=>{
+        ()=>{
           console.error(Error);
           this.toaster.error('Erro ao carregar treino', 'Erro!')
-          this.spiner.hide();
         },
-        complete:()=>{ this.spiner.hide();},
-      })
+
+      ).add(()=>{ this.spinner.hide()},)
     }
   }
   ngOnInit() {
@@ -58,12 +55,11 @@ export class TreinoDetalhesComponent implements OnInit {
       treinoDescricao: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
     });
   }
-  public resetForm():void
-  {
-    this.form.reset();
-  }
+
+  public resetForm():void{this.form.reset();}
+
   public salvarAlteracao():void{
-    this.spiner.show();
+    this.spinner.show();
     if(this.form.valid)
     {
       this.treino =  (this.modeSave === 'postTreino')
@@ -77,7 +73,7 @@ export class TreinoDetalhesComponent implements OnInit {
           this.toaster.error('Erro ao salvar a Treino', 'Error');
         },
 
-    ).add(() =>this.spiner.hide());
+    ).add(() =>this.spinner.hide());
 
     }
   }

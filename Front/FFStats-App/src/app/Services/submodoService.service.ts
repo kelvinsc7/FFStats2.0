@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Submodo } from '@app/Model/Submodo';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,21 +11,21 @@ export class SubmodoService {
   constructor(private http: HttpClient) { }
 
   getSubModos(): Observable<Submodo[]>{
-    return this.http.get<Submodo[]>(this.baseURL);
+    return this.http.get<Submodo[]>(this.baseURL).pipe(take(1));
   }
   getSubModosByDesc(desc: string): Observable<Submodo[]>{
-    return this.http.get<Submodo[]>(`${this.baseURL}/${desc}/descricao`);
+    return this.http.get<Submodo[]>(`${this.baseURL}/${desc}/descricao`).pipe(take(1));
   }
   getSubModoById(id: number): Observable<Submodo>{
-    return this.http.get<Submodo>(`${this.baseURL}/${id}`);
+    return this.http.get<Submodo>(`${this.baseURL}/${id}`).pipe(take(1));
   }
   postSubmodo(submodo: Submodo): Observable<Submodo>{
-    return this.http.post<Submodo>(this.baseURL, submodo);
+    return this.http.post<Submodo>(this.baseURL, submodo).pipe(take(1));
   }
   putSubmodo(submodo: Submodo): Observable<Submodo>{
-    return this.http.put<Submodo>(`${this.baseURL}/${submodo.submodoId}`, submodo);
+    return this.http.put<Submodo>(`${this.baseURL}/${submodo.submodoId}`, submodo).pipe(take(1));
   }
   deleteSubmodo(id: number): Observable<any>{
-    return this.http.delete(`${this.baseURL}/${id}`);
+    return this.http.delete(`${this.baseURL}/${id}`).pipe(take(1));
   }
 }

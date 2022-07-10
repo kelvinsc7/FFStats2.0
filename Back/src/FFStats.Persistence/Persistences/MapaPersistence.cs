@@ -22,7 +22,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(m=> m.Calls);
             }
-            query = query.OrderBy(P => P.Id);
+            query = query.OrderBy(P => P.id);
             return await query.ToArrayAsync();
         }
 
@@ -33,7 +33,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.Include(m=> m.Calls);
             }
-            query = query.AsNoTracking().OrderBy(m => m.Id).Where(m => m.Id == id);
+            query = query.AsNoTracking().OrderBy(m => m.id).Where(m => m.id == id);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -44,7 +44,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(m=> m.Calls);
             }
-            query = query.OrderBy(m => m.Id).Where(m => m.mapaNome.ToLower().Contains(Nome.ToLower()));;
+            query = query.OrderBy(m => m.id).Where(m => m.mapaNome.ToLower().Contains(Nome.ToLower()));;
             return await query.ToArrayAsync();
         }
     }

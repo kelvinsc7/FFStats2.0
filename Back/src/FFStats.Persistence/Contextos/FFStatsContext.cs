@@ -16,6 +16,7 @@ namespace FFStats.Persistence.Contextos
         public DbSet<Treino> Treinos{ get; set; }
         public DbSet<Modo> Modos{ get; set; }
         public DbSet<PartidaJogador> PartidasJogadores{ get; set; }
+        public DbSet<Line> Lines{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)//criado para relação n:n de tabela, relacionando o campo com as tabelas
         {
@@ -41,7 +42,7 @@ namespace FFStats.Persistence.Contextos
             modelBuilder.Entity<Partida>()
                         .HasMany(p => p.Estatisticas)
                         .WithOne(e => e.Partida)
-                        .OnDelete(DeleteBehavior.Cascade);   
+                        .OnDelete(DeleteBehavior.Cascade); 
         }
 
     }

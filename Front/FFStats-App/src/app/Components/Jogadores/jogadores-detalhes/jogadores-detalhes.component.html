@@ -14,21 +14,22 @@
           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.jogadorNick.errors && f.jogadorNick.touched}" formControlName="jogadorNick" placeholder="Insira o NickName">
           <div *ngIf="f.jogadorNick.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
           <div *ngIf="f.jogadorNick.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-          <div *ngIf="f.jogadorNick.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+          <div *ngIf="f.jogadorNick.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
         </div>
        </div>
        <div class="form-row">
          <div class="form-group col-md-6">
            <label><strong>Id do Jogo</strong> </label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.idjogo.errors && f.idjogo.touched}" formControlName="idjogo" placeholder="Insira o Id">
-           <div *ngIf="f.idjogo.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-           <div *ngIf="f.idjogo.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
-           <div *ngIf="f.idjogo.errors?.maxlength" class="invalid-feedback"> Maximo de 10 Caracteres</div>
+           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.idJogo.errors && f.idJogo.touched}" formControlName="idJogo" placeholder="Insira o Id">
+           <div *ngIf="f.idJogo.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
+           <div *ngIf="f.idJogo.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
+           <div *ngIf="f.idJogo.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
          </div>
          <div class="form-group col-md-6">
           <label><strong>Selecione a Line</strong></label>
-          <select type="multiselect" class="form-control form-select"  formControlName="idLine">
+          <select type="multiselect" class="form-control form-select"  formControlName="lineId">
             <option selected>Selecione uma Line</option>
+            <option *ngFor="let l of lines" value={{l.id}}> {{l.lineNome}}</option>
           </select>
         </div>
        </div>

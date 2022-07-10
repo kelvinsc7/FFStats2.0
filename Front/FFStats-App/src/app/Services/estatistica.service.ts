@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Estatistica } from '../Model/Estatistica';
 
 @Injectable(
@@ -10,22 +10,13 @@ export class EstatisticaService {
   baseURL = 'https://localhost:5001/api/estatisticas';
   constructor(private http: HttpClient) { }
 
-  getEstatisticas(): Observable<Estatistica[]>{
-    return this.http.get<Estatistica[]>(this.baseURL);
+  getEstatisticasByPartidaId(eventoId:number): Observable<Estatistica[]>{
+    return this.http.get<Estatistica[]>(`${this.baseURL}/${eventoId}`).pipe(take(1));
   }
-  getEstatisticasByDesc(desc: string): Observable<Estatistica[]>{
-    return this.http.get<Estatistica[]>(`${this.baseURL}/${desc}/descricao`);
+  saveEstatistica(partidaId:number, estatistica: Estatistica[]): Observable<Estatistica[]>{
+    return this.http.put<Estatistica[]>(`${this.baseURL}/${partidaId}`, estatistica).pipe(take(1));
   }
-  getEstatisticaById(id: number): Observable<Estatistica>{
-    return this.http.get<Estatistica>(`${this.baseURL}/${id}`);
-  }
-  postEstatistica(estatistica: Estatistica): Observable<Estatistica>{
-    return this.http.post<Estatistica>(this.baseURL, estatistica);
-  }
-  putEstatistica(estatistica: Estatistica): Observable<Estatistica>{
-    return this.http.put<Estatistica>(`${this.baseURL}/${estatistica.id}`, estatistica);
-  }
-  deleteEstatistica(id: number): Observable<any>{
-    return this.http.delete(`${this.baseURL}/${id}`);
+  deleteEstatistica(partidaID: number, estatisticaId: number): Observable<any>{
+    return this.http.delete(`${this.baseURL}/${partidaID}/${estatisticaId}`).pipe(take(1));
   }
 }

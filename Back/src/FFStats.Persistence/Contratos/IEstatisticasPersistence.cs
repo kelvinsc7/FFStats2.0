@@ -6,9 +6,7 @@ namespace FFStats.Persistence.Contratos
     public interface IEstatisticasPersistence
     {
          //Estatisticas
-        Task<Estatisticas[]> GetAllEstatisticasByNomeAsync(string Nome, bool includeAll);
-         Task<Estatisticas[]> GetAllEstatisticasAsync(bool includeAll);
-         Task<Estatisticas> GetAllEstatisticasByIdAsync(int id, bool includeAll);
-
+         Task<Estatisticas[]> GetEstatisticasByPartidaIdAsync(int partidaId);
+         Task<Estatisticas> GetEstatisticasByIdsAsync(int partidaId, int estatisticaId );
     }
 }

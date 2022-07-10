@@ -15,34 +15,22 @@ namespace FFStats.Persistence.Persistences
             this._context = context;
         }
 
-        public async Task<Estatisticas[]> GetAllEstatisticasAsync(bool includeAll)
+        public async Task<Estatisticas> GetEstatisticasByIdsAsync(int partidaId, int estatisticaId)
         {
             IQueryable<Estatisticas> query = _context.Estatisticas;
-            if(includeAll)
-            {
-                query = query.AsNoTracking().Include(e=> e.Jogador)
-                                            .Include(e =>e.Partida);
-            }
-            query = query.OrderBy(e => e.id);
-            return await query.ToArrayAsync();
-        }
 
-        public async Task<Estatisticas> GetAllEstatisticasByIdAsync(int id, bool includeAll)
-        {
-            IQueryable<Estatisticas> query = _context.Estatisticas;
-            if(includeAll)
-            {
-                query = query.AsNoTracking().Include(e=> e.Jogador)
-                                            .Include(e =>e.Partida);
-            }
-            query = query.AsNoTracking().OrderBy(e => e.id).Where(e => e.id == id);
+            query = query.AsNoTracking().Where(e => e.partidaId == partidaId && e.id == estatisticaId);
+
             return await query.FirstOrDefaultAsync();
         }
 
-        public Task<Estatisticas[]> GetAllEstatisticasByNomeAsync(string Nome, bool includeAll)
+        public async Task<Estatisticas[]> GetEstatisticasByPartidaIdAsync(int partidaId)
         {
-            throw new System.NotImplementedException();
-        }
+            IQueryable<Estatisticas> query = _context.Estatisticas;
 
+            query = query.AsNoTracking().Where(e => e.partidaId == partidaId);
+
+            return await query.ToArrayAsync();
+        }
     }
 }

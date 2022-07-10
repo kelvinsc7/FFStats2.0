@@ -20,9 +20,7 @@ export class CallDetalhesComponent implements OnInit {
   calls ={} as Call;
   modeSave = 'postCall';
 
-  get f():any{
-     return this.form.controls;
-  }
+  get f():any{return this.form.controls;}
 
   constructor(private fb: FormBuilder,
     private router: ActivatedRoute,
@@ -40,33 +38,30 @@ export class CallDetalhesComponent implements OnInit {
 
       this.modeSave = 'putCall';
 
-      this.callService.getCallById(+dadosIdParam).subscribe({
-        next:(call: Call)=>{
+      this.callService.getCallById(+dadosIdParam).subscribe(
+        (call: Call)=>{
           this.calls = {...call};
           this.form.patchValue(this.calls);
         },
-        error:()=>{
+        ()=>{
           console.error(Error);
-          this.toaster.error('Erro ao carregar partida', 'Erro!')
+          this.toaster.error('Erro ao carregar a call', 'Erro!')
           this.spiner.hide();
         },
-        complete:()=>{ this.spiner.hide();},
-      })
+      ).add(()=>{ this.spiner.hide();});
     }
-
   }
+
   public getMapas(): void{
-    this.mapaService.getMapas().subscribe({
-      next: (mapa: Mapa[]) =>{
+    this.mapaService.getMapas().subscribe(
+      (mapa: Mapa[]) =>{
         this.mapas = mapa
-
       },
-      error: (error: any)=>{
-
+      (error: any)=>{
       },
-      complete: () => {}
-    })
+    )
   }
+
   ngOnInit(): void {
     this.getMapas();
     this.carregaDados();
@@ -79,10 +74,8 @@ export class CallDetalhesComponent implements OnInit {
       mapaId:['',[Validators.required,]],
     });
   }
-  public resetForm():void
-  {
-    this.form.reset();
-  }
+  public resetForm():void{this.form.reset();}
+
   public salvarAlteracao():void{
     this.spiner.show();
     if(this.form.valid)
@@ -98,8 +91,7 @@ export class CallDetalhesComponent implements OnInit {
           this.toaster.error('Erro ao salvar a Call', 'Error');
         },
 
-    ).add(() =>this.spiner.hide());
-
+      ).add(() =>this.spiner.hide());
     }
   }
 }

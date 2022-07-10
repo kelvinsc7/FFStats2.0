@@ -28,7 +28,7 @@ namespace FFStats.Application.Service
                 _geralPersistence.Add<Treino>(treino);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.treinoId, false);
+                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.id, false);
                     return _mapper.Map<treinoDto>(treinoRetorno);
                 }
                 return null;
@@ -46,13 +46,13 @@ namespace FFStats.Application.Service
                 var treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, false);
                 if (treino == null) return null;
 
-                model.treinoId = treino.treinoId;
+                model.treinoId = treino.id;
                 
                 _mapper.Map(model, treino);
                 _geralPersistence.Update(treino);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.treinoId, false);
+                    var treinoRetorno = await _TreinoPersistence.GetAllTreinoByIdAsync(treino.id, false);
                     return _mapper.Map<treinoDto>(treinoRetorno);
                 }
                 return null;

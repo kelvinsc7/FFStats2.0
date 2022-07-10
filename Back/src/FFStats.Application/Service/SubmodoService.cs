@@ -28,7 +28,7 @@ namespace FFStats.Application.Service
                 _geralPersistence.Add<Submodo>(submodo);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.submodoId, false);
+                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.id, false);
                     return _mapper.Map<subModoDto>(submodoRetorno);
                 }
                 return null;
@@ -46,12 +46,12 @@ namespace FFStats.Application.Service
                 var submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, false);
                 if (submodo == null) return null;
 
-                model.submodoId = submodo.submodoId;
+                model.submodoId = submodo.id;
                 _mapper.Map(model, submodo);
                 _geralPersistence.Update(model);
                 if (await _geralPersistence.SaveChangeAsync())
                 {
-                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.submodoId, false);
+                    var submodoRetorno = await _SubmodoPersistence.GetAllSubmodoByIdAsync(submodo.id, false);
                     return _mapper.Map<subModoDto>(submodoRetorno);
                 }
                 return null;

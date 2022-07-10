@@ -91,19 +91,19 @@ export class MapaListaComponent implements OnInit {
     })
 
   }
-  public getAllEstatisticas() : void{
-    this.estatisticaService.getEstatisticas().subscribe({
-      next: (_estatisticas: Estatistica[]) =>{
-        this.estatistica = _estatisticas
-      },
-      error: (error: any)=>{
-        this.spinner.hide(),
-        this.toastr.error("Erro ao carregar estatisticas","Erro!")
-      },
-      complete: () => this.spinner.hide()
-    })
+  // public getAllEstatisticas() : void{
+  //   this.estatisticaService.getEstatisticas().subscribe({
+  //     next: (_estatisticas: Estatistica[]) =>{
+  //       this.estatistica = _estatisticas
+  //     },
+  //     error: (error: any)=>{
+  //       this.spinner.hide(),
+  //       this.toastr.error("Erro ao carregar estatisticas","Erro!")
+  //     },
+  //     complete: () => this.spinner.hide()
+  //   })
 
-  }
+  // }
   public getmapas(): void{
     this.mapaService.getMapas().subscribe({
       next: (_mapa: Mapa[]) =>{

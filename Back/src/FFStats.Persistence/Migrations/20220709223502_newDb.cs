@@ -3,108 +3,129 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FFStats.Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class newDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Jogadores",
+                name: "tb_Line",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    jogadorNome = table.Column<string>(type: "TEXT", nullable: true),
-                    jogadorNick = table.Column<string>(type: "TEXT", nullable: true)
+                    lineNome = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Jogadores", x => x.Id);
+                    table.PrimaryKey("PK_tb_Line", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mapas",
+                name: "tb_mapa",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     mapaNome = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mapas", x => x.Id);
+                    table.PrimaryKey("PK_tb_mapa", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Modos",
+                name: "tb_modo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     modoDescricao = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Modos", x => x.Id);
+                    table.PrimaryKey("PK_tb_modo", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Treinos",
+                name: "tb_treino",
                 columns: table => new
                 {
-                    treinoId = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     treinoDescricao = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Treinos", x => x.treinoId);
+                    table.PrimaryKey("PK_tb_treino", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Calls",
+                name: "tb_jogador",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    jogadorNome = table.Column<string>(type: "TEXT", nullable: true),
+                    jogadorNick = table.Column<string>(type: "TEXT", nullable: true),
+                    idJogo = table.Column<int>(type: "INTEGER", nullable: false),
+                    lineId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tb_jogador", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_tb_jogador_tb_Line_lineId",
+                        column: x => x.lineId,
+                        principalTable: "tb_Line",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tb_call",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     callCidade = table.Column<string>(type: "TEXT", nullable: true),
                     mapaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Calls", x => x.Id);
+                    table.PrimaryKey("PK_tb_call", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Calls_Mapas_mapaId",
+                        name: "FK_tb_call_tb_mapa_mapaId",
                         column: x => x.mapaId,
-                        principalTable: "Mapas",
-                        principalColumn: "Id",
+                        principalTable: "tb_mapa",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Submodos",
+                name: "tb_submodo",
                 columns: table => new
                 {
-                    submodoId = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     submodoDescricao = table.Column<string>(type: "TEXT", nullable: true),
                     modoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Submodos", x => x.submodoId);
+                    table.PrimaryKey("PK_tb_submodo", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Submodos_Modos_modoId",
+                        name: "FK_tb_submodo_tb_modo_modoId",
                         column: x => x.modoId,
-                        principalTable: "Modos",
-                        principalColumn: "Id",
+                        principalTable: "tb_modo",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Partidas",
+                name: "tb_partida",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     partidaDescricao = table.Column<string>(type: "TEXT", nullable: true),
                     treinoId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -117,41 +138,41 @@ namespace FFStats.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Partidas", x => x.Id);
+                    table.PrimaryKey("PK_tb_partida", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Partidas_Calls_callId",
+                        name: "FK_tb_partida_tb_call_callId",
                         column: x => x.callId,
-                        principalTable: "Calls",
-                        principalColumn: "Id",
+                        principalTable: "tb_call",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Partidas_Mapas_mapaId",
+                        name: "FK_tb_partida_tb_mapa_mapaId",
                         column: x => x.mapaId,
-                        principalTable: "Mapas",
-                        principalColumn: "Id",
+                        principalTable: "tb_mapa",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Partidas_Modos_modoId",
+                        name: "FK_tb_partida_tb_modo_modoId",
                         column: x => x.modoId,
-                        principalTable: "Modos",
-                        principalColumn: "Id",
+                        principalTable: "tb_modo",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Partidas_Submodos_submodoId",
+                        name: "FK_tb_partida_tb_submodo_submodoId",
                         column: x => x.submodoId,
-                        principalTable: "Submodos",
-                        principalColumn: "submodoId",
+                        principalTable: "tb_submodo",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Partidas_Treinos_treinoId",
+                        name: "FK_tb_partida_tb_treino_treinoId",
                         column: x => x.treinoId,
-                        principalTable: "Treinos",
-                        principalColumn: "treinoId",
+                        principalTable: "tb_treino",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Estatisticas",
+                name: "tb_estatistica",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -159,31 +180,34 @@ namespace FFStats.Persistence.Migrations
                     partidaId = table.Column<int>(type: "INTEGER", nullable: false),
                     jogadorId = table.Column<int>(type: "INTEGER", nullable: false),
                     Kill = table.Column<int>(type: "INTEGER", nullable: false),
-                    Dano = table.Column<int>(type: "INTEGER", nullable: false),
-                    Tempo = table.Column<int>(type: "INTEGER", nullable: false),
+                    Morte = table.Column<int>(type: "INTEGER", nullable: false),
                     Assistencia = table.Column<int>(type: "INTEGER", nullable: false),
-                    Ressucitado = table.Column<int>(type: "INTEGER", nullable: false),
-                    Salvador = table.Column<int>(type: "INTEGER", nullable: false)
+                    Dano = table.Column<int>(type: "INTEGER", nullable: false),
+                    Derrubado = table.Column<int>(type: "INTEGER", nullable: false),
+                    Cura = table.Column<int>(type: "INTEGER", nullable: false),
+                    Levantados = table.Column<int>(type: "INTEGER", nullable: false),
+                    Ressucitou = table.Column<int>(type: "INTEGER", nullable: false),
+                    Tempo = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estatisticas", x => x.id);
+                    table.PrimaryKey("PK_tb_estatistica", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Estatisticas_Jogadores_jogadorId",
+                        name: "FK_tb_estatistica_tb_jogador_jogadorId",
                         column: x => x.jogadorId,
-                        principalTable: "Jogadores",
-                        principalColumn: "Id",
+                        principalTable: "tb_jogador",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Estatisticas_Partidas_partidaId",
+                        name: "FK_tb_estatistica_tb_partida_partidaId",
                         column: x => x.partidaId,
-                        principalTable: "Partidas",
-                        principalColumn: "Id",
+                        principalTable: "tb_partida",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PartidasJogadores",
+                name: "tb_partidajogador",
                 columns: table => new
                 {
                     JogadorId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -191,100 +215,108 @@ namespace FFStats.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartidasJogadores", x => new { x.PartidaId, x.JogadorId });
+                    table.PrimaryKey("PK_tb_partidajogador", x => new { x.PartidaId, x.JogadorId });
                     table.ForeignKey(
-                        name: "FK_PartidasJogadores_Jogadores_JogadorId",
+                        name: "FK_tb_partidajogador_tb_jogador_JogadorId",
                         column: x => x.JogadorId,
-                        principalTable: "Jogadores",
-                        principalColumn: "Id",
+                        principalTable: "tb_jogador",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PartidasJogadores_Partidas_PartidaId",
+                        name: "FK_tb_partidajogador_tb_partida_PartidaId",
                         column: x => x.PartidaId,
-                        principalTable: "Partidas",
-                        principalColumn: "Id",
+                        principalTable: "tb_partida",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Calls_mapaId",
-                table: "Calls",
+                name: "IX_tb_call_mapaId",
+                table: "tb_call",
                 column: "mapaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estatisticas_jogadorId",
-                table: "Estatisticas",
+                name: "IX_tb_estatistica_jogadorId",
+                table: "tb_estatistica",
                 column: "jogadorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estatisticas_partidaId",
-                table: "Estatisticas",
+                name: "IX_tb_estatistica_partidaId",
+                table: "tb_estatistica",
                 column: "partidaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Partidas_callId",
-                table: "Partidas",
+                name: "IX_tb_jogador_lineId",
+                table: "tb_jogador",
+                column: "lineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tb_partida_callId",
+                table: "tb_partida",
                 column: "callId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Partidas_mapaId",
-                table: "Partidas",
+                name: "IX_tb_partida_mapaId",
+                table: "tb_partida",
                 column: "mapaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Partidas_modoId",
-                table: "Partidas",
+                name: "IX_tb_partida_modoId",
+                table: "tb_partida",
                 column: "modoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Partidas_submodoId",
-                table: "Partidas",
+                name: "IX_tb_partida_submodoId",
+                table: "tb_partida",
                 column: "submodoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Partidas_treinoId",
-                table: "Partidas",
+                name: "IX_tb_partida_treinoId",
+                table: "tb_partida",
                 column: "treinoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PartidasJogadores_JogadorId",
-                table: "PartidasJogadores",
+                name: "IX_tb_partidajogador_JogadorId",
+                table: "tb_partidajogador",
                 column: "JogadorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submodos_modoId",
-                table: "Submodos",
+                name: "IX_tb_submodo_modoId",
+                table: "tb_submodo",
                 column: "modoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Estatisticas");
+                name: "tb_estatistica");
 
             migrationBuilder.DropTable(
-                name: "PartidasJogadores");
+                name: "tb_partidajogador");
 
             migrationBuilder.DropTable(
-                name: "Jogadores");
+                name: "tb_jogador");
 
             migrationBuilder.DropTable(
-                name: "Partidas");
+                name: "tb_partida");
 
             migrationBuilder.DropTable(
-                name: "Calls");
+                name: "tb_Line");
 
             migrationBuilder.DropTable(
-                name: "Submodos");
+                name: "tb_call");
 
             migrationBuilder.DropTable(
-                name: "Treinos");
+                name: "tb_submodo");
 
             migrationBuilder.DropTable(
-                name: "Mapas");
+                name: "tb_treino");
 
             migrationBuilder.DropTable(
-                name: "Modos");
+                name: "tb_mapa");
+
+            migrationBuilder.DropTable(
+                name: "tb_modo");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(t=> t.Partidas);
             }
-            query = query.OrderBy(t => t.treinoId);
+            query = query.OrderBy(t => t.id);
             return await query.ToArrayAsync();
         }
 
@@ -34,7 +34,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(t=> t.Partidas);
             }
-            query = query.AsNoTracking().OrderBy(t => t.treinoId).Where(t => t.treinoId == Id);
+            query = query.AsNoTracking().OrderBy(t => t.id).Where(t => t.id == Id);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -45,7 +45,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(t=> t.Partidas);
             }
-            query = query.AsNoTracking().OrderBy(t => t.treinoId).Where(t => t.treinoDescricao.ToLower().Contains(Nome.ToLower()));
+            query = query.AsNoTracking().OrderBy(t => t.id).Where(t => t.treinoDescricao.ToLower().Contains(Nome.ToLower()));
             return await query.ToArrayAsync();
         }
     }

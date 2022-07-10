@@ -6,11 +6,9 @@ namespace FFStats.Application.Contratos
 {
     public interface IEstatisticasService
     {
-         Task<estatisticasDto> AddEstatisticass(estatisticasDto model);
-         Task<estatisticasDto> UpdateEstatisticass(int EstatisticasId, estatisticasDto model);
-         Task<bool> DeleteEstatisticas(int EstatisticasId);
-         Task<estatisticasDto[]> GetAllEstatisticassAsync(bool InlcudeAll = false);
-         Task<estatisticasDto> GetEstatisticassByIdAsync(int EstatisticasId, bool InlcudeAll = false);
-         Task<estatisticasDto[]> GetAllEstatisticassByDescAsync(string Desc, bool InlcudeAll = false);
+         Task<estatisticasDto[]> SaveEstatistica(int EstatisticasId, estatisticasDto[] model);
+         Task<bool> DeleteEstatisticas(int partidaId, int EstatisticasId);
+         Task<estatisticasDto[]> GetEstatisticasByPartidaIdAsync(int partidaId);
+         Task<estatisticasDto> GetEstatisticasByIdsAsync(int partidaId, int EstatisticasId);
     }
 }

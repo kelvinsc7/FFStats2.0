@@ -28,7 +28,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
             }
-            query = query.OrderBy(P => P.Id);
+            query = query.OrderBy(P => P.id);
             return await query.ToArrayAsync();
         }
         public async Task<Partida> GetPartidasByIdAsync(int PartidaId, bool IncludeJogador = false)
@@ -43,7 +43,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
             }
-            query = query.AsNoTracking().OrderBy(P => P.Id).Where(P => P.Id == PartidaId);
+            query = query.AsNoTracking().OrderBy(P => P.id).Where(P => P.id == PartidaId);
             return await query.FirstOrDefaultAsync();
         }
         public async Task<Partida[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false)
@@ -58,7 +58,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.AsNoTracking().Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
             }
-            query = query.OrderBy(P => P.Id).Where(P => P.partidaDescricao.ToLower().Contains(Desc.ToLower()));
+            query = query.OrderBy(P => P.id).Where(P => P.partidaDescricao.ToLower().Contains(Desc.ToLower()));
             return await query.ToArrayAsync();
         }
 
@@ -74,7 +74,7 @@ namespace FFStats.Persistence.Persistences
             {
                 query = query.Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
             }
-            query = query.AsNoTracking().OrderBy(P => P.Id).Where(P => P.mapaId == id);
+            query = query.AsNoTracking().OrderBy(P => P.id).Where(P => P.mapaId == id);
             return await query.ToArrayAsync();
         }
 
