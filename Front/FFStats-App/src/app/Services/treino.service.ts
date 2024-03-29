@@ -23,7 +23,7 @@ export class TreinoService {
     return this.http.post<Treino>(this.baseURL, treino).pipe(take(1));
   }
   putTreino(treino: Treino): Observable<Treino>{
-    return this.http.put<Treino>(`${this.baseURL}/${treino.treinoId}`, treino).pipe(take(1));
+    return this.http.put<Treino>(`${this.baseURL}/${treino.id}`, treino).pipe(take(1));
   }
   deleteTreino(id: number): Observable<any>{
     return this.http.delete(`${this.baseURL}/${id}`).pipe(take(1));

@@ -47,5 +47,16 @@ namespace FFStats.Persistence.Persistences
             query = query.OrderBy(sm => sm.submodoDescricao).Where(sm => sm.submodoDescricao.ToLower().Contains(Nome.ToLower()));
             return await query.ToArrayAsync();
         }
+
+        public async Task<Submodo[]> GetByModoIdAsync(int modoId, bool IncludeModo)
+        {
+            IQueryable<Submodo> query = _context.Submodos;
+            if(IncludeModo)
+            {
+                query = query.AsNoTracking().Include(sm=> sm.modo);
+            }
+            query = query.OrderBy(sm => sm.id).Where(sm => sm.modoId == modoId);
+            return await query.ToArrayAsync();
+        }
     }
 }

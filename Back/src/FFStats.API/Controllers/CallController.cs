@@ -49,6 +49,21 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Call. Erro: {ex.Message}");
             }
         }
+        [HttpGet("{mapaId}/mapa")]
+        public async Task<IActionResult> GetByMapaIdAsync(int mapaId)
+        {
+            try
+            {
+                var Call = await _CallService.GetAllCallByMapaId(mapaId,true);
+                if(Call == null) return NotFound("Nenhuma Call Encontrada!");
+
+                return  Ok(Call);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Call. Erro: {ex.Message}");
+            }
+        }
         [HttpGet("{desc}/descricao")]
         public async Task<IActionResult> GetByDesc(string desc)
         {

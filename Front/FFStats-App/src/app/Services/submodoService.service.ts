@@ -19,11 +19,14 @@ export class SubmodoService {
   getSubModoById(id: number): Observable<Submodo>{
     return this.http.get<Submodo>(`${this.baseURL}/${id}`).pipe(take(1));
   }
+  getSubModoByModoId(modoId: number): Observable<Submodo[]>{
+    return this.http.get<Submodo[]>(`${this.baseURL}/${modoId}/modo`).pipe(take(1));
+  }
   postSubmodo(submodo: Submodo): Observable<Submodo>{
     return this.http.post<Submodo>(this.baseURL, submodo).pipe(take(1));
   }
   putSubmodo(submodo: Submodo): Observable<Submodo>{
-    return this.http.put<Submodo>(`${this.baseURL}/${submodo.submodoId}`, submodo).pipe(take(1));
+    return this.http.put<Submodo>(`${this.baseURL}/${submodo.id}`, submodo).pipe(take(1));
   }
   deleteSubmodo(id: number): Observable<any>{
     return this.http.delete(`${this.baseURL}/${id}`).pipe(take(1));

@@ -26,10 +26,10 @@ namespace FFStats.API.Controllers
         {
             try
             {
-                var Estatisticass = await _EstatisticasService.GetEstatisticasByPartidaIdAsync(partidaId);
-                if(Estatisticass == null) return NotFound("Nenhuma Estatisticas Encontrada!");
+                var Estatisticas = await _EstatisticasService.GetEstatisticasByPartidaIdAsync(partidaId);
+                if(Estatisticas == null) return NotFound("Nenhuma Estatisticas Encontrada!");
 
-                return  Ok(Estatisticass);
+                return  Ok(Estatisticas);
             }
             catch (Exception ex)
             {

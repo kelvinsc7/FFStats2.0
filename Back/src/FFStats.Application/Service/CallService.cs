@@ -132,5 +132,22 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<callDto[]> GetAllCallByMapaId(int mapaId, bool IncludeMapa = false)
+        {
+            try
+            {
+                var Calls = await _CallPersistence.GetAllCallByMapaIdAsync(mapaId, IncludeMapa);
+                if (Calls == null) return null;
+
+                var resultado = _mapper.Map<callDto[]>(Calls);
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace FFStats.Application.Service
                 var treino = await _TreinoPersistence.GetAllTreinoByIdAsync(TreinoId, false);
                 if (treino == null) return null;
 
-                model.treinoId = treino.id;
+                model.Id = treino.id;
                 
                 _mapper.Map(model, treino);
                 _geralPersistence.Update(treino);

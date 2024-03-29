@@ -4,14 +4,14 @@
        <div class="form-row">
          <div class="form-group col-md-6">
            <label><strong>Descrição</strong></label>
-           <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.partidaDescricao.errors && f.partidaDescricao.touched}" formControlName="partidaDescricao" placeholder="Insira a descrição da partida">
+           <input type="text" class="form-control" [ngClass]="cssValidator(f.partidaDescricao)" formControlName="partidaDescricao" placeholder="Insira a descrição da partida">
            <div *ngIf="f.partidaDescricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
            <div *ngIf="f.partidaDescricao.errors?.minlength" class="invalid-feedback"> Minimo de 4 caracteres</div>
            <div *ngIf="f.partidaDescricao.errors?.maxlength" class="invalid-feedback"> Maximo de 20 Caracteres</div>
          </div>
          <div class="form-group col-md-3">
           <label><strong>Data:</strong></label>
-          <input type="text" class="form-control is-invalid" [ngClass]="{'is-invalid': f.partidaData.errors && f.partidaData.touched}" formControlName="partidaData"
+          <input type="text" class="form-control" [ngClass]="cssValidator(f.partidaData)" formControlName="partidaData"
                  bsDatepicker
                  value="{{partida.partidaData | DateTimeFormat}}"
                  [bsConfig]="bsConfig"
@@ -22,30 +22,30 @@
         </div>
         <div class="form-group col-md-3">
           <label><strong>Posição</strong></label>
-          <input type="number" class="form-control is-invalid" [ngClass]="{'is-invalid': f.posicao.errors && f.posicao.touched}" formControlName="posicao" placeholder="Insira a descrição da partida">
+          <input type="number" class="form-control" [ngClass]="cssValidator(f.posicao)" formControlName="posicao" placeholder="Insira a descrição da partida">
           <div *ngIf="f.posicao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-          <div *ngIf="f.posicao.errors?.min" class="invalid-feedback"> Necessario valor entre 1 e 55</div>
-          <div *ngIf="f.posicao.errors?.maxlength" class="invalid-feedback"> Necessario valor entre 1 e 55</div>
+          <div *ngIf="f.posicao.errors?.min" class="invalid-feedback"> Necessário valor entre 1 e 55</div>
+          <div *ngIf="f.posicao.errors?.max" class="invalid-feedback"> Necessário valor entre 1 e 55</div>
         </div>
        </div>
        <div class="form-row">
         <div class="form-group col-md-4">
           <label><strong>Treino</strong></label>
-          <select type="multiselect" class="form-control form-select" formControlName="treinoId">
-            <option value="0" >Selecione o Treino</option>
-            <option *ngFor="let tre of treino" value={{tre.treinoId}}> {{tre.treinoDescricao}}</option>
+          <select [(ngModel)]="soTreino" class="form-control form-select" formControlName="treinoId">
+            <option value="0">Selecione uma opção</option>
+            <option *ngFor="let tre of treino" [value]="tre.id"> {{tre.treinoDescricao}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Mapa</strong></label>
-          <select type="multiselect" class="form-control form-select" formControlName="mapaId" >
+          <select [(ngModel)]="soMapa" (ngModelChange)="onSelecionaMapa()" class="form-control form-select" formControlName="mapaId" >
             <option value="0">Selecione o Mapa</option>
             <option *ngFor="let map of mapas" value={{map.id}}> {{map.mapaNome}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Call</strong></label>
-          <select type="multiselect" class="form-control form-select" formControlName="callId">
+          <select [(ngModel)]="soCall" class="form-control form-select" formControlName="callId">
             <option value="0">Selecione a call</option>
             <option *ngFor="let c of calls" value={{c.id}}> {{c.callCidade}}</option>
           </select>
@@ -55,16 +55,16 @@
 
         <div class="form-group col-md-4">
          <label><strong>Modo:</strong></label>
-         <select type="multiselect" class="form-control form-select" formControlName="modoId">
+         <select [(ngModel)]="soModo" (ngModelChange)="onSelecionaModo()" class="form-control form-select" formControlName="modoId">
           <option value="0">Selecione o Modo</option>
           <option *ngFor="let m of modos" value={{m.id}}> {{m.modoDescricao}}</option>
         </select>
        </div>
        <div class="form-group col-md-4">
         <label><strong>Sub-Modo:</strong></label>
-        <select type="multiselect" class="form-control form-select" formControlName="submodoId">
+        <select [(ngModel)]="soSubModo" class="form-control form-select" formControlName="submodoId">
           <option value="0">Selecione o Sub-Modo</option>
-          <option *ngFor="let sm of smodos" value={{sm.submodoId}}> {{sm.submodoDescricao}}</option>
+          <option *ngFor="let sm of smodos" value={{sm.id}}> {{sm.submodoDescricao}}</option>
         </select>
       </div>
       </div>
@@ -74,7 +74,7 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarPartida()">
            <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
            Salvar Evento
          </button>
@@ -82,7 +82,10 @@
      </div>
    </form>
 </div>
-<div class="card rounded shadow-sm mt-4">
+
+<div class="card rounded shadow-sm mt-4" *ngIf="modoEditar">
+  <p> form value: {{form.controls['estatisticas'].value | json}}</p>
+  <p> form valid: {{form.controls['estatisticas'].status | json}}</p>
   <div class="p-3">
     <div class="d-flex border-bottom">
       <h2 class="mr-auto">
@@ -94,11 +97,11 @@
     </div>
     <p>Clique em Estatisticas para adicionar e preencher novas Estatisticas</p>
     <div class="form-row p-1">
-      <div class="col">
-        <div>
-          <fieldset class="form-group">
+      <div [formGroup]="form" class="col">
+        <div formArrayName="estatisticas" *ngFor="let esatistica of estatisticas.controls; let i=index">
+          <fieldset [formGroupName]="i" class="form-group">
             <legend class="d-flex justify-content-between capitalize">
-              <button class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex"
+              <button (click)="removerEstatistica(template ,i)" class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex"
                 tooltip="Excluir Estatisticas"
                 [adaptivePosition]="false"
                 >
@@ -109,48 +112,82 @@
           <div class="row">
             <div class="form-group col-md-12">
               <label>Jogador</label>
-              <select type="multiselect" class="form-control form-select" formControlName="jogadorId" >
+              <select class="form-control form-select" formControlName="jogadorId" >
                 <option value="0" >Selecione o Jogador</option>
+                <option *ngFor="let j of jogador" value={{j.id}}> {{j.jogadorNick}}</option>
               </select>
             </div>
             <div class="form-group col-md-3">
               <label>Kills</label>
-              <input type="number" class="form-control" formControlName="kill" placeholder="0">
+              <input
+                [ngClass]="cssValidator(estatisticas.get(i+'.kill'))"
+               type="number" class="form-control" 
+               formControlName="kill" 
+               placeholder="0">
+               <div *ngIf="f.partidaDescricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
             </div>
             <div class="form-group col-md-3">
               <label>Morte</label>
-              <input type="number" class="form-control" formControlName="morte" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.morte'))"
+              type="number" class="form-control" 
+              formControlName="morte" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Assistencia</label>
-              <input type="number" class="form-control" formControlName="assistencia" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.assistencia'))"
+              type="number" class="form-control" 
+              formControlName="assistencia" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Dano</label>
-              <input type="number" currencyMask class="form-control" formControlName="dano" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.dano'))"
+              type="number" currencyMask class="form-control" 
+              formControlName="dano" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Derrubados</label>
-              <input type="number" class="form-control" formControlName="derrubados" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.derrubados'))"
+              type="number" class="form-control" 
+              formControlName="derrubados" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Cura</label>
-              <input type="number" class="form-control" formControlName="cura" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.cura'))"
+              type="number" class="form-control" 
+              formControlName="cura" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Ressucitou</label>
-              <input type="number" class="form-control" formControlName="ressucitou" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.ressucitou'))"
+              type="number" class="form-control" 
+              formControlName="ressucitou" 
+              placeholder="0">
             </div>
             <div class="form-group col-md-3">
               <label>Tempo</label>
-              <input type="number" class="form-control" formControlName="tempo" placeholder="0">
+              <input
+              [ngClass]="cssValidator(estatisticas.get(i+'.tempo'))"
+              type="number" class="form-control" 
+              formControlName="tempo" 
+              placeholder="0">
             </div>
           </div>
         </fieldset>
       </div>
     </div>
   </div>
-  <button class="d-flex btn btn-outline-primary">
+  <button *ngIf="buttonAdicionarDisabled()"  (click)="adicionarEstatisticas()" class="d-flex btn btn-outline-primary">
     <i class="fa fa-plus-circle my-1"></i>
     <b class="ml-1">Estatistica</b>
   </button>
@@ -160,12 +197,22 @@
     <button class="btn btn-outline-secondary mr-auto border">
       Cancelar Alteração
     </button>
-    <button class="btn btn-success">
+    <button class="btn btn-success" (click)="salvarEstatisticas()">
       Salvar Estatisticas
     </button>
   </div>
 </div>
 </div>
+<br>
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Deseja realmente efetuar a exclusão da Estatistica ?</p>
+    <button type="button" class="btn btn-primary mr-3" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-danger" (click)="decline()" >Não</button>
+  </div>
+</ng-template>
 
 
 

@@ -19,6 +19,9 @@ export class CallService {
   getCallById(id: number): Observable<Call>{
     return this.http.get<Call>(`${this.baseURL}/${id}`).pipe(take(1));
   }
+  getCallByMapaId(mapaId: number): Observable<Call[]>{
+    return this.http.get<Call[]>(`${this.baseURL}/${mapaId}/mapa`).pipe(take(1));
+  }
   postCall(call: Call): Observable<Call>{
     return this.http.post<Call>(this.baseURL, call).pipe(take(1));
   }

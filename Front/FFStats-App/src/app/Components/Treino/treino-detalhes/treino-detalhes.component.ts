@@ -64,7 +64,7 @@ export class TreinoDetalhesComponent implements OnInit {
     {
       this.treino =  (this.modeSave === 'postTreino')
                       ? {... this.form.value}
-                      : {treinoId: this.treino.treinoId,... this.form.value}
+                      : {treinoId: this.treino.id,... this.form.value}
 
         this.treinoService[this.modeSave](this.treino).subscribe(
         () =>this.toaster.success('Treino Salvo com Sucesso', 'Sucesso!'),

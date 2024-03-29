@@ -1,7 +1,7 @@
 import { Partida } from "./Partida";
 
 export interface Treino {
-  treinoId: number;
+  id: number;
   treinoDescricao: string;
   partidas: Partida[];
 }

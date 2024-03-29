@@ -47,7 +47,16 @@ namespace FFStats.Persistence.Persistences
             query = query.AsNoTracking().OrderBy(c => c.id).Where(c => c.callCidade.ToLower().Contains(Nome.ToLower()));
             return await query.ToArrayAsync();
         }
-        
+        public async Task<Call[]> GetAllCallByMapaIdAsync(int mapaId, bool IncludeMapa)
+        {
+            IQueryable<Call> query = _context.Calls;
 
+            if(IncludeMapa)
+            {
+                query = query.AsNoTracking().Include(c=> c.mapa);
+            }
+            query = query.OrderBy(P => P.id).Where(P => P.mapaId == mapaId);
+            return await query.ToArrayAsync();
+        }
     }
 }

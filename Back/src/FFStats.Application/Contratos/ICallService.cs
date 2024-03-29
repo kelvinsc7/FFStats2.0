@@ -12,5 +12,6 @@ namespace FFStats.Application.Contratos
          Task<callDto[]> GetAllCallsAsync(bool IncludeMapa = false);
          Task<callDto> GetCallsByIdAsync(int CallId, bool IncludeMapa = false);
          Task<callDto[]> GetAllCallsByDescAsync(string Desc, bool IncludeMapa = false);
+         Task<callDto[]> GetAllCallByMapaId(int mapaId, bool IncludeMapa = false);
     }
 }

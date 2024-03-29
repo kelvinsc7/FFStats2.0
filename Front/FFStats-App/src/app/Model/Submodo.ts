@@ -1,7 +1,7 @@
 import { Modo } from "./Modo";
 
 export interface Submodo {
-  submodoId: number;
+  id: number;
   submodoDescricao: string;
   modoId: number;
   modo: Modo[];

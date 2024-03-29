@@ -51,6 +51,21 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Submodo. Erro: {ex.Message}");
             }
         }
+        [HttpGet("{modoId}/modo")]
+        public async Task<IActionResult> GetByModoIdAsync(int modoId)
+        {
+            try
+            {
+                var Submodo = await _SubmodoService.GetByModoIdAsync(modoId,true);
+                if(Submodo == null) return NotFound("Nenhuma Submodo Encontrada!");
+
+                return  Ok(Submodo);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Submodo. Erro: {ex.Message}");
+            }
+        }
         [HttpGet("{desc}/descricao")]
         public async Task<IActionResult> GetByDesc(string desc)
         {

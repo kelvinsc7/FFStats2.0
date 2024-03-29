@@ -12,5 +12,6 @@ namespace FFStats.Application.Contratos
          Task<subModoDto[]> GetAllSubmodosAsync(bool IncludeModo = false);
          Task<subModoDto> GetSubmodosByIdAsync(int SubmodoId, bool IncludeModo = false);
          Task<subModoDto[]> GetAllSubmodosByDescAsync(string Desc, bool IncludeModo = false);
+         Task<subModoDto[]> GetByModoIdAsync(int modoId,bool IncludeModo = false);
     }
 }

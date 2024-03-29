@@ -31,8 +31,8 @@
         </tr>
       </thead>
       <tbody *ngIf="treinos && treinos.length">
-        <tr *ngFor="let item of treinoFiltrada; let i = index" (click)="detalheTreino(item.treinoId)" style="cursor: pointer;">
-          <th class="d-none d-md-table-cell">{{item.treinoId}}</th>
+        <tr *ngFor="let item of treinoFiltrada; let i = index" (click)="detalheTreino(item.id)" style="cursor: pointer;">
+          <th class="d-none d-md-table-cell">{{item.id}}</th>
           <th>{{item.treinoDescricao}}</th>
           <th>{{item.partidas.length}}</th>
           <th>56</th>
@@ -45,7 +45,7 @@
           <th class="d-none d-md-table-cell">{{desc[i]?.modoDescricao}}</th>
           <th class="d-none d-md-table-cell">{{item.partidas[0]?.partidaData | DateTimeFormat}}</th>
           <th>
-            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.treinoId)">
+            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>
             </button>
           </th>

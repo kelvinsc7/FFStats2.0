@@ -46,7 +46,7 @@ namespace FFStats.Application.Service
                 var submodo = await _SubmodoPersistence.GetAllSubmodoByIdAsync(SubmodoId, false);
                 if (submodo == null) return null;
 
-                model.submodoId = submodo.id;
+                model.Id = submodo.id;
                 _mapper.Map(model, submodo);
                 _geralPersistence.Update(model);
                 if (await _geralPersistence.SaveChangeAsync())
@@ -118,6 +118,22 @@ namespace FFStats.Application.Service
                 if (submodo == null) return null;
 
                 var resultado = _mapper.Map<subModoDto>(submodo);
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<subModoDto[]> GetByModoIdAsync(int modoId, bool IncludeModo = false)
+        {
+            try
+            {
+                var submodo = await _SubmodoPersistence.GetByModoIdAsync(modoId, IncludeModo);
+                if (submodo == null) return null;
+
+                var resultado = _mapper.Map<subModoDto[]>(submodo);
                 return resultado;
             }
             catch (Exception ex)
