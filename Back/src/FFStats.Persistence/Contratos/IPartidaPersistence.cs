@@ -9,6 +9,7 @@ namespace FFStats.Persistence.Contratos
          Task<Partida[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false);
          Task<Partida[]> GetAllPartidasAsync(bool IncludeJogador = false);
          Task<Partida> GetPartidasByIdAsync(int id, bool IncludeJogador = false);
+         Task<Partida[]> GetPartidasByTreinoIdAsync(int id, bool IncludeJogador = false);
          Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false);
     }
 }

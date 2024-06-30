@@ -275,9 +275,9 @@ export class PartidasDetalhesComponent implements OnInit {
       morte: [estatistica.morte, Validators.required],
       assistencia: [estatistica.assistencia, Validators.required],
       dano: [estatistica.dano, Validators.required],
-      derrubados: [estatistica.derrubados, Validators.required],
+      derrubado: [estatistica.derrubado, Validators.required],
       cura: [estatistica.cura, Validators.required],
-      //levantados: [estatistica.levantados, Validators.required],
+      levantados: [estatistica.levantados, Validators.required],
       ressucitou: [estatistica.ressucitou, Validators.required],
       tempo: [estatistica.tempo, Validators.required],
     })

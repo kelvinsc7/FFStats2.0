@@ -13,6 +13,9 @@ export class EstatisticaService {
   getEstatisticasByPartidaId(eventoId:number): Observable<Estatistica[]>{
     return this.http.get<Estatistica[]>(`${this.baseURL}/${eventoId}`).pipe(take(1));
   }
+  getEstatisticasByJogadorId(jogadorId:number): Observable<Estatistica[]>{
+    return this.http.get<Estatistica[]>(`${this.baseURL}/Jogador/${jogadorId}`).pipe(take(1));
+  }
   saveEstatistica(partidaId:number, estatistica: Estatistica[]): Observable<Estatistica[]>{
     return this.http.put<Estatistica[]>(`${this.baseURL}/${partidaId}`, estatistica).pipe(take(1));
   }

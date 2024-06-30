@@ -36,6 +36,21 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
             }
         }
+        [HttpGet("Jogador/{jogadorId}")]
+        public async Task<IActionResult> GetbyJogador(int jogadorId)
+        {
+            try
+            {
+                var Estatisticas = await _EstatisticasService.GetEstatisticasByJogadorIdAsync(jogadorId);
+                if(Estatisticas == null) return NotFound("Nenhuma Estatisticas Encontrada!");
+
+                return  Ok(Estatisticas);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
+            }
+        }
 
 
         [HttpPut("{partidaId}")]

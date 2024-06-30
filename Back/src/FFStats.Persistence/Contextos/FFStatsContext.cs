@@ -43,6 +43,17 @@ namespace FFStats.Persistence.Contextos
                         .HasMany(p => p.Estatisticas)
                         .WithOne(e => e.Partida)
                         .OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Jogador>()
+                        .ToTable("tb_jogador")
+                        .HasKey(j => j.id);
+            modelBuilder.Entity<Jogador>()
+                        .HasOne(j => j.Line)
+                        .WithMany(l => l.Jogadores)
+                        .HasForeignKey(j => j.lineId);
+            modelBuilder.Entity<Jogador>()
+                        .HasMany(j => j.PartidasJogadores)
+                        .WithOne(pj => pj.Jogador)
+                        .HasForeignKey(pj => pj.JogadorId);          
         }
 
     }

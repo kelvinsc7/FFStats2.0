@@ -45,7 +45,8 @@ namespace FFStats.Application.Service
             try
             {
                 var jogador = await _JogadoresPersistence.GetAllJogadoresByIdAsync(JogadoresId, false);
-                if(jogador == null) return null;
+                if(jogador == null) 
+                    return null;
 
                 model.Id = jogador.id;
                 _mapper.Map(model, jogador);

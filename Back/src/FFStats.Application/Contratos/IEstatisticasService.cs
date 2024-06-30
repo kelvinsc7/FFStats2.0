@@ -9,6 +9,7 @@ namespace FFStats.Application.Contratos
          Task<estatisticasDto[]> SaveEstatistica(int EstatisticasId, estatisticasDto[] models);
          Task<bool> DeleteEstatisticas(int partidaId, int EstatisticasId);
          Task<estatisticasDto[]> GetEstatisticasByPartidaIdAsync(int partidaId);
+         Task<estatisticasDto[]> GetEstatisticasByJogadorIdAsync(int jogadorId);
          Task<estatisticasDto> GetEstatisticasByIdsAsync(int partidaId, int EstatisticasId);
     }
 }

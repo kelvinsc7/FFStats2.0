@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FFStats.Domain.Models;
@@ -22,6 +23,12 @@ namespace FFStats.Persistence.Persistences
         public void Update<T>(T Entity) where T : class
         {
             _context.Update(Entity);
+            var entry = _context.Entry(Entity);
+            if (entry.State == EntityState.Detached)
+            {
+                _context.Attach(Entity);
+            }
+            entry.State = EntityState.Modified;
         }
         public void Delete<T>(T Entity) where T : class
         {

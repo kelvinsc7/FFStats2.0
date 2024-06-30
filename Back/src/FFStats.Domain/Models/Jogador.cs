@@ -10,9 +10,12 @@ namespace FFStats.Domain.Models
        public string jogadorNome { get; set; }
        public string jogadorNick { get; set; }
        public int idJogo { get; set; }
-       [ForeignKey("tb_Line")]
+       // Foreign key for Line
        public int lineId { get; set; }
+       // Navigation property for Line
+       [ForeignKey("lineId")] 
        public Line Line{ get; set; }
+       // Navigation property for PartidasJogadores
        public IEnumerable<PartidaJogador> PartidasJogadores { get; set; }
 
     }

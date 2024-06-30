@@ -17,6 +17,8 @@ namespace FFStats.Persistence.Contratos
          /// <param name="partidaId">Código chave da tabela partida</param>
          /// <param name="estatisticaId">Código chave da tabela Estatistica</param>
          /// <returns>Apenas uma estatistica</returns>
+         
+         Task<Estatisticas[]> GetEstatisticasByJogadorIdAsync(int partidaId);
          Task<Estatisticas> GetEstatisticasByIdsAsync(int partidaId, int estatisticaId );
     }
 }

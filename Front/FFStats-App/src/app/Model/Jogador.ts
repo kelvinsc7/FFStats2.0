@@ -1,3 +1,4 @@
+import { Estatistica } from "./Estatistica";
 import { Line } from "./Line";
 import { Partida } from "./Partida";
 
@@ -9,4 +10,5 @@ export interface Jogador {
   lineId: number;
   line: Line;
   partidasJogadores: Partida[];
+  estatisticas : Estatistica[];
 }

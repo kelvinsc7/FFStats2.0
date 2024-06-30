@@ -11,7 +11,7 @@ export interface Estatistica {
   morte: number;
   assistencia: number;
   dano: number;
-  derrubados: number;
+  derrubado: number;
   cura: number;
   levantados: number;
   ressucitou: number;

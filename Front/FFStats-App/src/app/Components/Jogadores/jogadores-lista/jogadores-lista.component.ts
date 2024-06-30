@@ -53,25 +53,39 @@ export class JogadoresListaComponent implements OnInit {
 
   public ngOnInit() {
     this.spinner.show();
-    //this.getEstatisticas();
     this.getJogadores();
+    //this.getEstatisticas();
   }
-  public getJogadores(): void{
+
+  
+  public getJogadores(): void {
     this.jogadorService.getJogadores().subscribe({
-      next: (_jogadores: Jogador[] ) => {
-        this.jogadores = _jogadores
-        this.jogadoresFiltrados = this.jogadores
-        this.carregaKIll()
+      next: (_jogadores: Jogador[]) => {
+        this.jogadores = _jogadores;
+        
+  
+        // Loop sobre os jogadores
+        for (const jogador of this.jogadores) {
+          this.estatisticaService.getEstatisticasByJogadorId(jogador.id).subscribe({
+            next: (estatisticas: Estatistica[]) => {
+              jogador.estatisticas = estatisticas;
+            },
+            error: (error: any) => {
+              this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+            }
+          });
+        }
+        this.jogadoresFiltrados = this.jogadores;
       },
-      error: (error: any)=> {
-        this.spinner.hide(),
-        this.toastr.error("Erro ao carregar Jogadores","Erro!")
+      error: (error: any) => {
+        this.spinner.hide();
+        this.toastr.error("Erro ao carregar Jogadores", "Erro!");
       },
       complete: () => this.spinner.hide()
-    })
+    });
   }
   // public getEstatisticas(): void{
-  //   this.estatisticaService.getEstatisticas().subscribe({
+  //   this.estatisticaService.getEstatisticasByJogadorId().subscribe({
   //     next: (_estatisticas: Estatistica[] ) => {
   //       this.estatistica = _estatisticas;
   //     },
@@ -82,12 +96,23 @@ export class JogadoresListaComponent implements OnInit {
   //     complete: () => this.spinner.hide()
   //   })
   // }
-  public carregaKIll() :void {
-    for(let i=0;i<=this.estatistica.length;i++)
-    {
-      this.totalKill[i] = this.estatistica.filter(
-      e => e.jogadorId == i).reduce((a,b) => a + b.kill,0);
-    }
+  public carregaKIll(est : Estatistica[]) :number {
+    let totalKills = 0; est.forEach(item => { totalKills += item.kill; }); return totalKills; 
+    
+  }
+
+  public getkd(est : Estatistica[]) :number {
+    let totalKills = 0; 
+    est.forEach(item => { totalKills += item.kill; }); 
+    let totalmortes = 0
+    est.forEach(item => { totalmortes += item.morte; }); 
+
+    let kdRatio = totalKills/totalmortes;
+    return  parseFloat(kdRatio.toFixed(2));
+  }
+  getQuantidadePartidasUnicas(est : Estatistica[]): number {
+    const uniquePartidas  = new Set(est.map(e => e.partidaId));
+    return uniquePartidas.size;;
   }
   public openModal(event:any, template: TemplateRef<any>, id: number): void {
     event.stopPropagation();

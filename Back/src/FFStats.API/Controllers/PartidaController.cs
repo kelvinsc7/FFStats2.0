@@ -48,6 +48,21 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Partida. Erro: {ex.Message}");
             }
         }
+        [HttpGet("Treino/{id}")]
+        public async Task<IActionResult> GetByTreinoIdAsync(int id)
+        {
+            try
+            {
+                var partida = await _partidaService.GetPartidasByTreinoIdAsync(id,true);
+                if(partida == null) return NotFound("Nenhuma Partida Encontrada!");
+
+                return  Ok(partida);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Partida. Erro: {ex.Message}");
+            }
+        }
         [HttpGet("{id}/mapa")]
         public async Task<IActionResult> GetByMapaIdAsync(int id)
         {

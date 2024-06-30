@@ -19,6 +19,9 @@ export class PartidaService {
   getPartidaById(id: number): Observable<Partida>{
     return this.http.get<Partida>(`${this.baseURL}/${id}`).pipe(take(1));
   }
+  getPartidaByTreinoId(id: number): Observable<Partida[]>{
+    return this.http.get<Partida[]>(`${this.baseURL}/Treino/${id}`).pipe(take(1));
+  }
   getPartidaByMapaId(id: number): Observable<Partida>{
     return this.http.get<Partida>(`${this.baseURL}/${id}/mapa`).pipe(take(1));
   }

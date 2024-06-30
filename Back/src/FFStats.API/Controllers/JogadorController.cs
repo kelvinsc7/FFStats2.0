@@ -27,7 +27,8 @@ namespace FFStats.API.Controllers
             try
             {
                 var Jogadors = await _JogadoresService.GetAllJogadoresAsync(true);
-                if(Jogadors == null) return NotFound("Nenhuma Jogador Encontrada!");
+                if(Jogadors == null) 
+                    return NotFound("Nenhuma Jogador Encontrada!");
 
                 return  Ok(Jogadors);
             }
@@ -86,7 +87,8 @@ namespace FFStats.API.Controllers
             try
             {
                 var Jogador = await _JogadoresService.UpdateJogadoress(id, model);
-                if(Jogador == null) return BadRequest("Erro ao Tentar Atualizar Jogador");
+                if(Jogador == null) 
+                    return BadRequest("Erro ao Tentar Atualizar Jogador");
                 return  Ok(Jogador);
             }
             catch (Exception ex)

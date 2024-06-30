@@ -101,6 +101,22 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<estatisticasDto[]> GetEstatisticasByJogadorIdAsync(int jogadorId)
+        {
+            try
+            {
+                var estatisticas = await _EstatisticasPersistence.GetEstatisticasByJogadorIdAsync(jogadorId);
+                if (estatisticas == null) return null;
+
+                var resultado = _mapper.Map<estatisticasDto[]>(estatisticas);
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task<estatisticasDto> GetEstatisticasByIdsAsync(int EstatisticasId, int estatisticaId)
         {

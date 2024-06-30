@@ -32,5 +32,13 @@ namespace FFStats.Persistence.Persistences
 
             return await query.ToArrayAsync();
         }
+        public async Task<Estatisticas[]> GetEstatisticasByJogadorIdAsync(int jogadorId)
+        {
+            IQueryable<Estatisticas> query = _context.Estatisticas;
+
+            query = query.AsNoTracking().Where(e => e.jogadorId == jogadorId);
+
+            return await query.ToArrayAsync();
+        }
     }
 }

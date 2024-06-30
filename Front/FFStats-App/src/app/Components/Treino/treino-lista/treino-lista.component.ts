@@ -8,6 +8,9 @@ import { Modo } from 'src/app/Model/Modo';
 import { ModoService } from 'src/app/Services/modo.service';
 import { Partida } from 'src/app/Model/Partida';
 import { Router } from '@angular/router';
+import { EstatisticaService } from '@app/Services/estatistica.service';
+import { PartidaService } from '@app/Services/partida.service';
+import { Estatistica } from '@app/Model/Estatistica';
 
 @Component({
   selector: 'app-treino-lista',
@@ -51,6 +54,7 @@ export class TreinoListaComponent implements OnInit {
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     private modoService : ModoService,
+    private partidaService: PartidaService,
     private router: Router,
   ) { }
 
@@ -75,7 +79,19 @@ export class TreinoListaComponent implements OnInit {
     this.treinoService.getTreinos().subscribe({
       next: (_treino: Treino[]) =>{
         this.treinos = _treino
-        this.treinoFiltrada = _treino
+        
+
+        for(const treino of this.treinos){
+          this.partidaService.getPartidaByTreinoId(treino.id).subscribe({
+            next: (partida: Partida[]) =>{
+              treino.partidas = partida;
+            },
+            error: (error: any) => {
+              this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+            }
+          });
+        }
+        this.treinoFiltrada = this.treinos;
         this.atibuiModo()
       },
       error: (error: any)=>{
@@ -93,6 +109,29 @@ export class TreinoListaComponent implements OnInit {
       this._desc = this.modo.filter(
         m => m.id == j)
     }
+  }
+
+  getQtdeKill(partidas: Partida[]): number {
+    return partidas.reduce((totalKills, partida) => {
+      const killsInPartida = partida.estatisticas.reduce((acc, estatisticas) => acc + estatisticas.kill, 0);
+      return totalKills + killsInPartida;
+    }, 0);
+  }
+  getQtdeDano(partidas: Partida[]): number {
+    return partidas.reduce((totalKills, partida) => {
+      const killsInPartida = partida.estatisticas.reduce((acc, estatisticas) => acc + estatisticas.dano, 0);
+      return totalKills + killsInPartida;
+    }, 0);
+  }
+  getPosicoes(partidas: Partida[]): string {
+    return partidas.map(partida => partida.posicao).join(' - ');
+  }
+  getModo(partidas: Partida[]): string {
+    const modosUnicos = new Set<string>(); // Usamos um Set para armazenar nomes únicos
+    partidas.forEach(partida => {
+      modosUnicos.add(partida.modo.modoDescricao); // Adiciona o nome do modo ao Set
+    });
+    return Array.from(modosUnicos).join(', '); // Converte Set para array e concatena em uma string
   }
 
   public openModal(event:any, template: TemplateRef<any>, id: number): void {

@@ -35,14 +35,10 @@
           <th class="d-none d-md-table-cell">{{item.id}}</th>
           <th>{{item.treinoDescricao}}</th>
           <th>{{item.partidas.length}}</th>
-          <th>56</th>
-          <th>25000</th>
-          <th class="d-none d-md-table-cell">
-            <b *ngFor="let p of item.partidas">
-              {{p.posicao}}
-            </b>
-          </th>
-          <th class="d-none d-md-table-cell">{{desc[i]?.modoDescricao}}</th>
+          <th>{{getQtdeKill(item.partidas)}}</th>
+          <th>{{getQtdeDano(item.partidas)}}</th>
+          <th>{{getPosicoes(item.partidas)}}</th>
+          <th class="d-none d-md-table-cell">{{getModo(item.partidas)}}</th>
           <th class="d-none d-md-table-cell">{{item.partidas[0]?.partidaData | DateTimeFormat}}</th>
           <th>
             <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
