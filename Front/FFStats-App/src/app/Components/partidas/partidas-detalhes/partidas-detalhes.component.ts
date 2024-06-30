@@ -48,6 +48,7 @@ export class PartidasDetalhesComponent implements OnInit {
   // sojogador2: string ='0';
   // sojogador3: string ='0';
   // sojogador4: string ='0';
+  isLoading = false;
 
   treino:Treino[] = [];
   mapas:Mapa[] = [];
@@ -289,6 +290,7 @@ export class PartidasDetalhesComponent implements OnInit {
   }
 
   public salvarPartida():void{
+    this.isLoading = true;
     this.spiner.show();
     if(this.form.valid)
     {
@@ -307,6 +309,7 @@ export class PartidasDetalhesComponent implements OnInit {
         },
       ).add(() =>this.spiner.hide());
     }
+    this.isLoading = false;
   }
 
   public salvarEstatisticas():void{

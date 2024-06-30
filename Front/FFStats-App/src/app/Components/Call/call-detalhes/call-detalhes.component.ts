@@ -19,6 +19,7 @@ export class CallDetalhesComponent implements OnInit {
   form!:FormGroup;
   calls ={} as Call;
   modeSave = 'postCall';
+  isLoading = false;
 
   get f():any{return this.form.controls;}
 
@@ -77,6 +78,7 @@ export class CallDetalhesComponent implements OnInit {
   public resetForm():void{this.form.reset();}
 
   public salvarAlteracao():void{
+    this.isLoading = true;
     this.spiner.show();
     if(this.form.valid)
     {
@@ -93,5 +95,6 @@ export class CallDetalhesComponent implements OnInit {
 
       ).add(() =>this.spiner.hide());
     }
+    this.isLoading = false;
   }
 }

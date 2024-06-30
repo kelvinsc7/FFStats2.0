@@ -39,9 +39,9 @@
          <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
-         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()" [disabled]="isLoading">
+         <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
            <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true" ></span>
-           Salvar Evento
+           Salvar
          </button>
        </div>
      </div>

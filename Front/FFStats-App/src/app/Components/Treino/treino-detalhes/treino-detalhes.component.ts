@@ -16,6 +16,7 @@ export class TreinoDetalhesComponent implements OnInit {
   form!:FormGroup;
   treino ={} as Treino;
   modeSave = 'postTreino'
+  isLoading=false;
 
   get f():any{return this.form.controls}
 
@@ -59,6 +60,7 @@ export class TreinoDetalhesComponent implements OnInit {
   public resetForm():void{this.form.reset();}
 
   public salvarAlteracao():void{
+    this.isLoading = true;
     this.spinner.show();
     if(this.form.valid)
     {
@@ -76,5 +78,6 @@ export class TreinoDetalhesComponent implements OnInit {
     ).add(() =>this.spinner.hide());
 
     }
+    this.isLoading = false;
   }
 }

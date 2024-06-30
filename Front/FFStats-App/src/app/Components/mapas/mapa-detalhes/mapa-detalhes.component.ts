@@ -16,6 +16,7 @@ export class MapaDetalhesComponent implements OnInit {
   form!:FormGroup;
   mapas={} as Mapa;
   modeSave = 'postMapa';
+  isLoading = false;
 
   get f():any{return this.form.controls;}
 
@@ -59,6 +60,7 @@ export class MapaDetalhesComponent implements OnInit {
   public resetForm():void{this.form.reset();}
 
   public salvarAlteracao():void{
+    this.isLoading = true;
     this.spiner.show();
     if(this.form.valid)
     {
@@ -76,5 +78,6 @@ export class MapaDetalhesComponent implements OnInit {
     ).add(() =>this.spiner.hide());
 
     }
+    this.isLoading = false;
   }
 }
