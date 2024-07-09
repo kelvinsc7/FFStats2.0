@@ -6,7 +6,7 @@ export interface Estatistica {
   partidaId: number;
   partida: Partida[];
   jogadorId: number;
-  jogador: Jogador[];
+  jogador: Jogador;
   kill: number;
   morte: number;
   assistencia: number;
