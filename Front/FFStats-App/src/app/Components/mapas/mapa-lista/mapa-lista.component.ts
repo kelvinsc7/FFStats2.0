@@ -1,3 +1,4 @@
+import { Call } from '@app/Model/Call';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Estatistica } from '@app/Model/Estatistica';
@@ -9,6 +10,8 @@ import { PartidaService } from '@app/Services/partida.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { JogadorService } from '@app/Services/jogador.service';
+import { Jogador } from '@app/Model/Jogador';
 
 @Component({
   selector: 'app-mapa-lista',
@@ -21,27 +24,10 @@ export class MapaListaComponent implements OnInit {
   public mapas: Mapa[] = [];
   public mapaFiltrada : Mapa[] = [];
   private _filtromapa: string = '';
-  private partida : Partida[]=[];
-  private _qtdePardida : Number[]=[];
-  private _booyahh : Number[]=[];
-  private estatistica : Estatistica[]=[];
-  private _kill : Number[]=[];
-  private partidaEstatistica : Partida[]=[];
   public mapaId:number = 0;
+  public jogador: Jogador 
 
-  public get kill()
-  {
-    return this._kill;
-  }
-  public get booyahh()
-  {
-    return this._booyahh;
-  }
-
-  public get qtdePardida()
-  {
-    return this._qtdePardida;
-  }
+  
 
   public get filtromapa()
   {
@@ -62,6 +48,7 @@ export class MapaListaComponent implements OnInit {
 
   constructor(
     private mapaService: MapaService,
+    private jogadorService: JogadorService,
     private modalService : BsModalService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
@@ -73,45 +60,29 @@ export class MapaListaComponent implements OnInit {
 
   public ngOnInit(): void {
     this.spinner.show();
-    this.getAllPartidas();
     this.getmapas();
     //this.QtdePartida();
   }
 
-  public getAllPartidas() : void{
-    this.partidaService.getPartidas().subscribe({
-      next: (_partida: Partida[]) =>{
-        this.partida = _partida
-      },
-      error: (error: any)=>{
-        this.spinner.hide(),
-        this.toastr.error("Erro ao carregar mapas","Erro!")
-      },
-      complete: () => this.spinner.hide()
-    })
 
-  }
-  // public getAllEstatisticas() : void{
-  //   this.estatisticaService.getEstatisticas().subscribe({
-  //     next: (_estatisticas: Estatistica[]) =>{
-  //       this.estatistica = _estatisticas
-  //     },
-  //     error: (error: any)=>{
-  //       this.spinner.hide(),
-  //       this.toastr.error("Erro ao carregar estatisticas","Erro!")
-  //     },
-  //     complete: () => this.spinner.hide()
-  //   })
-
-  // }
   public getmapas(): void{
     this.mapaService.getMapas().subscribe({
       next: (_mapa: Mapa[]) =>{
         this.mapas = _mapa
+
+
+        // Loop sobre os jogadores
+        for (const mapa of this.mapas) {
+          this.partidaService.getPartidaByMapaId(mapa.id).subscribe({
+            next: (partida: Partida[]) => {
+              mapa.partida = partida;
+            },
+            error: (error: any) => {
+              this.toastr.error("Erro ao carregar partidas do mapa", "Erro!");
+            }
+          });
+        }
         this.mapaFiltrada = _mapa
-        this.carregaTotalPartida();
-        this.carregaTotalBooyah()
-        this.carregaKill();
       },
       error: (error: any)=>{
         this.spinner.hide(),
@@ -120,37 +91,78 @@ export class MapaListaComponent implements OnInit {
       complete: () => this.spinner.hide()
     })
   }
-  public carregaTotalPartida():void{
-    for(let i=0;i<=this.mapas.length;i++)
-    {
-      this.qtdePardida[i] = this.partida.filter(
-      p => p.mapaId == i).length;
-    }
+  public getCall(call : Call[]): string{
+    return call.map(call=>call.callCidade).join(' - ');
   }
-  public carregaTotalBooyah():void{
-    for(let i=0;i<=this.mapas.length;i++)
-    {
-      this.booyahh[i] = this.partida.filter(
-      p => p.mapaId == i && p.posicao ==1).length;
-    }
+  public getQtdePartidas(par : Partida[]): number{
+
+    return par.length;
   }
-  public carregaKill():void{
-    var total :number = 0;
-    for(let i=1;i<=this.mapas.length;i++)
-    {
-      this.partidaEstatistica = this.partida.filter(p => p.mapaId == i)
-      console.log("Tamanho da controladora: "+this.partidaEstatistica.length)
-      for(let j=0;j<this.partidaEstatistica.length;j++)
-      {
-        console.log("Controladora: " + this.partidaEstatistica[j].id)
-        total = total+this.estatistica.filter(e => e.partidaId == this.partidaEstatistica[j].id).length
-        console.log(this.estatistica.filter(e => e.partidaId == this.partidaEstatistica[j].id))
-        console.log("Quantidade de estatistica: " + total);
+  public getQtdeBoyahh(par : Partida[]): number{
+    return par.filter(p => p.posicao === 1).length
+  }
+  public getKills(par: Partida[]): number{
+    return par.reduce((totalKills, partida) => {
+      const killsInPartida = partida.estatisticas.reduce((acc, estatisticas) => acc + estatisticas.kill, 0);
+      return totalKills + killsInPartida;
+    }, 0);
+  }
+
+
+  public getMelhorJogador(partidas: Partida[]): string {
+    let jogadorComMaisKills = '';
+    let maxKills = 0;
+    let jogadorKills: { [jogadorNick: string]: number } = {};
+  
+    partidas.forEach(partida => {
+      if (partida.estatisticas) {
+        partida.estatisticas.forEach((estatistica: Estatistica) => {
+          if (estatistica.jogador && estatistica.jogador.jogadorNick) {
+            const jogadorNick = estatistica.jogador.jogadorNick;
+            if (!jogadorKills[jogadorNick]) {
+              jogadorKills[jogadorNick] = 0;
+            }
+            jogadorKills[jogadorNick] += estatistica.kill;
+          }
+        });
       }
-      this._kill[i] = total
-      total = 0;
-      console.log(this._kill[i])
+    });
+  
+    // Encontrar o jogador com mais kills
+    for (const jogadorNick in jogadorKills) {
+      if (jogadorKills[jogadorNick] > maxKills) {
+        maxKills = jogadorKills[jogadorNick];
+        jogadorComMaisKills = jogadorNick;
+      }
     }
+  
+    return jogadorComMaisKills !=''? jogadorComMaisKills + '  \n(' + maxKills + ' Kills)':'';
+  }
+
+
+  public getCallMais(par : Partida[]): string{
+    const contagemCidades: { [cidade: string]: number } = {};
+
+    par.forEach(p => {
+      const cidade = p.call.callCidade;
+      if (cidade) {
+        if (!contagemCidades[cidade]) {
+          contagemCidades[cidade] = 0;
+        }
+        contagemCidades[cidade]++;
+      }
+    });
+
+    let cidadeMaisComum = '';
+    let maiorContagem = 0;
+
+    for (const cidade in contagemCidades) {
+      if (contagemCidades[cidade] > maiorContagem) {
+        maiorContagem = contagemCidades[cidade];
+        cidadeMaisComum = cidade;
+      }
+    }
+    return cidadeMaisComum !='' ? cidadeMaisComum + ' '+ maiorContagem + 'x':'';
   }
 
   public openModal(event:any, template: TemplateRef<any>, id: number): void {

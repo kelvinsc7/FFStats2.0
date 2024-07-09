@@ -84,18 +84,6 @@ export class JogadoresListaComponent implements OnInit {
       complete: () => this.spinner.hide()
     });
   }
-  // public getEstatisticas(): void{
-  //   this.estatisticaService.getEstatisticasByJogadorId().subscribe({
-  //     next: (_estatisticas: Estatistica[] ) => {
-  //       this.estatistica = _estatisticas;
-  //     },
-  //     error: (error: any)=> {
-  //       this.spinner.hide(),
-  //       this.toastr.error("Erro ao carregar Estatisticaes","Erro!")
-  //     },
-  //     complete: () => this.spinner.hide()
-  //   })
-  // }
   public carregaKIll(est : Estatistica[]) :number {
     let totalKills = 0; est.forEach(item => { totalKills += item.kill; }); return totalKills; 
     
