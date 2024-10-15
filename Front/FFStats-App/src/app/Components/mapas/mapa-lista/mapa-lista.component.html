@@ -34,16 +34,12 @@
         <tr *ngFor="let item of mapaFiltrada; let i = index"  (click)="detalheMapas(item.id)" style="cursor: pointer;">
           <th class="d-none d-md-table-cell">{{item.id}}</th>
           <th>{{item.mapaNome}}</th>
-          <th>
-            <b *ngFor="let c of item.calls">
-              | {{c.callCidade}} |
-            </b>
-          </th>
-          <th>{{qtdePardida[item.id]}}</th>
-          <th>{{booyahh[item.id]}}</th>
-          <th class="d-none d-md-table-cell">530</th>
-          <th class="d-none d-md-table-cell">Vrt Bliminha</th>
-          <th class="d-none d-md-table-cell">Brasilia</th>
+          <th>{{getCalls(item.calls)}}</th>
+          <th>{{getTotalPartidas(item)}}</th>
+          <th>{{getBooyah(item)}}</th>
+          <th class="d-none d-md-table-cell">{{getQtdeKill(item.partidas)}}</th>
+          <th class="d-none d-md-table-cell">{{getMelhorJogador(item)}}</th>
+          <th class="d-none d-md-table-cell">{{getMaiorCall(item)}}</th>
           <th>
             <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>

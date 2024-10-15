@@ -1,3 +1,4 @@
+import { Call } from './../../../Model/Call';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Estatistica } from '@app/Model/Estatistica';
@@ -108,10 +109,20 @@ export class MapaListaComponent implements OnInit {
     this.mapaService.getMapas().subscribe({
       next: (_mapa: Mapa[]) =>{
         this.mapas = _mapa
-        this.mapaFiltrada = _mapa
-        this.carregaTotalPartida();
-        this.carregaTotalBooyah()
-        this.carregaKill();
+        for(const mapa of this.mapas){
+          this.partidaService.getPartidaByMapaId(mapa.id).subscribe({
+            next: (partida: Partida[]) =>{
+              mapa.partidas = partida;
+            },
+            error: (error: any) => {
+              this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+            }
+          });
+        }
+        this.mapaFiltrada = this.mapas
+        // this.carregaTotalPartida();
+        // this.carregaTotalBooyah()
+        // this.carregaKill();
       },
       error: (error: any)=>{
         this.spinner.hide(),
@@ -120,39 +131,94 @@ export class MapaListaComponent implements OnInit {
       complete: () => this.spinner.hide()
     })
   }
-  public carregaTotalPartida():void{
-    for(let i=0;i<=this.mapas.length;i++)
-    {
-      this.qtdePardida[i] = this.partida.filter(
-      p => p.mapaId == i).length;
-    }
+  
+  getQtdeKill(partidas: Partida[]): number {
+    return partidas.reduce((totalKills, partida) => {
+      const killsInPartida = partida.estatisticas.reduce((acc, estatisticas) => acc + estatisticas.kill, 0);
+      return totalKills + killsInPartida;
+    }, 0);
   }
-  public carregaTotalBooyah():void{
-    for(let i=0;i<=this.mapas.length;i++)
-    {
-      this.booyahh[i] = this.partida.filter(
-      p => p.mapaId == i && p.posicao ==1).length;
-    }
+  public getBooyah(mapa: Mapa): number {
+    if (!mapa.partidas) return 0;
+    return mapa.partidas.filter(p => p.posicao === 1).length;
   }
-  public carregaKill():void{
-    var total :number = 0;
-    for(let i=1;i<=this.mapas.length;i++)
-    {
-      this.partidaEstatistica = this.partida.filter(p => p.mapaId == i)
-      console.log("Tamanho da controladora: "+this.partidaEstatistica.length)
-      for(let j=0;j<this.partidaEstatistica.length;j++)
-      {
-        console.log("Controladora: " + this.partidaEstatistica[j].id)
-        total = total+this.estatistica.filter(e => e.partidaId == this.partidaEstatistica[j].id).length
-        console.log(this.estatistica.filter(e => e.partidaId == this.partidaEstatistica[j].id))
-        console.log("Quantidade de estatistica: " + total);
+  public getTotalPartidas(mapa: Mapa): number {
+    return mapa.partidas ? mapa.partidas.length : 0;
+  }
+  public getCalls(calls: Call[]):string{
+    return calls.map(call => call.callCidade).join(' - ');
+  }
+  public getMelhorJogador(mapa: Mapa): string {
+    if (!mapa.partidas || mapa.partidas.length === 0) return 'Sem dados';
+  
+    // Mapeia as estatísticas de kills por jogadorId
+    const killsPorJogador: { [jogadorId: number]: number } = {};
+  
+    for (const partida of mapa.partidas) {
+      if (partida.estatisticas) {
+        for (const estatistica of partida.estatisticas) {
+          const jogadorId = estatistica.jogador.id;  // Aqui garantimos que `jogador` é um objeto
+          if (killsPorJogador[jogadorId]) {
+            killsPorJogador[jogadorId] += estatistica.kill;
+          } else {
+            killsPorJogador[jogadorId] = estatistica.kill;
+          }
+        }
       }
-      this._kill[i] = total
-      total = 0;
-      console.log(this._kill[i])
     }
+  
+    // Encontra o jogadorId com o maior número de kills
+    let jogadorComMaisKillsId: number | null = null;
+    let maxKills = 0;
+  
+    for (const jogadorId in killsPorJogador) {
+      if (killsPorJogador[jogadorId] > maxKills) {
+        maxKills = killsPorJogador[jogadorId];
+        jogadorComMaisKillsId = parseInt(jogadorId, 10);
+      }
+    }
+  
+    // Caso não tenha sido encontrado um jogador válido
+    if (jogadorComMaisKillsId === null) return 'Sem dados';
+  
+    // Busca o nome do jogador com base no jogadorId
+    const jogadorComMaisKills = mapa.partidas
+      .flatMap(partida => partida.estatisticas)
+      .find(estatistica => estatistica.jogador.id === jogadorComMaisKillsId)?.jogador.jogadorNick;
+  
+    return jogadorComMaisKills ? `${jogadorComMaisKills} (${maxKills} kills)` : 'Jogador não encontrado';
   }
+  public getMaiorCall(mapa: Mapa): string {
+    if (!mapa.partidas || mapa.partidas.length === 0) return 'Sem dados';
 
+    // Mapeia as contagens de chamadas (CallId) por mapa e armazena o callCidade correspondente
+    const callCount: { [callId: string]: { count: number, callCidade: string } } = {};
+
+    // Itera sobre as partidas do mapa
+    for (const partida of mapa.partidas) {
+        const callId = partida.callId; // Supondo que cada partida possui um campo callId
+        const callCidade = partida.call.callCidade; // Acessando o callCidade do objeto call
+
+        if (callCount[callId]) {
+            callCount[callId].count += 1; // Incrementa a contagem para este callId
+        } else {
+            callCount[callId] = { count: 1, callCidade }; // Inicializa a contagem e armazena o callCidade
+        }
+    }
+
+    // Encontra o CallId com a maior quantidade de partidas
+    let maiorCallCidade = '';
+    let maxPartidas = 0;
+
+    for (const callId in callCount) {
+        if (callCount[callId].count > maxPartidas) {
+            maxPartidas = callCount[callId].count;
+            maiorCallCidade = callCount[callId].callCidade; // Obtém o callCidade correspondente
+        }
+    }
+
+    return `${maiorCallCidade} (${maxPartidas} partidas)`;
+  }
   public openModal(event:any, template: TemplateRef<any>, id: number): void {
     event.stopPropagation();
     this.mapaId = id;
