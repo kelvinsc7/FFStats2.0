@@ -10,6 +10,8 @@ import { PartidaService } from '@app/Services/partida.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { JogadorService } from '@app/Services/jogador.service';
+import { Jogador } from '@app/Model/Jogador';
 
 @Component({
   selector: 'app-mapa-lista',
@@ -22,27 +24,10 @@ export class MapaListaComponent implements OnInit {
   public mapas: Mapa[] = [];
   public mapaFiltrada : Mapa[] = [];
   private _filtromapa: string = '';
-  private partida : Partida[]=[];
-  private _qtdePardida : Number[]=[];
-  private _booyahh : Number[]=[];
-  private estatistica : Estatistica[]=[];
-  private _kill : Number[]=[];
-  private partidaEstatistica : Partida[]=[];
   public mapaId:number = 0;
+  public jogador: Jogador 
 
-  public get kill()
-  {
-    return this._kill;
-  }
-  public get booyahh()
-  {
-    return this._booyahh;
-  }
-
-  public get qtdePardida()
-  {
-    return this._qtdePardida;
-  }
+  
 
   public get filtromapa()
   {
@@ -63,6 +48,7 @@ export class MapaListaComponent implements OnInit {
 
   constructor(
     private mapaService: MapaService,
+    private jogadorService: JogadorService,
     private modalService : BsModalService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
@@ -74,37 +60,11 @@ export class MapaListaComponent implements OnInit {
 
   public ngOnInit(): void {
     this.spinner.show();
-    this.getAllPartidas();
     this.getmapas();
     //this.QtdePartida();
   }
 
-  public getAllPartidas() : void{
-    this.partidaService.getPartidas().subscribe({
-      next: (_partida: Partida[]) =>{
-        this.partida = _partida
-      },
-      error: (error: any)=>{
-        this.spinner.hide(),
-        this.toastr.error("Erro ao carregar mapas","Erro!")
-      },
-      complete: () => this.spinner.hide()
-    })
 
-  }
-  // public getAllEstatisticas() : void{
-  //   this.estatisticaService.getEstatisticas().subscribe({
-  //     next: (_estatisticas: Estatistica[]) =>{
-  //       this.estatistica = _estatisticas
-  //     },
-  //     error: (error: any)=>{
-  //       this.spinner.hide(),
-  //       this.toastr.error("Erro ao carregar estatisticas","Erro!")
-  //     },
-  //     complete: () => this.spinner.hide()
-  //   })
-
-  // }
   public getmapas(): void{
     this.mapaService.getMapas().subscribe({
       next: (_mapa: Mapa[]) =>{
