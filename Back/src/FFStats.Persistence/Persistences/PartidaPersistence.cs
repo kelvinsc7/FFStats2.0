@@ -84,16 +84,11 @@ namespace FFStats.Persistence.Persistences
         public async Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false)
         {
             IQueryable<Partida> query = _context.Partidas
-                            // .Include(p => p.treino)
-                            // .Include(p => p.mapa)
-                             .Include(p => p.call)
-                            // .Include(p => p.modo)
-                            // .Include(p => p.sumodo)
-                            .Include(p => p.Estatisticas)
-                                .ThenInclude(e => e.Jogador);
+                            .Include(p => p.call)
+                            .Include(p => p.Estatisticas).ThenInclude(e => e.Jogador);
             if(IncludeJogador)
             {
-                query = query.Include(P=> P.PartidasJogadores).ThenInclude(PJ =>PJ.Jogador);
+                
             }
             query = query.AsNoTracking().OrderBy(P => P.id).Where(P => P.mapaId == id);
             return await query.ToArrayAsync();
