@@ -98,6 +98,9 @@ export class JogadoresListaComponent implements OnInit {
     let kdRatio = totalKills/totalmortes;
     return  parseFloat(kdRatio.toFixed(2));
   }
+  getTotalMorte(est: Estatistica[]): number{
+    let totalMorte = 0; est.forEach(item => { totalMorte += item.morte; }); return totalMorte;
+  }
   getQuantidadePartidasUnicas(est : Estatistica[]): number {
     const uniquePartidas  = new Set(est.map(e => e.partidaId));
     return uniquePartidas.size;;

@@ -26,6 +26,7 @@
           <th class="d-none d-md-table-cell">Line</th>
           <th>Qtde. Partidas</th>
           <th>Kills</th>
+          <th>Mortes</th>
           <th class="d-none d-md-table-cell">KD</th>
           <th>Opções</th>
         </tr>
@@ -39,6 +40,7 @@
           <th class="d-none d-md-table-cell">{{item.line.lineNome}}</th>
           <th>{{ getQuantidadePartidasUnicas(item.estatisticas) }}</th>
           <th>{{carregaKIll(item.estatisticas)}}</th><!--Local onde ira colocar a quantidade de Kills  -->
+          <th>{{getTotalMorte(item.estatisticas)}}</th>
           <th class="d-none d-md-table-cell">{{ getkd(item.estatisticas) }}</th><!-- Kill / Partida -->
           <th>
             <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
