@@ -59,6 +59,9 @@ import { PartidasDetalhesComponent} from './Components/partidas/partidas-detalhe
 import { PartidasListaComponent } from './Components/partidas/partidas-lista/partidas-lista.component';
 import { PartidaService } from './Services/partida.service';
 
+//Area BuscaApiComponente
+import { BuscaApiComponent } from './Components/BuscaApi/busca-api.component';
+
 //Area Perfil Components
 import { PerfilComponent } from './Components/user/Perfil/Perfil.component';
 import { UserComponent } from './Components/user/user.component';
@@ -78,6 +81,7 @@ import { LineService } from './Services/Line.service';
 //Area Pipes
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 import { SubmodoService } from './Services/submodoService.service';
+import { BuscaApiDetalhesComponent } from './Components/BuscaApi/BuscaApi-detalhes/BuscaApi-detalhes.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -110,6 +114,8 @@ defineLocale('pt-br', ptBrLocale);
     UserComponent,
     LoginComponent,
     RegistrationComponent,
+    BuscaApiComponent,
+    BuscaApiDetalhesComponent
    ],
   imports: [
     BrowserModule,
