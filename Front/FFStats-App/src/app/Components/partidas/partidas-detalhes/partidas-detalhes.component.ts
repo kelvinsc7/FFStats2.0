@@ -57,7 +57,8 @@ export class PartidasDetalhesComponent implements OnInit {
   calls: Call[] = [];
   jogador: Jogador[] = [];
   partida={} as Partida;
-  form!:FormGroup;
+  formPartida!:FormGroup;
+  formEstatistica!:FormGroup;
   modeSave = 'postPartida';
 
   estatisticaAtual = {id:0, indice :0}
@@ -67,10 +68,10 @@ export class PartidasDetalhesComponent implements OnInit {
   }
 
   get estatisticas(): FormArray{
-    return this.form.get('estatisticas') as FormArray;
+    return this.formEstatistica.get('estatisticas') as FormArray;
   }
 
-  get f():any{return this.form.controls;}
+  get f():any{return this.formPartida.controls;}
 
   get bsConfig():any{
     return { isAnimated: true, adaptivePosition: true,
@@ -110,7 +111,7 @@ export class PartidasDetalhesComponent implements OnInit {
       this.partidaService.getPartidaById(this.partidaId).subscribe(
         (partida: Partida)=>{
           this.partida = {...partida};
-          this.form.patchValue(this.partida);
+          this.formPartida.patchValue(this.partida);
 
           console.log(this.jogador)
           this.partida.estatisticas.forEach(estatistica =>{ 
@@ -245,7 +246,7 @@ export class PartidasDetalhesComponent implements OnInit {
     this.validation();
   }
   public validation():void{
-    this.form = this.fb.group({
+    this.formPartida = this.fb.group({
       partidaDescricao: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
       partidaData: ['', [Validators.required]],
       posicao: ['',[Validators.required, Validators.min(1),Validators.max(55)]],
@@ -253,7 +254,9 @@ export class PartidasDetalhesComponent implements OnInit {
       mapaId:['',[Validators.required,]],
       callId:['',[Validators.required,]],
       modoId:['',[Validators.required,]],
-      submodoId:['',[Validators.required,]],
+      submodoId:['',[Validators.required,]]
+    });
+    this.formEstatistica = this.fb.group({
       estatisticas: this.fb.array([])
     });
   }
@@ -283,7 +286,7 @@ export class PartidasDetalhesComponent implements OnInit {
     })
   }
 
-  public resetForm():void{this.form.reset();}
+  public resetForm():void{this.formPartida.reset();}
 
   public cssValidator(campoForm: FormControl | AbstractControl): any {
     return {'is-invalid': campoForm.errors && campoForm.touched}
@@ -292,11 +295,11 @@ export class PartidasDetalhesComponent implements OnInit {
   public salvarPartida():void{
     this.isLoading = true;
     this.spiner.show();
-    if(this.form.valid)
+    if(this.formPartida.valid)
     {
       this.partida =  (this.modeSave === 'postPartida')
-                      ? {... this.form.value}
-                      : {id: this.partida.id,... this.form.value}
+                      ? {... this.formPartida.value}
+                      : {id: this.partida.id,... this.formPartida.value}
 
         this.partidaService[this.modeSave](this.partida).subscribe(
         (partidaRetorno: Partida) =>{
@@ -314,8 +317,8 @@ export class PartidasDetalhesComponent implements OnInit {
 
   public salvarEstatisticas():void{
     this.spiner.show();
-    if (this.form.controls['estatisticas'].valid){
-      this.estatisticaService.saveEstatistica(this.partidaId, this.form.value.estatisticas).subscribe(
+    if (this.formEstatistica.controls['estatisticas'].valid){
+      this.estatisticaService.saveEstatistica(this.partidaId, this.formEstatistica.value.estatisticas).subscribe(
         () =>{
           this.toaster.success('Estatisticas salvos com Sucesso!', 'Sucesso!');
           //this.estatisticas.reset();
