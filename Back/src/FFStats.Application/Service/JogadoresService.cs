@@ -125,5 +125,6 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+        
     }
 }
