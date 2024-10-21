@@ -16,245 +16,164 @@
       </button>
     </div>
   </div>
-  <div class="card rounded shadow-sm mt-4">
-    <div class="d-flex border-bottom">
+  <div class="card bg-light mb-3" *ngIf="this.jogador.accountName">
+    <div class="card-header">
       <h2 class="mr-auto">
-        Dados do Jogador
+        <i class="fa-solid fa-person-military-rifle"></i> Dados do Jogador
       </h2>
-      <h2>
-        <i class="fa-solid fa-person-military-rifle"></i>
-      </h2>
-      
     </div>
-    <div class="p-1">
-      <div class="col">
-        <div >
-          <table class="table table-striped table-light text-center table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th class="d-none d-md-table-cell">ID do Jogo</th>
-                <th>NickName</th>
-                <th>Level</th>
-                <th>Experiencia</th>
-                <th>Likes</th>
-                <th>Pontos Ranqueada</th>
-                <th>Pontos CS</th>
-                <th class="d-none d-md-table-cell">Criado em</th>
-                <th class="d-none d-md-table-cell">Ultimo login</th>
-                <th class="d-none d-md-table-cell">Guilda</th>
-                <th>Opções</th>
-              </tr>
-            </thead>
-            <tbody >
-              <tr >
-                <th class="d-none d-md-table-cell">{{this.jogador.accountUID}}</th>
-                <th>{{this.jogador.accountName}}</th>
-                <th>{{this.jogador.accountLevel}}</th>
-                <th>{{this.jogador.accountXP}}</th>
-                <th>{{this.jogador.accountLikes}}</th>
-                <th>{{this.jogador.brRankPoints}}</th>
-                <th>{{this.jogador.csRankPoints}}</th>
-                <th class="d-none d-md-table-cell">{{this.jogador.accountCreateTime | date: 'dd/MM/yyyy HH:mm'}}</th>
-                <th class="d-none d-md-table-cell">{{this.jogador.accountLastLogin | date: 'dd/MM/yyyy HH:mm'}}</th>
-                <th class="d-none d-md-table-cell">{{this.jogador.guildInformation.guildName}}</th>
-                <th>
-                  <button type="button" class="btn btn-success btn-md" tooltip="Salvar">
-                    <i class=" fa fa-plus-circle"></i>
-                  </button>
-                </th>
-              </tr>
-            </tbody>
-          </table>
+    <div class="card-body">
+      <div class="container" >
+        <div class="row align-items-center">
+          <div class="col-auto" [ngStyle]="{'padding-right': '0'}" >
+            <img [src]="this.jogador.accountAvatarImage" class="img-fluid" [ngStyle]="{'height': '3.2rem'}" alt="Avatar" />
+          </div>
+          <div class="col-auto" [ngStyle]="{'margin-left': '-10px'}">
+            <h6 class="card-title mb-0">{{this.jogador.accountName}} <i class="fa-regular fa-circle-check" *ngIf="this.jogador.accountCelebrityStatus != 'No'"></i></h6>
+            <p class="card-text mb-0">{{this.jogador.accountSignature}}</p>
+            <p class="card-text mb-0">lvl. {{this.jogador.accountLevel}}   <i class="fa-solid fa-thumbs-up"></i> {{this.jogador.accountLikes}}</p>
+          </div>
+          <div class="col-auto ml-auto">
+            <p class="card-text mb-0">Criado em {{this.jogador.accountCreateTime}}</p>
+            <p class="card-text mb-0">Ultimo Login: {{this.jogador.accountLastLogin}}</p>
+          </div>
+        </div>
+        <div class="row align-items-center mt-4">
+          <div class="col-auto">
+            <p class="card-text mb-0">Passe de Elite: {{this.jogador.accountBooyahPass}}</p>
+            <p class="card-text mb-0">Emblemas: {{this.jogador.accountBooyahPassBadges}}</p>
+          </div>
+          <div class="col-auto ml-auto">
+            <p class="card-text mb-0">Patente Ranqueada: {{this.jogador.brRankPoints}}</p>
+            <p class="card-text mb-0">Pontos Ranqueada: {{this.jogador.brRankPoints}}</p>
+          </div>
+          <div class="col-auto ml-auto">
+            <p class="card-text mb-0">Patente CS: {{this.jogador.csRankPoints}}</p>
+            <p class="card-text mb-0">Pontos CS: {{this.jogador.csRankPoints}}</p>
+          </div>
+          <div class="col-auto ml-auto">
+            <p class="card-text mb-0">Guilda: {{this.jogador.guildInformation.guildName}}</p>
+            <p class="card-text mb-0">Nivel: {{this.jogador.guildInformation.guildLevel}}</p>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-auto ml-auto">
+            <button class="btn btn-success" (click)="BuscarJogador(playerId.value)">
+              <span class="fa-solid fa-save"></span>
+              Salvar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="card rounded shadow-sm mt-4">
-    <div class="d-flex border-bottom">
+  <!--Card de estatisticas-->
+  <div class="card bg-light mb-3" *ngIf="this.validaStats">
+    <div class="card-header">
       <h2 class="mr-auto">
-        Estatisticas Jogador
-      </h2>
-      <h2>
-        <i class="fa-solid fa-chart-column"></i>
+        <i class="fa-solid fa-chart-column"></i> Estatisticas Jogador
       </h2>
     </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Solo</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.soloStats.gamesPlayed}} | Booyahs: {{this.playerStats.soloStats.wins}} | Kills: {{this.playerStats.soloStats.kills}} |</h6>
-            <div class="row">
-              <div class="col-sm-4">
-                <p class="card-text">Mortes: {{this.playerStats.soloStats.detailedStats.deaths}}</p>
-                <p class="card-text">KD: {{this.playerStats.soloStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
-                <p class="card-text">Top 3: {{this.playerStats.soloStats.detailedStats.topNTimes}}</p>
-                <p class="card-text">Média de distancia: {{this.playerStats.soloStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Tempo médio: {{this.playerStats.soloStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-                <p class="card-text">Maximo Kill: {{this.playerStats.soloStats.detailedStats.highestKills}}</p>
-                <p class="card-text">Dano: {{this.playerStats.soloStats.detailedStats.damage}}</p>
-                <p class="card-text">Capas: {{this.playerStats.soloStats.detailedStats.headshots}}</p>
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Kill Capa: {{this.playerStats.soloStats.detailedStats.headshotKills}}</p>
-                <p class="card-text">Taxa HS: {{this.playerStats.soloStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
-                <p class="card-text">Derrubados: {{this.playerStats.soloStats.detailedStats.knockDown}}</p>
-                <p class="card-text">Reviveu: {{this.playerStats.soloStats.detailedStats.revives}}</p>
-                <p class="card-text">Kill com Veiculo: {{this.playerStats.soloStats.detailedStats.roadKills}}</p>
-              </div>
-            </div>     
-          </div>
-        </div>
+    <div class="card text-center">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <!-- Solo Tab -->
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab === 'solo'}" href="javascript:void(0)" (click)="setActiveTab('solo')">Solo</a>
+          </li>
+          <!-- Duo Tab -->
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab === 'duo'}" href="javascript:void(0)"  (click)="setActiveTab('duo')">Duo</a>
+          </li>
+          <!-- Squad Tab -->
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab === 'squad'}" href="javascript:void(0)"  (click)="setActiveTab('squad')">Squad</a>
+          </li>
+        </ul>
       </div>
-      <div class="col-sm-4">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Duo</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.duoStats.gamesPlayed}} | Booyahs: {{this.playerStats.duoStats.wins}} | Kills: {{this.playerStats.duoStats.kills}} |</h6>
-            <div class="row">
-              <div class="col-sm-4">
-                <p class="card-text">Mortes: {{this.playerStats.duoStats.detailedStats.deaths}}</p>
-                <p class="card-text">KD: {{this.playerStats.duoStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
-                <p class="card-text">Top 3: {{this.playerStats.duoStats.detailedStats.topNTimes}}</p>
-                <p class="card-text">Média de distancia: {{this.playerStats.duoStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Tempo médio: {{this.playerStats.duoStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-                <p class="card-text">Maximo Kill: {{this.playerStats.duoStats.detailedStats.highestKills}}</p>
-                <p class="card-text">Dano: {{this.playerStats.duoStats.detailedStats.damage}}</p>
-                <p class="card-text">Capas: {{this.playerStats.duoStats.detailedStats.headshots}}</p>
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Kill Capa: {{this.playerStats.duoStats.detailedStats.headshotKills}}</p>
-                <p class="card-text">Taxa HS: {{this.playerStats.duoStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
-                <p class="card-text">Derrubados: {{this.playerStats.duoStats.detailedStats.knockDown}}</p>
-                <p class="card-text">Reviveu: {{this.playerStats.duoStats.detailedStats.revives}}</p>
-                <p class="card-text">Kill com Veiculo: {{this.playerStats.duoStats.detailedStats.roadKills}}</p>
-              </div>
-            </div>     
-          </div>
+      <div class="card-body" *ngIf="activeTab === 'solo'">
+        <div class="card-header">
+          <h5 class="card-title">Solo</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.soloStats.gamesPlayed}} | Booyahs: {{this.playerStats.soloStats.wins}} | Kills: {{this.playerStats.soloStats.kills}} |</h6>
         </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="card-text">Mortes: {{this.playerStats.soloStats.detailedStats.deaths}}</p>
+            <p class="card-text">KD: {{this.playerStats.soloStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">Top 3: {{this.playerStats.soloStats.detailedStats.topNTimes}}</p>
+            <p class="card-text">Média de distancia: {{this.playerStats.soloStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Tempo médio: {{this.playerStats.soloStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Maximo Kill: {{this.playerStats.soloStats.detailedStats.highestKills}}</p>
+            <p class="card-text">Dano: {{this.playerStats.soloStats.detailedStats.damage}}</p>
+            <p class="card-text">Capas: {{this.playerStats.soloStats.detailedStats.headshots}}</p>
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Kill Capa: {{this.playerStats.soloStats.detailedStats.headshotKills}}</p>
+            <p class="card-text">Taxa HS: {{this.playerStats.soloStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
+            <p class="card-text">Derrubados: {{this.playerStats.soloStats.detailedStats.knockDown}}</p>
+            <p class="card-text">Reviveu: {{this.playerStats.soloStats.detailedStats.revives}}</p>
+            <p class="card-text">Kill com Veiculo: {{this.playerStats.soloStats.detailedStats.roadKills}}</p>
+          </div>
+        </div>     
       </div>
-      <div class="col-sm-4">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Squad</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.quadStats.gamesPlayed}} | Booyahs: {{this.playerStats.quadStats.wins}} | Kills: {{this.playerStats.quadStats.kills}} |</h6>
-            <div class="row">
-              <div class="col-sm-4">
-                <p class="card-text">Mortes: {{this.playerStats.quadStats.detailedStats.deaths}}</p>
-                <p class="card-text">KD: {{this.playerStats.quadStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
-                <p class="card-text">Top 3: {{this.playerStats.quadStats.detailedStats.topNTimes}}</p>
-                <p class="card-text">Média de distancia: {{this.playerStats.quadStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Tempo médio: {{this.playerStats.quadStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-                <p class="card-text">Maximo Kill: {{this.playerStats.quadStats.detailedStats.highestKills}}</p>
-                <p class="card-text">Dano: {{this.playerStats.quadStats.detailedStats.damage}}</p>
-                <p class="card-text">Capas: {{this.playerStats.quadStats.detailedStats.headshots}}</p>
-              </div>
-              <div class="col-sm-4">
-                <p class="card-text">Kill Capa: {{this.playerStats.quadStats.detailedStats.headshotKills}}</p>
-                <p class="card-text">Taxa HS: {{this.playerStats.quadStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
-                <p class="card-text">Derrubados: {{this.playerStats.quadStats.detailedStats.knockDown}}</p>
-                <p class="card-text">Reviveu: {{this.playerStats.quadStats.detailedStats.revives}}</p>
-                <p class="card-text">Kill com Veiculo: {{this.playerStats.quadStats.detailedStats.roadKills}}</p>
-              </div>
-            </div>     
-          </div>
+      <div class="card-body" *ngIf="activeTab === 'duo'">
+        <div class="card-header">
+          <h5 class="card-title">Duo</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.duoStats.gamesPlayed}} | Booyahs: {{this.playerStats.duoStats.wins}} | Kills: {{this.playerStats.duoStats.kills}} |</h6>
         </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="card-text">Mortes: {{this.playerStats.duoStats.detailedStats.deaths}}</p>
+            <p class="card-text">KD: {{this.playerStats.duoStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">Top 3: {{this.playerStats.duoStats.detailedStats.topNTimes}}</p>
+            <p class="card-text">Média de distancia: {{this.playerStats.duoStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Tempo médio: {{this.playerStats.duoStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Maximo Kill: {{this.playerStats.duoStats.detailedStats.highestKills}}</p>
+            <p class="card-text">Dano: {{this.playerStats.duoStats.detailedStats.damage}}</p>
+            <p class="card-text">Capas: {{this.playerStats.duoStats.detailedStats.headshots}}</p>
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Kill Capa: {{this.playerStats.duoStats.detailedStats.headshotKills}}</p>
+            <p class="card-text">Taxa HS: {{this.playerStats.duoStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
+            <p class="card-text">Derrubados: {{this.playerStats.duoStats.detailedStats.knockDown}}</p>
+            <p class="card-text">Reviveu: {{this.playerStats.duoStats.detailedStats.revives}}</p>
+            <p class="card-text">Kill com Veiculo: {{this.playerStats.duoStats.detailedStats.roadKills}}</p>
+          </div>
+        </div>     
+      </div>
+      <div class="card-body" *ngIf="activeTab === 'squad'">
+        <div class="card-header">
+          <h5 class="card-title">Squad</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Partidas: {{this.playerStats.quadStats.gamesPlayed}} | Booyahs: {{this.playerStats.quadStats.wins}} | Kills: {{this.playerStats.quadStats.kills}} |</h6>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="card-text">Mortes: {{this.playerStats.quadStats.detailedStats.deaths}}</p>
+            <p class="card-text">KD: {{this.playerStats.quadStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">Top 3: {{this.playerStats.quadStats.detailedStats.topNTimes}}</p>
+            <p class="card-text">Média de distancia: {{this.playerStats.quadStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Tempo médio: {{this.playerStats.quadStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Maximo Kill: {{this.playerStats.quadStats.detailedStats.highestKills}}</p>
+            <p class="card-text">Dano: {{this.playerStats.quadStats.detailedStats.damage}}</p>
+            <p class="card-text">Capas: {{this.playerStats.quadStats.detailedStats.headshots}}</p>
+          </div>
+          <div class="col-sm-4">
+            <p class="card-text">Kill Capa: {{this.playerStats.quadStats.detailedStats.headshotKills}}</p>
+            <p class="card-text">Taxa HS: {{this.playerStats.quadStats.detailedStats.headshotKills}}</p><!-- Necessario calcular a taxa F= hs*100/K-->
+            <p class="card-text">Derrubados: {{this.playerStats.quadStats.detailedStats.knockDown}}</p>
+            <p class="card-text">Reviveu: {{this.playerStats.quadStats.detailedStats.revives}}</p>
+            <p class="card-text">Kill com Veiculo: {{this.playerStats.quadStats.detailedStats.roadKills}}</p>
+          </div>
+        </div>     
       </div>
     </div>
-    <!-- <div class="p-1">
-      <div class="col">
-        <div >
-          <table class="table table-striped table-light text-center table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th class="d-none d-md-table-cell">Modo</th>
-                <th>Partidas</th>
-                <th>Booyah</th>
-                <th>kills</th>
-                <th>Mortes</th>
-                <th>KD</th>
-                <th>Top 3</th>
-                <th class="d-none d-md-table-cell">Média de distancia</th>
-                <th class="d-none d-md-table-cell">Tempo médio de Sobrevivencia</th>
-                <th class="d-none d-md-table-cell">Maximo Kill na partida</th>
-                <th>Dano</th>
-                <th>Capas</th>
-                <th>Kill Capa</th>
-                <th>Taxa HS</th>
-                <th>Derrubados</th>
-                <th>Reviveu</th>
-                <th>Kill com Veiculo</th>
-              </tr>
-            </thead>
-            <tbody >
-              <tr >
-                <th class="d-none d-md-table-cell">Solo</th>
-                <th>{{this.playerStats.soloStats.gamesPlayed}}</th>
-                <th>{{this.playerStats.soloStats.wins}}</th>
-                <th>{{this.playerStats.soloStats.kills}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.deaths}}</th>
-                <th>CALCULAR KD</th>
-                <th>{{this.playerStats.soloStats.detailedStats.topNTimes}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.distanceTravelled}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.survivalTime}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.highestKills}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.damage}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.headshots}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.headshotKills}}</th>
-                <th>Calcular TAXA HS</th>
-                <th>{{this.playerStats.soloStats.detailedStats.knockDown}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.revives}}</th>
-                <th>{{this.playerStats.soloStats.detailedStats.roadKills}}</th>
-              </tr>
-              <tr >
-                <th class="d-none d-md-table-cell">Duo</th>
-                <th>{{this.playerStats.duoStats.gamesPlayed}}</th>
-                <th>{{this.playerStats.duoStats.wins}}</th>
-                <th>{{this.playerStats.duoStats.kills}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.deaths}}</th>
-                <th>CALCULAR KD</th>
-                <th>{{this.playerStats.duoStats.detailedStats.topNTimes}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.distanceTravelled}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.survivalTime}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.highestKills}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.damage}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.headshots}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.headshotKills}}</th>
-                <th>Calcular TAXA HS</th>
-                <th>{{this.playerStats.duoStats.detailedStats.knockDown}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.revives}}</th>
-                <th>{{this.playerStats.duoStats.detailedStats.roadKills}}</th>
-              </tr>
-              <tr >
-                <th class="d-none d-md-table-cell">Squad</th>
-                <th>{{this.playerStats.quadStats.gamesPlayed}}</th>
-                <th>{{this.playerStats.quadStats.wins}}</th>
-                <th>{{this.playerStats.quadStats.kills}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.deaths}}</th>
-                <th>CALCULAR KD</th>
-                <th>{{this.playerStats.quadStats.detailedStats.topNTimes}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.distanceTravelled}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.survivalTime}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.highestKills}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.damage}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.headshots}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.headshotKills}}</th>
-                <th>Calcular TAXA HS</th>
-                <th>{{this.playerStats.quadStats.detailedStats.knockDown}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.revives}}</th>
-                <th>{{this.playerStats.quadStats.detailedStats.roadKills}}</th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div> -->
   </div>
+  
   
 </div>

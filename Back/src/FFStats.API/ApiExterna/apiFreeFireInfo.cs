@@ -244,7 +244,7 @@ public class GuildLeaderInformation
     public string LeaderName { get; set; }
 
     [JsonPropertyName("Leader Pin")]
-    public int LeaderPin { get; set; }
+    public int? LeaderPin { get; set; }
 
     [JsonPropertyName("Leader Title")]
     public string LeaderTitle { get; set; }
