@@ -99,13 +99,15 @@
         <div class="row">
           <div class="col-sm-4">
             <p class="card-text">Mortes: {{this.playerStats.soloStats.detailedStats.deaths}}</p>
-            <p class="card-text">KD: {{this.playerStats.soloStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">KD: {{this.calculaKD(this.playerStats.soloStats.kills,this.playerStats.soloStats.detailedStats.deaths )}} </p><!-- Necessario calcular o KD -->
             <p class="card-text">Top 3: {{this.playerStats.soloStats.detailedStats.topNTimes}}</p>
-            <p class="card-text">Média de distancia: {{this.playerStats.soloStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Top 3 (%): {{this.calculaPercentT3(this.playerStats.soloStats.detailedStats.topNTimes, this.playerStats.soloStats.gamesPlayed)}}%</p>
+            <p class="card-text">Maximo Kill: {{this.playerStats.soloStats.detailedStats.highestKills}}</p>
           </div>
           <div class="col-sm-4">
-            <p class="card-text">Tempo médio: {{this.playerStats.soloStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-            <p class="card-text">Maximo Kill: {{this.playerStats.soloStats.detailedStats.highestKills}}</p>
+            <p class="card-text">Tempo médio: {{calculaTempoMedio(this.playerStats.soloStats.detailedStats.survivalTime,this.playerStats.soloStats.gamesPlayed )}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Distancia Total: {{calculaDistanciaTotal(this.playerStats.soloStats.detailedStats.distanceTravelled)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Média de distancia: {{calculaMediaDistancia(this.playerStats.soloStats.detailedStats.distanceTravelled, this.playerStats.soloStats.gamesPlayed)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
             <p class="card-text">Dano: {{this.playerStats.soloStats.detailedStats.damage}}</p>
             <p class="card-text">Capas: {{this.playerStats.soloStats.detailedStats.headshots}}</p>
           </div>
@@ -126,13 +128,15 @@
         <div class="row">
           <div class="col-sm-4">
             <p class="card-text">Mortes: {{this.playerStats.duoStats.detailedStats.deaths}}</p>
-            <p class="card-text">KD: {{this.playerStats.duoStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">KD: {{this.calculaKD(this.playerStats.duoStats.kills,this.playerStats.duoStats.detailedStats.deaths )}} </p><!-- Necessario calcular o KD -->
             <p class="card-text">Top 3: {{this.playerStats.duoStats.detailedStats.topNTimes}}</p>
-            <p class="card-text">Média de distancia: {{this.playerStats.duoStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Top 3 (%): {{this.calculaPercentT3(this.playerStats.duoStats.detailedStats.topNTimes, this.playerStats.duoStats.gamesPlayed)}}%</p>
+            <p class="card-text">Maximo Kill: {{this.playerStats.duoStats.detailedStats.highestKills}}</p>
           </div>
           <div class="col-sm-4">
-            <p class="card-text">Tempo médio: {{this.playerStats.duoStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-            <p class="card-text">Maximo Kill: {{this.playerStats.duoStats.detailedStats.highestKills}}</p>
+            <p class="card-text">Tempo médio: {{calculaTempoMedio(this.playerStats.duoStats.detailedStats.survivalTime,this.playerStats.duoStats.gamesPlayed )}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Distancia Total: {{calculaDistanciaTotal(this.playerStats.duoStats.detailedStats.distanceTravelled)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Média de distancia: {{calculaMediaDistancia(this.playerStats.duoStats.detailedStats.distanceTravelled, this.playerStats.duoStats.gamesPlayed)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
             <p class="card-text">Dano: {{this.playerStats.duoStats.detailedStats.damage}}</p>
             <p class="card-text">Capas: {{this.playerStats.duoStats.detailedStats.headshots}}</p>
           </div>
@@ -153,14 +157,16 @@
         <div class="row">
           <div class="col-sm-4">
             <p class="card-text">Mortes: {{this.playerStats.quadStats.detailedStats.deaths}}</p>
-            <p class="card-text">KD: {{this.playerStats.quadStats.detailedStats.deaths}}</p><!-- Necessario calcular o KD -->
+            <p class="card-text">KD: {{this.calculaKD(this.playerStats.quadStats.kills,this.playerStats.quadStats.detailedStats.deaths )}}</p><!-- Necessario calcular o KD -->
             <p class="card-text">Top 3: {{this.playerStats.quadStats.detailedStats.topNTimes}}</p>
-            <p class="card-text">Média de distancia: {{this.playerStats.quadStats.detailedStats.distanceTravelled}}</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Top 3 (%): {{this.calculaPercentT3(this.playerStats.quadStats.detailedStats.topNTimes, this.playerStats.quadStats.gamesPlayed)}}%</p>
+            <p class="card-text">Maximo Kill: {{this.playerStats.quadStats.detailedStats.highestKills}}</p>
           </div>
           <div class="col-sm-4">
-            <p class="card-text">Tempo médio: {{this.playerStats.quadStats.detailedStats.survivalTime}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
-            <p class="card-text">Maximo Kill: {{this.playerStats.quadStats.detailedStats.highestKills}}</p>
-            <p class="card-text">Dano: {{this.playerStats.quadStats.detailedStats.damage}}</p>
+            <p class="card-text">Tempo médio: {{calculaTempoMedio(this.playerStats.quadStats.detailedStats.survivalTime,this.playerStats.quadStats.gamesPlayed )}}</p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+            <p class="card-text">Distancia Total: {{calculaDistanciaTotal(this.playerStats.quadStats.detailedStats.distanceTravelled)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Média de distancia: {{calculaMediaDistancia(this.playerStats.quadStats.detailedStats.distanceTravelled, this.playerStats.quadStats.gamesPlayed)}} Km</p><!-- Necessario calcular a média F=(Dt/GP)/1000 -->
+            <p class="card-text">Dano Total: {{this.playerStats.quadStats.detailedStats.damage}}</p>
             <p class="card-text">Capas: {{this.playerStats.quadStats.detailedStats.headshots}}</p>
           </div>
           <div class="col-sm-4">

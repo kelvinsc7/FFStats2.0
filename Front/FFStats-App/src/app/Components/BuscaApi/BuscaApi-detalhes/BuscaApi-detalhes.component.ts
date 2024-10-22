@@ -22,7 +22,7 @@ export class BuscaApiDetalhesComponent implements OnInit {
   constructor(
     private JogadorService : JogadorService,
     private spiner: NgxSpinnerService,
-    private toaster: ToastrService
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -39,6 +39,7 @@ export class BuscaApiDetalhesComponent implements OnInit {
       ()=>{
         console.error(Error);
         this.validaJogador = false
+        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
       },
     ).add(()=>this.spiner.hide());
     
@@ -53,6 +54,7 @@ export class BuscaApiDetalhesComponent implements OnInit {
       ()=>{
         console.error(Error);
         this.validaStats = false
+        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
       },
     ).add(()=>this.spiner.hide());
 
@@ -82,6 +84,40 @@ export class BuscaApiDetalhesComponent implements OnInit {
     // Retorna a string formatada
     return brasiliaDate.toLocaleString('pt-BR', options);
   
+  }
+  calculaKD(kill: number, mortes: number): number {
+	if (!mortes) {
+	  return 0; // Caso mortes seja 0 ou NaN, retorna 0.
+	}
+	const kd = kill / mortes;
+	return isNaN(kd) ? 0 : parseFloat(kd.toFixed(2)); // Arredonda para 2 casas decimais e verifica se é NaN.
+  }
+  calculaPercentT3(top3:number, partidas:number): number{
+	if (!partidas) {
+		return 0; // Caso mortes seja 0 ou NaN, retorna 0.
+	  }
+	  const percent = (top3*100)/partidas
+	  return isNaN(percent) ? 0 : parseFloat(percent.toFixed(2)); // Arredonda para 2 casas decimais e verifica se é NaN.
+  }
+  calculaDistanciaTotal(distancia:number):number{
+	const km =  distancia/1000;
+	return isNaN(km) ? 0 : parseFloat(km.toFixed(2)); // Arredonda para 2 casas decimais e verifica se é NaN.
+  }
+  calculaMediaDistancia(distancia:number, partida:number):number{
+	const km = (distancia/partida)/1000;
+	return isNaN(km) ? 0 : parseFloat(km.toFixed(2));
+  }
+  calculaTempoMedio(tempo:number, partida:number):string{
+	if(!tempo){
+		return "00:00"
+	}
+	const minutosGeral = (tempo/partida) / 60;
+	const minutos = Math.floor(minutosGeral);
+	const secondsGeral = minutosGeral - minutos
+	var seconds = Math.floor((secondsGeral * 60) / 1)
+
+	return minutos.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+	
   }
   setActiveTab(tab: string) {
     this.activeTab = tab;
