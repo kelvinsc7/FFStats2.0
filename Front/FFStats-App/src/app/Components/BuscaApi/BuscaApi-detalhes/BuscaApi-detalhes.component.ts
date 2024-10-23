@@ -119,6 +119,36 @@ export class BuscaApiDetalhesComponent implements OnInit {
 	return minutos.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
 	
   }
+  calculaTempoTotal(tempo:number):string{
+    if(!tempo){
+      return "00:00"
+    }
+    const hours = Math.floor(tempo / 3600); // Calcula o total de horas
+    const minutes = Math.floor((tempo % 3600) / 60); // Calcula o total de minutos
+    const remainingSeconds = tempo % 60; // Calcula o total de segundos restantes
+
+    // Formatar para o padrão HH:MM:SS, preenchendo com 0 à esquerda quando necessário
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    
+  }
+  calculaMediaDano(dano:number, partida:number):number{
+    if(!dano){
+      return 0;
+    }
+    const mediaDano = dano / partida;
+    return isNaN(mediaDano)? 0: parseFloat(mediaDano.toFixed(2))
+  }
+  calculaTaxaHs(kilCapa:number, kills:number):number{
+    if(!kills){
+      return 0;
+    }
+    const taxaHs = (kilCapa *100) / kills
+    return isNaN(taxaHs)? 0:parseFloat(taxaHs.toFixed(2))
+  }
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
