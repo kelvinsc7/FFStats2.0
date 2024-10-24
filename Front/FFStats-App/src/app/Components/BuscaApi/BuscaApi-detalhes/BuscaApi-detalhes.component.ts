@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { PlayerStats } from '@app/Model/PlayerStats';
+import { Jogador } from '@app/Model/Jogador';
 
 @Component({
   selector: 'app-BuscaApi-detalhes',
@@ -14,10 +15,12 @@ import { PlayerStats } from '@app/Model/PlayerStats';
 export class BuscaApiDetalhesComponent implements OnInit {
 
   jogador={} as PlayerData;
+  jogadorBd ={} as Jogador 
   playerStats  = {} as PlayerStats;
   validaJogador  = false;
   validaStats  = false;
   activeTab: string = 'solo';
+  modo: string = 'postJogador';
 
   constructor(
     private JogadorService : JogadorService,
@@ -42,10 +45,20 @@ export class BuscaApiDetalhesComponent implements OnInit {
         this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
       },
     ).add(()=>this.spiner.hide());
-    
-
-
-
+  
+    this.JogadorService.getJogadorByIdJogo(parseInt(playerId)).subscribe(
+      (jogador: Jogador)=>{
+        this.jogadorBd = {...jogador};
+        if(this.jogadorBd.idJogo){
+          this.modo = 'putJogador'
+        }
+        this.jogadorBd.jogadorNick = this.jogador.accountName;
+      },
+      ()=>{
+        console.error(Error);
+        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+      },
+    )
     this.JogadorService.getJogadorByUId2(parseInt(playerId)).subscribe(
       (estatistica : PlayerStats)=>{
         this.playerStats  = {...estatistica};
@@ -57,7 +70,6 @@ export class BuscaApiDetalhesComponent implements OnInit {
         this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
       },
     ).add(()=>this.spiner.hide());
-
   }
   convertToBrasiliaTime(dateString: string): string {
     // Cria um objeto Date a partir da string de data como GMT-0530
@@ -148,6 +160,77 @@ export class BuscaApiDetalhesComponent implements OnInit {
     }
     const taxaHs = (kilCapa *100) / kills
     return isNaN(taxaHs)? 0:parseFloat(taxaHs.toFixed(2))
+  }
+  classificaRanqueada(points: number): string {
+    if (points >= 9800) return "Elite V";
+    else if (points >= 8700) return "Elite IV";
+    else if (points >= 7700) return "Elite III";
+    else if (points >= 6800) return "Elite II";
+    else if (points >= 6000) return "Elite I";
+    else if (points >= 4850) return "Mestre V";
+    else if (points >= 4350) return "Mestre IV";
+    else if (points >= 4000) return "Mestre III";
+    else if (points >= 3500) return "Mestre II";
+    else if (points >= 3200) return "Mestre I";
+    else if (points >= 3050) return "Diamante IV";
+    else if (points >= 2900) return "Diamante III";
+    else if (points >= 2750) return "Diamante II";
+    else if (points >= 2600) return "Diamante I";
+    else if (points >= 2475) return "Platina IV";
+    else if (points >= 2350) return "Platina III";
+    else if (points >= 2225) return "Platina II";
+    else if (points >= 2100) return "Platina I";
+    else if (points >= 1975) return "Ouro IV";
+    else if (points >= 1850) return "Ouro III";
+    else if (points >= 1725) return "Ouro II";
+    else if (points >= 1600) return "Ouro I";
+    else if (points >= 1500) return "Prata III";
+    else if (points >= 1400) return "Prata II";
+    else if (points >= 1300) return "Prata I";
+    else if (points >= 1200) return "Bronze III";
+    else if (points >= 1100) return "Bronze II";
+    else  return "Bronze I";
+  }
+  classificaCSRanqueada(points: number): string {
+    if (points >= 180) return "Elite V";
+    else if (points >= 165) return "Elite IV";
+    else if (points >= 150) return "Elite III";
+    else if (points >= 135) return "Elite II";
+    else if (points >= 115) return "Elite I";
+    else if (points >= 106) return "Mestre V";
+    else if (points >= 96) return "Mestre IV";
+    else if (points >= 90) return "Mestre III";
+    else if (points >= 76) return "Mestre II";
+    else if (points >= 75) return "Mestre I";
+    else if (points >= 70) return "Diamante IV";
+    else if (points >= 65) return "Diamante III";
+    else if (points >= 60) return "Diamante II";
+    else if (points >= 55) return "Diamante I";
+    else if (points >= 50) return "Platina IV";
+    else if (points >= 45) return "Platina III";
+    else if (points >= 40) return "Platina II";
+    else if (points >= 35) return "Platina I";
+    else if (points >= 31) return "Ouro IV";
+    else if (points >= 27) return "Ouro III";
+    else if (points >= 23) return "Ouro II";
+    else if (points >= 19) return "Ouro I";
+    else if (points >= 16) return "Prata III";
+    else if (points >= 13) return "Prata II";
+    else if (points >= 10) return "Prata I";
+    else if (points >= 7) return "Bronze III";
+    else if (points >= 4) return "Bronze II";
+    else return "Bronze I";
+  }
+  public salvarJogador():void{
+    this.spiner.show();
+    this.JogadorService[this.modo](this.jogadorBd).subscribe(
+      () =>this.toastr.success('Jogador Salva com Sucesso', 'Sucesso!'),
+      (error: any) =>{
+        console.error(error);
+        this.toastr.error('Erro ao salvar a Jogador', 'Error');
+      },
+    ).add(() =>this.spiner.hide());
+    
   }
   setActiveTab(tab: string) {
     this.activeTab = tab;

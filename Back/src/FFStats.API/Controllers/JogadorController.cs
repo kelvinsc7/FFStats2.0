@@ -52,6 +52,21 @@ namespace FFStats.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Jogador. Erro: {ex.Message}");
             }
         }
+        [HttpGet("idJogo/{id}")]
+        public async Task<IActionResult> GetByIdJogoAsync(int id)
+        {
+            try
+            {
+                var Jogador = await _JogadoresService.GetJogadoresByIdJogoAsync(id,true);
+                if(Jogador == null) return NotFound("Nenhuma Jogador Encontrada!");
+
+                return  Ok(Jogador);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Jogador. Erro: {ex.Message}");
+            }
+        }
         [HttpGet("ffInfo/{id}")]
         public async Task<IActionResult> GetByUIdAsync(int id)
         {

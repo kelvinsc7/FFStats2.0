@@ -36,6 +36,16 @@ namespace FFStats.Persistence.Persistences
             query = query.OrderBy(J => J.id).Where(J=> J.id == JogadorId);
             return await query.FirstOrDefaultAsync();
         }
+        public async Task<Jogador> GetAllJogadoresByIdJogoAsync(int JogadorId, bool IncludePartidas)
+        {
+            IQueryable<Jogador> query = _context.Jogadores.Include(j=>j.Line);
+            if(IncludePartidas)
+            {
+                query = query.AsNoTracking().Include(J=> J.PartidasJogadores).ThenInclude(PJ =>PJ.Partida);
+            }
+            query = query.OrderBy(J => J.id).Where(J=> J.idJogo == JogadorId);
+            return await query.FirstOrDefaultAsync();
+        }
         public async Task<Jogador[]> GetAllJogadoresByNomeAsync(string Nome, bool IncludePartidas = false)
         {
             IQueryable<Jogador> query = _context.Jogadores.Include(j=>j.Line);

@@ -23,6 +23,9 @@ export class JogadorService {
   public getJogadorById(id: number): Observable<Jogador>{
     return this.http.get<Jogador>(`${this.baseURL}/${id}`).pipe(take(1));
   }
+  public getJogadorByIdJogo(id: number): Observable<Jogador>{
+    return this.http.get<Jogador>(`${this.baseURL}/idJogo/${id}`).pipe(take(1));
+  }
   public getJogadorByUId(id: number): Observable<PlayerData>{
     return this.http.get<PlayerData>(`${this.baseURL}/ffInfo/${id}`).pipe(take(1));
   }
