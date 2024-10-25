@@ -55,6 +55,105 @@ public class FreeFireApiService
         }
     }
 }
+public class NullableIntConverter : JsonConverter<int?>
+{
+    public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            var stringValue = reader.GetString();
+            
+            // Tenta converter a string para um número inteiro.
+            if (int.TryParse(stringValue, out int intValue))
+            {
+                return intValue;
+            }
+            else
+            {
+                return null; // Retorna nulo se não puder converter para int.
+            }
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            return reader.GetInt32(); // Se já for um número, retorna o valor inteiro.
+        }
+        
+        return null; // Retorna nulo para qualquer outro tipo inesperado.
+    }
+
+    public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)
+    {
+        if (value.HasValue)
+        {
+            writer.WriteNumberValue(value.Value); // Serializa como número se houver valor.
+        }
+        else
+        {
+            writer.WriteNullValue(); // Se for nulo, escreve um valor nulo.
+        }
+    }
+}
+public class LeaderAnimationsConverter : JsonConverter<List<int?>>
+{
+    public override List<int?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        // Se o valor for uma string
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            var stringValue = reader.GetString();
+            if (stringValue == "Not Found")
+            {
+                return new List<int?>(); // Retorna uma lista vazia ou pode retornar null, conforme sua preferência
+            }
+        }
+        
+        // Se o valor for um array
+        if (reader.TokenType == JsonTokenType.StartArray)
+        {
+            var animations = new List<int?>();
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            {
+                if (reader.TokenType == JsonTokenType.Number)
+                {
+                    animations.Add(reader.GetInt32());
+                }
+                else
+                {
+                    animations.Add(null); // Se não for número, adiciona null
+                }
+            }
+
+            return animations;
+        }
+
+        throw new JsonException("Formato inesperado para 'Leader Animations'.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, List<int?> value, JsonSerializerOptions options)
+    {
+        if (value == null || value.Count == 0)
+        {
+            writer.WriteStringValue("Not Found"); // Se a lista estiver vazia ou nula, escreve "Not Found"
+        }
+        else
+        {
+            writer.WriteStartArray();
+            foreach (var item in value)
+            {
+                if (item.HasValue)
+                {
+                    writer.WriteNumberValue(item.Value);
+                }
+                else
+                {
+                    writer.WriteNullValue(); // Escreve null se não houver valor
+                }
+            }
+            writer.WriteEndArray();
+        }
+    }
+}
 public class PlayerData
 {
     [JsonPropertyName("Account Avatar Image")]
@@ -67,7 +166,8 @@ public class PlayerData
     public string AccountBooyahPass { get; set; }
 
     [JsonPropertyName("Account Booyah Pass Badges")]
-    public int AccountBooyahPassBadges { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? AccountBooyahPassBadges { get; set; }
 
     [JsonPropertyName("Account Celebrity Status")]
     public string AccountCelebrityStatus { get; set; }
@@ -115,10 +215,12 @@ public class PlayerData
     public int AccountXP { get; set; }
 
     [JsonPropertyName("BR Rank Points")]
-    public int BRRankPoints { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? BRRankPoints { get; set; }
 
     [JsonPropertyName("CS Rank Points")]
-    public int CSRankPoints { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? CSRankPoints { get; set; }
 
     [JsonPropertyName("Equipped Items")]
     public EquippedItems EquippedItems { get; set; }
@@ -190,16 +292,19 @@ public class EquippedPetInformation
 public class GuildInformation
 {
     [JsonPropertyName("Guild Capacity")]
-    public int GuildCapacity { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? GuildCapacity { get; set; }
 
     [JsonPropertyName("Guild Current Members")]
-    public int GuildCurrentMembers { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? GuildCurrentMembers { get; set; }
 
     [JsonPropertyName("Guild ID")]
     public string GuildId { get; set; }
 
     [JsonPropertyName("Guild Level")]
-    public int GuildLevel { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? GuildLevel { get; set; }
 
     [JsonPropertyName("Guild Name")]
     public string GuildName { get; set; }
@@ -214,36 +319,43 @@ public class GuildLeaderInformation
     public string LeaderAccountCreatedTime { get; set; }
 
     [JsonPropertyName("Leader Animations")]
-    public List<int> LeaderAnimations { get; set; }
+    [JsonConverter(typeof(LeaderAnimationsConverter))]
+    public List<int?> LeaderAnimations { get; set; }
 
     [JsonPropertyName("Leader Avatar Image")]
     public string LeaderAvatarImage { get; set; }
 
     [JsonPropertyName("Leader BP Badges")]
-    public int LeaderBPBadges { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderBPBadges { get; set; }
 
     [JsonPropertyName("Leader BR Points")]
-    public int LeaderBRPoints { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderBRPoints { get; set; }
 
     [JsonPropertyName("Leader Banner Image")]
     public string LeaderBannerImage { get; set; }
 
     [JsonPropertyName("Leader CS Points")]
-    public int LeaderCSPoints { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderCSPoints { get; set; }
 
     [JsonPropertyName("Leader Last Login Time (GMT 0530)")]
     public string LeaderLastLoginTime { get; set; }
-
+    
     [JsonPropertyName("Leader Level")]
-    public int LeaderLevel { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderLevel { get; set; }
 
     [JsonPropertyName("Leader Likes")]
-    public int LeaderLikes { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderLikes { get; set; }
 
     [JsonPropertyName("Leader Name")]
     public string LeaderName { get; set; }
 
     [JsonPropertyName("Leader Pin")]
+    [JsonConverter(typeof(NullableIntConverter))]
     public int? LeaderPin { get; set; }
 
     [JsonPropertyName("Leader Title")]
@@ -253,7 +365,8 @@ public class GuildLeaderInformation
     public string LeaderUID { get; set; }
 
     [JsonPropertyName("Leader XP")]
-    public int LeaderXP { get; set; }
+    [JsonConverter(typeof(NullableIntConverter))]
+    public int? LeaderXP { get; set; }
 }
 
 public class PublicCraftlandMaps

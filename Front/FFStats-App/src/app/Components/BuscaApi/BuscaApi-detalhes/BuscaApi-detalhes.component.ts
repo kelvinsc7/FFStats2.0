@@ -55,8 +55,7 @@ export class BuscaApiDetalhesComponent implements OnInit {
         this.jogadorBd.jogadorNick = this.jogador.accountName;
       },
       ()=>{
-        console.error(Error);
-        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+        this.modo = 'postJogador'
       },
     )
     this.JogadorService.getJogadorByUId2(parseInt(playerId)).subscribe(
