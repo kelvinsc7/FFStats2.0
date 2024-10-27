@@ -1,34 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef } from '@angular/core';
 import { PlayerData } from '@app/Model/PlayerData';
 import { JogadorService } from '@app/Services/jogador.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { PlayerStats } from '@app/Model/PlayerStats';
 import { Jogador } from '@app/Model/Jogador';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Line } from '@app/Model/Line';
+import { LineService } from '@app/Services/Line.service';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-BuscaApi-detalhes',
   templateUrl: './BuscaApi-detalhes.component.html',
   styleUrls: ['./BuscaApi-detalhes.component.scss']
 })
-export class BuscaApiDetalhesComponent implements OnInit {
 
+export class BuscaApiDetalhesComponent implements OnInit  {
+  @ViewChild('jogadorNomeInput') jogadorNomeInput!: ElementRef;
   jogador={} as PlayerData;
+  modalRef?: BsModalRef;
   jogadorBd ={} as Jogador 
   playerStats  = {} as PlayerStats;
   validaJogador  = false;
   validaStats  = false;
   activeTab: string = 'solo';
   modo: string = 'postJogador';
+  form!:FormGroup;
+  lines: Line[] = [];
 
   constructor(
+    private fb: FormBuilder,
     private JogadorService : JogadorService,
+    private modalService : BsModalService,
     private spiner: NgxSpinnerService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private lineService: LineService,
   ) { }
-
+  
+  get f():any{return this.form.controls;}
   ngOnInit() {
+    this.getLine();
+    this.validation();
   }
     public BuscarJogador(playerId: string):void{
     this.spiner.show()
@@ -222,6 +236,10 @@ export class BuscaApiDetalhesComponent implements OnInit {
   }
   public salvarJogador():void{
     this.spiner.show();
+    if(this.modo === 'postJogador')
+    {
+      this.jogadorBd = this.form.value;
+    }
     this.JogadorService[this.modo](this.jogadorBd).subscribe(
       () =>this.toastr.success('Jogador Salva com Sucesso', 'Sucesso!'),
       (error: any) =>{
@@ -229,9 +247,44 @@ export class BuscaApiDetalhesComponent implements OnInit {
         this.toastr.error('Erro ao salvar a Jogador', 'Error');
       },
     ).add(() =>this.spiner.hide());
-    
+    this.closeModal();
   }
   setActiveTab(tab: string) {
     this.activeTab = tab;
+  }
+  public openModal(event:any, template: TemplateRef<any>): void {
+    event.stopPropagation();
+    
+    this.jogadorBd.jogadorNick = this.jogador.accountName;
+    this.jogadorBd.idJogo = Number(this.jogador.accountUID)
+    this.form.patchValue({
+      jogadorNick: this.jogadorBd.jogadorNick,
+      idJogo: this.jogadorBd.idJogo,
+      lineId: 1,
+    });
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+  }
+  public resetForm():void{this.form.reset();}
+  public validation():void{
+    this.form = this.fb.group({
+      jogadorNome: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
+      jogadorNick: ['', [Validators.required, Validators.minLength(4),Validators.maxLength(20)]],
+      idJogo: ['',[ Validators.minLength(4),Validators.maxLength(10)]],
+      lineId: ['',[]],
+    });
+  }
+  public closeModal(): void {
+    if (this.modalRef) {
+      this.modalRef.hide();
+    }
+  }
+  public getLine():void{
+    this.lineService.getLines().subscribe(
+      (line: Line[]) =>{
+        this.lines = line
+      },
+      (error: any)=>{
+      }
+    )
   }
 }
