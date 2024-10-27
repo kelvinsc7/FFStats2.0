@@ -111,6 +111,20 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<jogadoresDto> GetJogadoresByIdJogoAsync(int JogadoresId, bool IncludePartidas = false)
+        {
+            try
+            {
+                var jogadores = await _JogadoresPersistence.GetAllJogadoresByIdJogoAsync(JogadoresId, IncludePartidas);
+                if(jogadores == null) return null;
+                var resultado = _mapper.Map<jogadoresDto>(jogadores);
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<jogadoresDto[]> GetAllJogadoresByDescAsync(string Desc, bool IncludePartidas = false)
         {
             try
@@ -125,5 +139,6 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+        
     }
 }

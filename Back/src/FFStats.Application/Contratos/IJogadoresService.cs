@@ -11,6 +11,7 @@ namespace FFStats.Application.Contratos
          Task<bool> DeleteJogador(int JogadorId);
          Task<jogadoresDto[]> GetAllJogadoresAsync(bool IncludePartidas = false);
          Task<jogadoresDto> GetJogadoresByIdAsync(int JogadoresId, bool IncludePartidas = false);
+         Task<jogadoresDto> GetJogadoresByIdJogoAsync(int JogadoresId, bool IncludePartidas = false);
          Task<jogadoresDto[]> GetAllJogadoresByDescAsync(string Desc, bool IncludePartidas = false);
     }
 }

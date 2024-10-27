@@ -444,6 +444,12 @@ $RECYCLE.BIN/
 .idea/
 *.sln.iml
 
+# Ignorar todos os arquivos .db
+*.db
+
+# Ignorar todos os arquivos .pack
+*.pack
+
 ##
 ## Visual Studio Code
 ##

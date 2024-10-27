@@ -23,6 +23,9 @@ import { MapaListaComponent } from './Components/mapas/mapa-lista/mapa-lista.com
 //Area Modo
 import { ModoComponent } from './Components/Modo/Modo.component';
 
+import { BuscaApiComponent } from './Components/BuscaApi/busca-api.component';
+import { BuscaApiDetalhesComponent } from './Components/BuscaApi/BuscaApi-detalhes/BuscaApi-detalhes.component';
+
 //Area Partidas
 import { PartidasComponent } from './Components/partidas/partidas.component';
 import { PartidasDetalhesComponent} from './Components/partidas/partidas-detalhes/partidas-detalhes.component'
@@ -100,6 +103,15 @@ const routes: Routes = [
       {path: 'detalhes/:id', component: TreinoDetalhesComponent},
       {path: 'detalhes', component: TreinoDetalhesComponent},
       {path: 'lista', component: TreinoListaComponent},
+    ]
+  },
+  {path: 'BuscaApi', redirectTo: 'BuscaApi/detalhes'},
+  {
+    path: 'BuscaApi', component: BuscaApiComponent,
+    children:[
+      // {path: 'detalhes/:id', component: TreinoDetalhesComponent},
+      {path: 'detalhes', component: BuscaApiDetalhesComponent}
+      // {path: 'lista', component: TreinoListaComponent},
     ]
   },
 
