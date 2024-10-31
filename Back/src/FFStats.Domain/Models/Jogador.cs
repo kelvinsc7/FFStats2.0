@@ -17,6 +17,7 @@ namespace FFStats.Domain.Models
        public Line Line{ get; set; }
        // Navigation property for PartidasJogadores
        public IEnumerable<PartidaJogador> PartidasJogadores { get; set; }
+       public IEnumerable<EstatisticasRank> EstatisticasRanks { get; set; }
 
     }
 }

@@ -17,6 +17,8 @@ namespace FFStats.Persistence.Contextos
         public DbSet<Modo> Modos{ get; set; }
         public DbSet<PartidaJogador> PartidasJogadores{ get; set; }
         public DbSet<Line> Lines{ get; set; }
+        public DbSet<Temporada> Temporadas{ get; set; }
+        public DbSet<EstatisticasRank> EstatisticasRanks{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)//criado para relação n:n de tabela, relacionando o campo com as tabelas
         {
@@ -54,6 +56,21 @@ namespace FFStats.Persistence.Contextos
                         .HasMany(j => j.PartidasJogadores)
                         .WithOne(pj => pj.Jogador)
                         .HasForeignKey(pj => pj.JogadorId);          
+
+            modelBuilder.Entity<Temporada>()
+                        .HasMany(t=>t.EstatisticasRanks)
+                        .WithOne(e =>e.Temporada)
+                        .HasForeignKey(e=>e.TemporadaId)
+                        .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<EstatisticasRank>()
+                        .HasOne(e => e.Temporada)
+                        .WithMany(t => t.EstatisticasRanks)
+                        .HasForeignKey(e => e.TemporadaId); // Chave estrangeira para Temporada
+
+            modelBuilder.Entity<EstatisticasRank>()
+                        .HasOne(e => e.Jogador)
+                        .WithMany(j => j.EstatisticasRanks) // Assuming 'Jogador' has 'EstatisticasRanks' relationship
+                        .HasForeignKey(e => e.JogadorId); // Chave estrangeira para Jogador
         }
 
     }
