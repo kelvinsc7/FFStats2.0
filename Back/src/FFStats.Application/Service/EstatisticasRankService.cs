@@ -22,19 +22,9 @@ namespace FFStats.Application.Service
 
         }
 
-        public async Task<estatisticasRankDto[]> SaveEstatisticaRank(int EstatisticasId, estatisticasRankDto[] models)
+        public  Task<estatisticasRankDto[]> SaveEstatisticaRank(int EstatisticasId, estatisticasRankDto[] models)
         {
-            //  try
-            // {
-            //     var estatisticaRank = _mapper.Map<EstatisticasRank>(models);
-            //     estatisticaRank.Id = EstatisticasId;
-            //     _geralPersistence.Add<EstatisticasRank>(estatisticaRank);
-            //     await _geralPersistence.SaveChangeAsync();
-            // }
-            // catch (Exception ex)
-            // {
-            //     throw new Exception(ex.Message);
-            // }
+             throw new NotImplementedException();
         }
 
         public Task<bool> DeleteEstatisticaRank(int Id)
