@@ -83,6 +83,60 @@ namespace FFStats.Persistence.Migrations
                     b.ToTable("tb_estatistica");
                 });
 
+            modelBuilder.Entity("FFStats.Domain.Models.EstatisticasRank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Capa")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Dano")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Derrubados")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("DistanciaPercorrida")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("JogadorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Kills")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaiorKill")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Modelo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Mortes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Partidas")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Revividos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TempoSobrevivido")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TemporadaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JogadorId");
+
+                    b.HasIndex("TemporadaId");
+
+                    b.ToTable("tb_estatistica_rank");
+                });
+
             modelBuilder.Entity("FFStats.Domain.Models.Jogador", b =>
                 {
                     b.Property<int>("id")
@@ -229,6 +283,26 @@ namespace FFStats.Persistence.Migrations
                     b.ToTable("tb_submodo");
                 });
 
+            modelBuilder.Entity("FFStats.Domain.Models.Temporada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Fim")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Inicio")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tb_temporada");
+                });
+
             modelBuilder.Entity("FFStats.Domain.Models.Treino", b =>
                 {
                     b.Property<int>("id")
@@ -271,6 +345,25 @@ namespace FFStats.Persistence.Migrations
                     b.Navigation("Jogador");
 
                     b.Navigation("Partida");
+                });
+
+            modelBuilder.Entity("FFStats.Domain.Models.EstatisticasRank", b =>
+                {
+                    b.HasOne("FFStats.Domain.Models.Jogador", "Jogador")
+                        .WithMany("EstatisticasRanks")
+                        .HasForeignKey("JogadorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FFStats.Domain.Models.Temporada", "Temporada")
+                        .WithMany("EstatisticasRanks")
+                        .HasForeignKey("TemporadaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Jogador");
+
+                    b.Navigation("Temporada");
                 });
 
             modelBuilder.Entity("FFStats.Domain.Models.Jogador", b =>
@@ -359,6 +452,8 @@ namespace FFStats.Persistence.Migrations
 
             modelBuilder.Entity("FFStats.Domain.Models.Jogador", b =>
                 {
+                    b.Navigation("EstatisticasRanks");
+
                     b.Navigation("PartidasJogadores");
                 });
 
@@ -382,6 +477,11 @@ namespace FFStats.Persistence.Migrations
                     b.Navigation("Estatisticas");
 
                     b.Navigation("PartidasJogadores");
+                });
+
+            modelBuilder.Entity("FFStats.Domain.Models.Temporada", b =>
+                {
+                    b.Navigation("EstatisticasRanks");
                 });
 
             modelBuilder.Entity("FFStats.Domain.Models.Treino", b =>

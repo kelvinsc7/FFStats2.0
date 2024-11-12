@@ -18,6 +18,8 @@ namespace FFStats.Application.Helpers
             CreateMap<Treino, treinoDto>().ReverseMap();  
             CreateMap<PartidaJogador, partidajogadoresDto>().ReverseMap();
             CreateMap<Line, LineDto>().ReverseMap();
+            CreateMap<Temporada, temporadaDto>().ReverseMap();
+            CreateMap<EstatisticasRank, estatisticasRankDto>().ReverseMap();
         }
     }
 }
