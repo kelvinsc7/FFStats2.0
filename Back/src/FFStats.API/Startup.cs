@@ -50,6 +50,7 @@ namespace FFStats.API
             services.AddScoped<ISubmodoService, SubmodoService>();
             services.AddScoped<ITreinoService, TreinoService>();
             services.AddScoped<ILineService, LineService>();
+            services.AddScoped<IConfiguracaoService, ConfiguracaoService>();
 
             services.AddScoped<ICallPersistence, CallPersistence>();
             services.AddScoped<IEstatisticasPersistence, EstatisticasPersistence>();
@@ -62,6 +63,7 @@ namespace FFStats.API
             services.AddScoped<ISubmodoPersistence, SubmodoPersistence>();
             services.AddScoped<ITreinoPersistence, TreinoPersistence>();
             services.AddScoped<ILinePersistence, LinePersistence>();
+            services.AddScoped<IConfiguracaoPersistence, ConfiguracaoPersistence>();
 
             services.AddCors();
             services.AddSwaggerGen(c =>
