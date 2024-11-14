@@ -7,6 +7,9 @@ import { CallComponent } from './Components/Call/Call.component';
 import { CallDetalhesComponent } from './Components/Call/call-detalhes/call-detalhes.component';
 import { CallListasComponent } from './Components/Call/call-listas/call-listas.component';
 
+//Area Configurações
+import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/configuracao.component';
+
 //Area DashBoard
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 
@@ -114,7 +117,15 @@ const routes: Routes = [
       // {path: 'lista', component: TreinoListaComponent},
     ]
   },
-
+  {path: 'configuracoes', redirectTo: 'configuracoes'},
+  {
+    path: 'configuracoes', component: ConfiguracaoComponent,
+    children:[
+      // {path: 'detalhes/:id', component: TreinoDetalhesComponent},
+      //{path: 'detalhes', component: BuscaApiDetalhesComponent}
+      // {path: 'lista', component: TreinoListaComponent},
+    ]
+  },
   {path: '', redirectTo:'dashboard', pathMatch: 'full' },
   {path: '**', redirectTo:'dashboard', pathMatch: 'full' }
 ];

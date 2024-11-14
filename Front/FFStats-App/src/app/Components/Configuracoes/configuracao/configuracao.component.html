@@ -1,0 +1,19 @@
+<app-Titulo [titulo]="'Configurações'" [iconclass]="'fa-solid fa-gear'" [botaolistar]="false"></app-Titulo>
+
+<div class="card rounded shadow-md p-3">
+  <div class="row">
+    <div class="col-12 mb-2" *ngFor="let config of configuracoes">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="font-weight-bold">{{ config.nome }}</span>
+        <div class="form-check form-switch">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="switch-{{ config.id }}"
+            [checked]="config.ativo"
+            (change)="toggleAtivo(config)">      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
