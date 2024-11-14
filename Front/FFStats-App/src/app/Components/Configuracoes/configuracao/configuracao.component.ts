@@ -24,7 +24,7 @@ export class ConfiguracaoComponent implements OnInit {
     this.loadConfiguracoes();
   }
   loadConfiguracoes(): void {
-    this.configuracaoService.getConfiguracoes().subscribe(data => {
+    this.configuracaoService.configuracoes$.subscribe(data => {
       this.configuracoes = data;
     });
   }
@@ -35,7 +35,10 @@ export class ConfiguracaoComponent implements OnInit {
     config.ativo = !config.ativo;
     this.configuracao = config;
     this.configuracaoService.updateConfiguracao(this.configuracao).subscribe(
-      () =>this.toaster.success('Configuração Alterada com Sucesso', 'Sucesso!'),
+      () =>{
+        this.configuracaoService.refreshConfiguracao(config);
+        this.toaster.success('Configuração Alterada com Sucesso', 'Sucesso!')
+      },
       (error: any) =>{
         console.error(error);
         this.toaster.error('Erro ao alterar a Configuração', 'Error');
