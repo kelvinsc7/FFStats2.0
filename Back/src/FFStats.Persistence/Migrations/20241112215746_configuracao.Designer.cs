@@ -3,14 +3,16 @@ using System;
 using FFStats.Persistence.Contextos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FFStats.Persistence.Migrations
 {
     [DbContext(typeof(FFStatsContext))]
-    partial class FFStatsContextModelSnapshot : ModelSnapshot
+    [Migration("20241112215746_configuracao")]
+    partial class configuracao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

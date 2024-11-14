@@ -20,6 +20,7 @@ namespace FFStats.Application.Helpers
             CreateMap<Line, LineDto>().ReverseMap();
             CreateMap<Temporada, temporadaDto>().ReverseMap();
             CreateMap<EstatisticasRank, estatisticasRankDto>().ReverseMap();
+            CreateMap<Configuracao, ConfiguracaoDTO>().ReverseMap();
         }
     }
 }

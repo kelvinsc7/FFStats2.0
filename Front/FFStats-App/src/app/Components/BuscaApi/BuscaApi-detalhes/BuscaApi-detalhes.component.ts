@@ -10,6 +10,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Line } from '@app/Model/Line';
 import { LineService } from '@app/Services/Line.service';
 import { ViewChild, ElementRef } from '@angular/core';
+import { ConfiguracaoService } from '@app/Services/configuracao.service';
 
 @Component({
   selector: 'app-BuscaApi-detalhes',
@@ -29,6 +30,8 @@ export class BuscaApiDetalhesComponent implements OnInit  {
   modo: string = 'postJogador';
   form!:FormGroup;
   lines: Line[] = [];
+  ffEstatisticasAtivo:boolean = true;
+  ffinfoAtivo:Boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +40,7 @@ export class BuscaApiDetalhesComponent implements OnInit  {
     private spiner: NgxSpinnerService,
     private toastr: ToastrService,
     private lineService: LineService,
+    private configuracaoService: ConfiguracaoService,
   ) { }
   
   get f():any{return this.form.controls;}
@@ -46,43 +50,54 @@ export class BuscaApiDetalhesComponent implements OnInit  {
   }
     public BuscarJogador(playerId: string):void{
     this.spiner.show()
-    this.JogadorService.getJogadorByUId(parseInt(playerId)).subscribe(
-      (jogador: PlayerData)=>{
-        this.jogador = {...jogador};
-        this.jogador.accountCreateTime = this.convertToBrasiliaTime(this.jogador.accountCreateTime)
-        this.jogador.accountLastLogin = this.convertToBrasiliaTime(this.jogador.accountLastLogin)
-        this.validaJogador = true
-      },
-      ()=>{
-        console.error(Error);
-        this.validaJogador = false
-        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
-      },
-    ).add(()=>this.spiner.hide());
-  
-    this.JogadorService.getJogadorByIdJogo(parseInt(playerId)).subscribe(
-      (jogador: Jogador)=>{
-        this.jogadorBd = {...jogador};
-        if(this.jogadorBd.idJogo){
-          this.modo = 'putJogador'
-        }
-        this.jogadorBd.jogadorNick = this.jogador.accountName;
-      },
-      ()=>{
-        this.modo = 'postJogador'
-      },
-    )
-    this.JogadorService.getJogadorByUId2(parseInt(playerId)).subscribe(
-      (estatistica : PlayerStats)=>{
-        this.playerStats  = {...estatistica};
-        this.validaStats = true
-      },
-      ()=>{
-        console.error(Error);
-        this.validaStats = false
-        this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
-      },
-    ).add(()=>this.spiner.hide());
+    this.configuracaoService.configuracoes$.subscribe(data => {
+      const ffestatisticas = data.find(c => c.nome === 'API FFEstatisticas');
+      const ffinfo = data.find(c => c.nome === 'API FFInfo');
+      this.ffEstatisticasAtivo = ffestatisticas.ativo;
+      this.ffinfoAtivo = ffinfo.ativo;
+    });
+    if(this.ffinfoAtivo)
+    {
+      this.JogadorService.getJogadorByUId(parseInt(playerId)).subscribe(
+        (jogador: PlayerData)=>{
+          this.jogador = {...jogador};
+          this.jogador.accountCreateTime = this.convertToBrasiliaTime(this.jogador.accountCreateTime)
+          this.jogador.accountLastLogin = this.convertToBrasiliaTime(this.jogador.accountLastLogin)
+          this.validaJogador = true
+        },
+        ()=>{
+          console.error(Error);
+          this.validaJogador = false
+          this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+        },
+      ).add(()=>this.spiner.hide());
+      this.JogadorService.getJogadorByIdJogo(parseInt(playerId)).subscribe(
+        (jogador: Jogador)=>{
+          this.jogadorBd = {...jogador};
+          if(this.jogadorBd.idJogo){
+            this.modo = 'putJogador'
+          }
+          this.jogadorBd.jogadorNick = this.jogador.accountName;
+        },
+        ()=>{
+          this.modo = 'postJogador'
+        },
+      )
+    }
+    if(this.ffEstatisticasAtivo)
+    {
+      this.JogadorService.getJogadorByUId2(parseInt(playerId)).subscribe(
+        (estatistica : PlayerStats)=>{
+          this.playerStats  = {...estatistica};
+          this.validaStats = true
+        },
+        ()=>{
+          console.error(Error);
+          this.validaStats = false
+          this.toastr.error("Erro ao carregar estatísticas do jogador", "Erro!");
+        },
+      ).add(()=>this.spiner.hide());
+    }
   }
   convertToBrasiliaTime(dateString: string): string {
     // Cria um objeto Date a partir da string de data como GMT-0530
