@@ -82,6 +82,8 @@ import { LineService } from './Services/Line.service';
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 import { SubmodoService } from './Services/submodoService.service';
 import { BuscaApiDetalhesComponent } from './Components/BuscaApi/BuscaApi-detalhes/BuscaApi-detalhes.component';
+import { ConfiguracaoService } from './Services/configuracao.service';
+import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/configuracao.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -115,7 +117,8 @@ defineLocale('pt-br', ptBrLocale);
     LoginComponent,
     RegistrationComponent,
     BuscaApiComponent,
-    BuscaApiDetalhesComponent
+    BuscaApiDetalhesComponent,
+    ConfiguracaoComponent
    ],
   imports: [
     BrowserModule,
@@ -147,6 +150,7 @@ defineLocale('pt-br', ptBrLocale);
     EstatisticaService,
     SubmodoService,
     LineService,
+    ConfiguracaoService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

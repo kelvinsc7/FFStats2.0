@@ -15,7 +15,7 @@
             <i class="fa-solid fa-person-military-rifle"></i>
           </a>
         </li>
-        <li class="nav-item " routerLinkActive="active">
+        <li class="nav-item" *ngIf="showBuscaApi" routerLinkActive="active">
           <a class="nav-link" routerLink="BuscaApi">
             Busca Api
             <i class="fa-solid fa-clipboard-user"></i>
@@ -45,12 +45,12 @@
             <i class="fa-solid fa-location-arrow"></i>
           </a>
         </li>
-        <!-- <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" aria-current="page" routerLink="modo">
-            Modos
+        <li class="nav-item" routerlinkactive="active">
+          <a class="nav-link" routerLink="configuracoes">
+            Configuracoes
             <i class="fa-solid fa-gear"></i>
           </a>
-        </li> -->
+        </li>
       </ul>
 
       <ul class="navbar-nav">
