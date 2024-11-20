@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Treino } from '../Model/Treino';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
 )
 export class TreinoService {
-  baseURL = 'https://localhost:5001/api/Treino';
+  baseURL = environment.apiBaseUrl+'/api/Treino';
   constructor(private http: HttpClient) { }
 
   getTreinos(): Observable<Treino[]>{

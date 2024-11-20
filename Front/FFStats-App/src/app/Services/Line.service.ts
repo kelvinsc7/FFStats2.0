@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Line } from '@app/Model/Line';
 import { Observable, take } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class LineService {
-
-  baseURL = 'https://localhost:5001/api/line';
+  baseURL = environment.apiBaseUrl+'/api/line';
   constructor(private http: HttpClient) { }
   getLines(): Observable<Line[]>{
     return this.http.get<Line[]>(this.baseURL).pipe(take(1));

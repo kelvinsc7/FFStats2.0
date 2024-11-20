@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Modo } from '../Model/Modo';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class ModoService {
-  baseURL = 'https://localhost:5001/api/modo';
+  baseURL = environment.apiBaseUrl+'/api/modo';
   constructor(private http: HttpClient) { }
 
   getModos(): Observable<Modo[]>{

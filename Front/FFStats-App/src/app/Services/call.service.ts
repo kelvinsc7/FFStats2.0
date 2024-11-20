@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Call } from '../Model/Call';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class CallService {
-  baseURL = 'https://localhost:5001/api/call';
+  baseURL = environment.apiBaseUrl+'/api/call';
   constructor(private http: HttpClient) { }
 
   getCalls(): Observable<Call[]>{
