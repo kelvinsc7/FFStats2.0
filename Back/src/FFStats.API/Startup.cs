@@ -33,7 +33,7 @@ namespace FFStats.API
             // );
             services.AddControllers().AddNewtonsoftJson( x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<FFStatsContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("Default"))
+            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
                    .EnableSensitiveDataLogging()
                    .LogTo(Console.WriteLine, LogLevel.Information)
         );
@@ -79,7 +79,12 @@ namespace FFStats.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FFStats.API v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "FFStats API V1");
+                    c.RoutePrefix = string.Empty;
+                });
+                
             }
 
             app.UseHttpsRedirection();
