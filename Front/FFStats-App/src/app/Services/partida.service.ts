@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Partida } from '../Model/Partida';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class PartidaService {
-  baseURL = 'https://localhost:5001/api/partida';
+  baseURL = environment.apiBaseUrl+'/api/partida';
   constructor(private http: HttpClient) { }
 
   getPartidas(): Observable<Partida[]>{

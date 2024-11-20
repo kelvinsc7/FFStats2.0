@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Estatistica } from '../Model/Estatistica';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class EstatisticaService {
-  baseURL = 'https://localhost:5001/api/estatisticas';
+  baseURL = environment.apiBaseUrl+'/api/estatisticas';
   constructor(private http: HttpClient) { }
 
   getEstatisticasByPartidaId(eventoId:number): Observable<Estatistica[]>{

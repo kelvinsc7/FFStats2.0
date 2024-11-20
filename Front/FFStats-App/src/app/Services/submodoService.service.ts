@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Submodo } from '@app/Model/Submodo';
 import { Observable, take } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubmodoService {
-  baseURL = 'https://localhost:5001/api/submodo';
+  baseURL = environment.apiBaseUrl+'/api/submodo';
   constructor(private http: HttpClient) { }
 
   getSubModos(): Observable<Submodo[]>{

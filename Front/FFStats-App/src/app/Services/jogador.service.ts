@@ -4,13 +4,14 @@ import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Jogador } from '../Model/Jogador';
 import { PlayerStats } from '@app/Model/PlayerStats';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 
 export class JogadorService {
-  baseURL = 'https://localhost:5001/api/Jogador';
+  baseURL = environment.apiBaseUrl+'/api/Jogador';
 
   constructor(private http: HttpClient) { }
 

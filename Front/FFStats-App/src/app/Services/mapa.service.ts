@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Mapa } from '../Model/Mapa';
+import { environment } from 'src/environments/environment';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class MapaService {
-  baseURL = 'https://localhost:5001/api/mapa';
+  baseURL = environment.apiBaseUrl+'/api/mapa';
   constructor(private http: HttpClient) { }
 
   getMapas(): Observable<Mapa[]>{
