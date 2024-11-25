@@ -46,7 +46,8 @@
         <div class="form-group col-md-4">
           <label><strong>Call</strong></label>
           <select [(ngModel)]="soCall" class="form-control form-select" formControlName="callId">
-            <option value="0">Selecione a call</option>
+            <option *ngIf='mapaSelecionado === 0' value="0">Selecione o Mapa</option>
+            <option *ngIf='mapaSelecionado > 0' value="0">Selecione a call</option>
             <option *ngFor="let c of calls" value={{c.id}}> {{c.callCidade}}</option>
           </select>
         </div>
@@ -64,7 +65,9 @@
         <label><strong>Sub-Modo:</strong></label>
         <select [(ngModel)]="soSubModo" class="form-control form-select" formControlName="submodoId">
           <option value="0">Selecione o Sub-Modo</option>
-          <option *ngFor="let sm of smodos" value={{sm.id}}> {{sm.submodoDescricao}}</option>
+          <option *ngFor="let sm of smodos || []" value={{sm.id}}>
+            {{sm.submodoDescricao}}
+          </option>
         </select>
       </div>
       </div>

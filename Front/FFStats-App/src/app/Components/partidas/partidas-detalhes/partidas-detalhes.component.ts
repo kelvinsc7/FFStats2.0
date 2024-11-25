@@ -33,22 +33,20 @@ export class DemoDatepickerBasicComponent {}
 })
 export class PartidasDetalhesComponent implements OnInit {
 
+  //Variaveis
   modalRef: BsModalRef;
   currentDate: Date = new Date; //Data atual, usado no datapicker
   maxFormsEstatistica = 4; //Variavel de controle de quantodade de estatisticas
   partidaId :number;
-  //SelectedOptions
   soTreino: string = '0';
   soMapa: string = '0';
   soCall: string = '0';
   soModo: string = '0';
   soSubModo: string = '0';
   soJogador : string ='0';
-  // sojogador1: string ='0';
-  // sojogador2: string ='0';
-  // sojogador3: string ='0';
-  // sojogador4: string ='0';
   isLoading = false;
+  alteracsm = false;
+
 
   treino:Treino[] = [];
   mapas:Mapa[] = [];
@@ -61,128 +59,73 @@ export class PartidasDetalhesComponent implements OnInit {
   formEstatistica!:FormGroup;
   modeSave = 'postPartida';
 
+  callFiltradas: Call[] = [];
+  subModoFiltrados: Submodo[] = [];
+  mapaSelecionado: number | null = null;
+  modoSelecionado: number | null = null;
   estatisticaAtual = {id:0, indice :0}
-
-  get modoEditar(): boolean{
-    return this.modeSave === 'putPartida'
-  }
-
-  get estatisticas(): FormArray{
-    return this.formEstatistica.get('estatisticas') as FormArray;
-  }
-
+  //Configurações da pagina
   get f():any{return this.formPartida.controls;}
-
   get bsConfig():any{
     return { isAnimated: true, adaptivePosition: true,
-             dateInputFormat: 'DD/MM/YYYY',
-             containerClass: 'theme-default',
-             showWeekNumbers: false,
-             initialValue : this.currentDate
+            dateInputFormat: 'DD/MM/YYYY',
+            containerClass: 'theme-default',
+            showWeekNumbers: false,
+            initialValue : this.currentDate
             }
   }
-
   constructor(private fb: FormBuilder,
-              private localeService: BsLocaleService,
-              private activatedRouter: ActivatedRoute,
-              private partidaService: PartidaService,
-              private treinoService: TreinoService,
-              private mapaService: MapaService,
-              private callService: CallService,
-              private modoService: ModoService,
-              private submodoService: SubmodoService,
-              private jogadorService: JogadorService,
-              private spiner: NgxSpinnerService,
-              private toaster: ToastrService,
-              private router: Router,
-              private modalService: BsModalService,
-              private estatisticaService: EstatisticaService)
-              {this.localeService.use('pt-br');}
-
-  public carregaDados():void{
-    this.partidaId = +this.activatedRouter.snapshot.paramMap.get('id');
-
-    if(this.partidaId!== null && this.partidaId>0)
-    {
-      this.spiner.show();
-
-      this.modeSave = 'putPartida';
-
-      this.partidaService.getPartidaById(this.partidaId).subscribe(
-        (partida: Partida)=>{
-          this.partida = {...partida};
-          this.formPartida.patchValue(this.partida);
-
-          console.log(this.jogador)
-          this.partida.estatisticas.forEach(estatistica =>{ 
-            this.estatisticas.push(this.criarEstatisticas(estatistica));
-          });
-          //this.carregaEstatisticas();
-        },
-        (Error)=>{
-          console.error(Error);
-          this.toaster.error('Erro ao carregar partida', 'Erro!')
-        },
-      ).add(()=>{ this.spiner.hide();},)
+    private localeService: BsLocaleService,
+    private activatedRouter: ActivatedRoute,
+    private partidaService: PartidaService,
+    private treinoService: TreinoService,
+    private mapaService: MapaService,
+    private callService: CallService,
+    private modoService: ModoService,
+    private submodoService: SubmodoService,
+    private jogadorService: JogadorService,
+    private spiner: NgxSpinnerService,
+    private toaster: ToastrService,
+    private router: Router,
+    private modalService: BsModalService,
+    private estatisticaService: EstatisticaService)
+    {this.localeService.use('pt-br');}
+    public cssValidator(campoForm: FormControl | AbstractControl): any {
+      return {'is-invalid': campoForm.errors && campoForm.touched}
     }
 
+    //Metodos de inicialização
+  ngOnInit() {
+    // Chamadas que podem ser feitas imediatamente
+    this.getMapas();
+    //this.getCall();
+    this.getModo();
+    //this.getSubModo();
+    this.getJogadores();
+    this.getTreinos();
+    this.validation();
+    this.carregaDados();
+    this.formPartida.valueChanges.subscribe(valores => console.log('Valores do formulário:', valores));
   }
-  // public carregaEstatisticas():void{
-  //     this.estatisticaService.getEstatisticasByPartidaId(this.partidaId).subscribe(
-  //       (estatisticaRetorno: Estatistica[]) =>{
-  //         estatisticaRetorno.forEach(estatistica =>{ 
-  //           this.estatisticas.push(this.criarEstatisticas(estatistica))
-  //         }
-  //       )
-  //       },
-  //       (error :any) =>{
-  //         this.toaster.error('Erro ao tentar carregar as Estatisticas', 'Erro!');
-  //         console.error(error);
-  //       }
-  //     ).add(()=>{ this.spiner.hide();},)
-  // }
-  public getCall():void{
-    if(this.soMapa == '0')
-    {
-      this.callService.getCalls().subscribe(
-        (call: Call[]) =>{
-          this.calls = call
+    public getMapas(): void{
+      this.mapaService.getMapas().subscribe(
+        (mapa: Mapa[]) =>{
+          this.mapas = mapa;
         },
         (error: any)=>{
-        }
-      )
-    }
-    else
-    {
-      this.callService.getCallByMapaId(Number(this.soMapa)).subscribe(
-        (call: Call[]) =>{
-          this.calls = call
         },
-        (error: any)=>{
-        }
       )
     }
-    
-  }
-  getJogadorControl(index: number): string {
-    return this.estatisticas.at(index).get('jogadorId').value;
-  }
-  public getTreinos(): void{
-    this.treinoService.getTreinos().subscribe(
-      (treino: Treino[]) =>{
-        this.treino = treino
-      },
-      (error: any)=>{},
-    )
-  }
-  public getMapas(): void{
-    this.mapaService.getMapas().subscribe(
-      (mapa: Mapa[]) =>{
-        this.mapas = mapa
+  public getCalls():Call[]{
+    this.callService.getCalls().subscribe(
+      (call: Call[]) =>{
+        this.callFiltradas =  call
       },
       (error: any)=>{
-      },
+        return []
+      }
     )
+    return this.callFiltradas
   }
   public getModo(): void{
     this.modoService.getModos().subscribe(
@@ -193,24 +136,16 @@ export class PartidasDetalhesComponent implements OnInit {
       },
     )
   }
-  public getSubModo(): void{
-    if(this.soModo  == '0'){
-      this.submodoService.getSubModos().subscribe(
-        (sm: Submodo[]) =>{
-          this.smodos = sm
-        },
-        (error: any)=>{
-        },
-      )
-    }
-    else
-    this.submodoService.getSubModoByModoId(Number(this.soModo)).subscribe(
+  public getSubModo(): Submodo[]{
+    this.submodoService.getSubModos().subscribe(
       (sm: Submodo[]) =>{
-        this.smodos = sm
+        this.subModoFiltrados = sm;
       },
       (error: any)=>{
+        return []
       },
     )
+    return this.subModoFiltrados
   }
   public getJogadores(): void{
     this.jogadorService.getJogadores().subscribe(
@@ -222,28 +157,13 @@ export class PartidasDetalhesComponent implements OnInit {
       },
     )
   }
-
-  onSelecionaMapa(){
-    this.getCall();
-  }
-  onSelecionaModo(){
-    this.getSubModo();
-  }
-
-  getFullNgModelName(index: number): string{
-    console.log(`${this.soJogador}${index}`);
-    return `${this.soJogador}${index}`;
-  }
-
-  ngOnInit() {
-    this.getJogadores();
-    this.getTreinos();
-    this.getMapas();
-    this.getCall();
-    this.getModo();
-    this.getSubModo();
-    this.carregaDados();
-    this.validation();
+  public getTreinos(): void{
+    this.treinoService.getTreinos().subscribe(
+      (treino: Treino[]) =>{
+        this.treino = treino
+      },
+      (error: any)=>{},
+    )
   }
   public validation():void{
     this.formPartida = this.fb.group({
@@ -260,16 +180,83 @@ export class PartidasDetalhesComponent implements OnInit {
       estatisticas: this.fb.array([])
     });
   }
+  public async carregaDados(): Promise<void> {
+    this.partidaId = +this.activatedRouter.snapshot.paramMap.get('id');
   
-  adicionarEstatisticas(): void{
-      if (this.estatisticas.length < this.maxFormsEstatistica)
-        this.estatisticas.push(this.criarEstatisticas({id : 0} as Estatistica));
+    if (this.partidaId !== null && this.partidaId > 0) {
+      this.spiner.show();
+      this.modeSave = 'putPartida';
+  
+      try {
+        // Aguarda a partida ser carregada
+        this.partida = await this.partidaService.getPartidaById(this.partidaId).toPromise();
+        this.mapaSelecionado = this.partida.mapaId;
+        this.modoSelecionado = this.partida.modoId;
+  
+        // Aguarda chamadas relacionadas
+        const calls = await this.callService.getCalls().toPromise();
+        const subModos = await this.submodoService.getSubModos().toPromise();
+  
+        // Filtra os dados
+        this.calls = calls.filter(c => c.mapaId === this.partida.mapaId);
+        this.smodos = subModos.filter(sm => sm.modoId === this.partida.modoId);
+  
+        // Atualiza o formulário
+        this.partida.partidaData = new Date(this.partida.partidaData);
+        this.formPartida.patchValue(this.partida);
+  
+        // Carrega estatísticas
+        this.partida.estatisticas.forEach(estatistica => {
+          this.estatisticas.push(this.criarEstatisticas(estatistica));
+        });
+      } catch (error) {
+        console.error(error);
+        this.toaster.error('Erro ao carregar dados', 'Erro!');
+      } finally {
+        this.spiner.hide();
+      }
+    }
+  }
+  get modoEditar(): boolean{
+    return this.modeSave === 'putPartida'
+  }
+  get estatisticas(): FormArray{
+    return this.formEstatistica.get('estatisticas') as FormArray;
+  }
+  //Metodos da pagina
+  //Atualizações
+  onSelecionaMapa(){
+      this.mapaSelecionado = +this.soMapa; // Obtém o mapa selecionado do combobox
+      this.calls = this.getCalls().filter(c => c.mapaId == this.mapaSelecionado)
+
+  }
+  onSelecionaModo(){
+    this.modoSelecionado = +this.soModo;
+    this.smodos = this.getSubModo().filter(sm => sm.modoId == this.modoSelecionado)
+  }
+  public getCallByMap(mapaId: number):void{
+    this.callService.getCallByMapaId(mapaId).subscribe(
+      (calls: Call[]) => {
+        this.calls = calls; // Atualiza as opções do combobox
+      },
+      (error: any) => {
+        console.error('Erro ao carregar as Calls', error);
+      }
+    );
   }
 
+  getSubmodesByMode(mode: number | null): any[] {
+    this.getSubModo();
+    return this.smodos.filter(submode => submode != null && submode.modoId === mode);
+  }
+  //Estatisticas
+  adicionarEstatisticas(): void{
+    if (this.estatisticas.length < this.maxFormsEstatistica)
+      this.estatisticas.push(this.criarEstatisticas({id : 0} as Estatistica));
+  }
   buttonAdicionarDisabled(): boolean{
     return this.estatisticas.length < this.maxFormsEstatistica
   }
-
   criarEstatisticas(estatistica: Estatistica): FormGroup{
     return this.fb.group({
       id: [estatistica.id],
@@ -285,13 +272,20 @@ export class PartidasDetalhesComponent implements OnInit {
       tempo: [estatistica.tempo, Validators.required],
     })
   }
-
-  public resetForm():void{this.formPartida.reset();}
-
-  public cssValidator(campoForm: FormControl | AbstractControl): any {
-    return {'is-invalid': campoForm.errors && campoForm.touched}
+  public resetForm():void{
+    this.formPartida.reset();
   }
+  public removerEstatistica(template : TemplateRef<any>, indice : number):void{
 
+    this.estatisticaAtual.id = this.estatisticas.get(indice+'.id').value;
+    this.estatisticaAtual.indice = indice;
+    if(this.estatisticaAtual.id !== 0)
+      this.modalRef = this.modalService.show(template, {class:'modal-sm'})
+    else
+      this.estatisticas.removeAt(this.estatisticaAtual.indice);
+    
+  }
+  //Salvamentos
   public salvarPartida():void{
     this.isLoading = true;
     this.spiner.show();
@@ -314,7 +308,6 @@ export class PartidasDetalhesComponent implements OnInit {
     }
     this.isLoading = false;
   }
-
   public salvarEstatisticas():void{
     this.spiner.show();
     if (this.formEstatistica.controls['estatisticas'].valid){
@@ -330,17 +323,7 @@ export class PartidasDetalhesComponent implements OnInit {
       ).add(() => this.spiner.hide())
     }
   }
-
-  public removerEstatistica(template : TemplateRef<any>, indice : number):void{
-
-    this.estatisticaAtual.id = this.estatisticas.get(indice+'.id').value;
-    this.estatisticaAtual.indice = indice;
-    if(this.estatisticaAtual.id !== 0)
-      this.modalRef = this.modalService.show(template, {class:'modal-sm'})
-    else
-      this.estatisticas.removeAt(this.estatisticaAtual.indice);
-    
-  }
+  //Modal
   public confirm():void{
     this.modalRef.hide();
     this.spiner.show();
@@ -358,5 +341,5 @@ export class PartidasDetalhesComponent implements OnInit {
   }
   public decline():void{
     this.modalRef.hide();
-  }
+}
 }
