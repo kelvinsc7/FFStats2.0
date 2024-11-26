@@ -1,7 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Call } from '@app/Model/Call';
+import { Partida } from '@app/Model/Partida';
 import { CallService } from '@app/Services/call.service';
+import { PartidaService } from '@app/Services/partida.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -43,6 +45,7 @@ export class CallListasComponent implements OnInit {
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     private router : Router,
+    private partidaService : PartidaService
     )
     { }
 
@@ -55,6 +58,16 @@ export class CallListasComponent implements OnInit {
     this.CallService.getCalls().subscribe({
       next: (_Call: Call[]) =>{
         this.Calls = _Call
+        for(const call of this.Calls){
+          this.partidaService.getPartidaByCallId(call.id).subscribe({
+            next: (partida: Partida[]) =>{
+              call.partidas = partida;
+            },
+            error: (error: any) => {
+              this.toastr.error("Erro ao carregar Partidas da call", "Erro!");
+            }
+          });
+        }
         this.CallFiltrada = _Call
 
       },
@@ -69,6 +82,9 @@ export class CallListasComponent implements OnInit {
     event.stopPropagation();
     this.callId = id;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+  public getTotalPartidas(call: Call): number {
+    return call.partidas ? call.partidas.length : 0;
   }
 
   public confirm(): void {

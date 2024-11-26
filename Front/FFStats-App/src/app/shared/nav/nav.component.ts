@@ -24,7 +24,7 @@ export class NavComponent implements OnInit {
     this.configuracaoService.configuracoes$.subscribe(data => {
       const ffestatisticas = data.find(c => c.nome === 'API FFEstatisticas');
       const ffinfo = data.find(c => c.nome === 'API FFInfo');
-      if (ffestatisticas.ativo === false && ffinfo.ativo === false) {
+      if (ffestatisticas && ffinfo && ffestatisticas.ativo === false && ffinfo.ativo === false) {
         this.showBuscaApi = false;
       } else {
         this.showBuscaApi = true;
