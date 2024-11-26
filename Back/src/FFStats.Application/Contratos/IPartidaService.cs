@@ -13,5 +13,6 @@ namespace FFStats.Application.Contratos
          Task<partidaDto[]> GetPartidasByTreinoIdAsync(int treinoId, bool IncludeJogador = false);
          Task<partidaDto[]> GetAllPartidasByDescAsync(string Desc, bool IncludeJogador = false);
          Task<partidaDto[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false);
+         Task<partidaDto[]> GetPartidasByCallIdAsync(int id, bool IncludeJogador = false);
     }
 }
