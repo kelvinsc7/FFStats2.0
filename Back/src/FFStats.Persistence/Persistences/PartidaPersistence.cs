@@ -93,6 +93,18 @@ namespace FFStats.Persistence.Persistences
             query = query.AsNoTracking().OrderBy(P => P.id).Where(P => P.mapaId == id);
             return await query.ToArrayAsync();
         }
+        public async Task<Partida[]> GetPartidasByCallIdAsync(int id, bool IncludeJogador = false)
+        {
+            IQueryable<Partida> query = _context.Partidas
+                            .Include(p => p.call)
+                            .Include(p => p.Estatisticas).ThenInclude(e => e.Jogador);
+            if(IncludeJogador)
+            {
+                
+            }
+            query = query.AsNoTracking().OrderBy(P => P.id).Where(P => P.callId == id);
+            return await query.ToArrayAsync();
+        }
 
     }
 }

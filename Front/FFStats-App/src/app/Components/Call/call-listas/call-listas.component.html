@@ -35,11 +35,11 @@
           <th class="d-none d-md-table-cell">{{item.id}}</th>
           <th>{{item.callCidade}}</th>
           <th>{{item.mapa.mapaNome}}</th>
-          <th>30</th>
-          <th>2</th>
-          <th class="d-none d-md-table-cell">30</th>
-          <th class="d-none d-md-table-cell">Vrt Bliminha</th>
-          <th class="d-none d-md-table-cell">07/06/2022</th>
+          <th>{{getTotalPartidas(item)}}</th>
+          <th>{{getBooyah(item)}}</th>
+          <th class="d-none d-md-table-cell">{{getQtdeKill(item.partidas)}}</th>
+          <th class="d-none d-md-table-cell">{{getMelhorJogador(item)}}</th>
+          <th class="d-none d-md-table-cell">{{getUltima(item.partidas)}}</th>
           <th>
             <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>

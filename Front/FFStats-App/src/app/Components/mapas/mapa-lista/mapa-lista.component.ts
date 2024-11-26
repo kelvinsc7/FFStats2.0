@@ -93,6 +93,8 @@ export class MapaListaComponent implements OnInit {
   }
   
   getQtdeKill(partidas: Partida[]): number {
+    if (!partidas || partidas.length ===0)
+      return 0;
     return partidas.reduce((totalKills, partida) => {
       const killsInPartida = partida.estatisticas.reduce((acc, estatisticas) => acc + estatisticas.kill, 0);
       return totalKills + killsInPartida;

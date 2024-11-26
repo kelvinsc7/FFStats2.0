@@ -11,5 +11,6 @@ namespace FFStats.Persistence.Contratos
          Task<Partida> GetPartidasByIdAsync(int id, bool IncludeJogador = false);
          Task<Partida[]> GetPartidasByTreinoIdAsync(int id, bool IncludeJogador = false);
          Task<Partida[]> GetPartidasByMapaIdAsync(int id, bool IncludeJogador = false);
+         Task<Partida[]> GetPartidasByCallIdAsync(int id, bool IncludeJogador = false);
     }
 }

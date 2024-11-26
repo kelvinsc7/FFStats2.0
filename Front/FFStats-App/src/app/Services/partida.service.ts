@@ -26,6 +26,9 @@ export class PartidaService {
   getPartidaByMapaId(id: number): Observable<Partida[]>{
     return this.http.get<Partida[]>(`${this.baseURL}/${id}/mapa`).pipe(take(1));
   }
+  getPartidaByCallId(id: number): Observable<Partida[]>{
+    return this.http.get<Partida[]>(`${this.baseURL}/${id}/call`).pipe(take(1));
+  }
 
   postPartida(partida: Partida): Observable<Partida>{
     return this.http.post<Partida>(this.baseURL, partida).pipe(take(1));
