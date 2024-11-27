@@ -85,12 +85,18 @@ export class JogadoresListaComponent implements OnInit {
     });
   }
   public carregaKIll(est : Estatistica[]) :number {
-    let totalKills = 0; est.forEach(item => { totalKills += item.kill; }); return totalKills; 
+    let totalKills = 0; 
+    if(!est || est.length ===0)
+      return totalKills
+    est.forEach(item => { totalKills += item.kill; }); 
+    return totalKills; 
     
   }
 
   public getkd(est : Estatistica[]) :number {
     let totalKills = 0; 
+    if(!est || est.length ===0)
+      return parseFloat(totalKills.toFixed(2));
     est.forEach(item => { totalKills += item.kill; }); 
     let totalmortes = 0
     est.forEach(item => { totalmortes += item.morte; }); 
@@ -99,11 +105,17 @@ export class JogadoresListaComponent implements OnInit {
     return  parseFloat(kdRatio.toFixed(2));
   }
   getTotalMorte(est: Estatistica[]): number{
-    let totalMorte = 0; est.forEach(item => { totalMorte += item.morte; }); return totalMorte;
+    let totalMorte = 0;
+    if(!est || est.length ===0)
+      return totalMorte
+     est.forEach(item => { totalMorte += item.morte; }); 
+     return totalMorte;
   }
   getQuantidadePartidasUnicas(est : Estatistica[]): number {
+    if (!est || est.length ===0)
+      return 0;
     const uniquePartidas  = new Set(est.map(e => e.partidaId));
-    return uniquePartidas.size;;
+    return uniquePartidas.size;
   }
   public openModal(event:any, template: TemplateRef<any>, id: number): void {
     event.stopPropagation();
