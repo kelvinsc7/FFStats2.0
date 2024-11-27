@@ -41,7 +41,7 @@
           <th class="d-none d-md-table-cell">{{getMelhorJogador(item)}}</th>
           <th class="d-none d-md-table-cell">{{getUltima(item.partidas)}}</th>
           <th>
-            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
+            <button aria-label="Excluir" type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>
             </button>
           </th>
