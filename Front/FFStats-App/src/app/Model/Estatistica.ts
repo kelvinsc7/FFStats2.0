@@ -15,5 +15,5 @@ export interface Estatistica {
   cura: number;
   levantados: number;
   ressucitou: number;
-  tempo: number;
+  tempo: string;
 }
