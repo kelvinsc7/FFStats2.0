@@ -66,6 +66,7 @@ export class PartidasDetalhesComponent implements OnInit {
   estatisticaAtual = {id:0, indice :0}
   //Configurações da pagina
   get f():any{return this.formPartida.controls;}
+  get e():any{return this.formEstatistica.controls}
   get bsConfig():any{
     return { isAnimated: true, adaptivePosition: true,
             dateInputFormat: 'DD/MM/YYYY',
@@ -177,8 +178,32 @@ export class PartidasDetalhesComponent implements OnInit {
       submodoId:['',[Validators.required,]]
     });
     this.formEstatistica = this.fb.group({
-      estatisticas: this.fb.array([])
+      estatisticas: this.fb.array([]),
+      tempo: ['', [Validators.required, Validators.pattern('^[0-5][0-9]:[0-5][0-9]$')]] 
     });
+  }
+  onTempoInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
+  
+    if (value.length > 2) {
+      value = `${value.substring(0, 2)}:${value.substring(2, 4)}`;
+    }
+  
+    input.value = value; // Atualiza o valor no input
+    this.formEstatistica.get('tempo')?.setValue(value); // Atualiza o FormControl
+  }
+  converteToTime(seconds: string): string {
+    const minutes = Math.floor(parseInt(seconds) / 60);
+    const remainingSeconds = parseInt(seconds) % 60;
+    return `${this.padZero(minutes)}:${this.padZero(remainingSeconds)}`;
+  }
+  converteToSeconds(time: string): number {
+    const [minutes, seconds] = time.split(':').map(Number);
+    return (minutes * 60) + seconds;
+  }
+  private padZero(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
   }
   public async carregaDados(): Promise<void> {
     this.partidaId = +this.activatedRouter.snapshot.paramMap.get('id');
@@ -207,6 +232,7 @@ export class PartidasDetalhesComponent implements OnInit {
   
         // Carrega estatísticas
         this.partida.estatisticas.forEach(estatistica => {
+          estatistica.tempo = this.converteToTime(estatistica.tempo);
           this.estatisticas.push(this.criarEstatisticas(estatistica));
         });
       } catch (error) {
@@ -311,6 +337,9 @@ export class PartidasDetalhesComponent implements OnInit {
   public salvarEstatisticas():void{
     this.spiner.show();
     if (this.formEstatistica.controls['estatisticas'].valid){
+      this.formEstatistica.value.estatisticas.forEach(estatistica => {
+        estatistica.tempo = this.converteToSeconds(estatistica.tempo);
+      });
       this.estatisticaService.saveEstatistica(this.partidaId, this.formEstatistica.value.estatisticas).subscribe(
         () =>{
           this.toaster.success('Estatisticas salvos com Sucesso!', 'Sucesso!');
