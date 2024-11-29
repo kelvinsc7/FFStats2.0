@@ -24,5 +24,6 @@ export interface Partida {
   posicao: number;
   partidasJogadores: Jogador[];
   estatisticas: Estatistica[];
+  MVP: string
 
 }
