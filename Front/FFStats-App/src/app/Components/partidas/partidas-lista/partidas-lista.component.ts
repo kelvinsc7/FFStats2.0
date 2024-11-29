@@ -1,3 +1,4 @@
+import { Estatistica } from '@app/Model/Estatistica';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -55,8 +56,14 @@ export class PartidasListaComponent implements OnInit {
   public getPartidas(): void{
     this.partidaService.getPartidas().subscribe({
       next: (_partida: Partida[]) =>{
-        this.partidas = _partida
-        this.partidaFiltrada = _partida
+        this.partidas = _partida;
+        this.partidaFiltrada = _partida;
+        this.partidas.forEach(p=> {
+          if (!p.estatisticas || p.estatisticas.length ===0)
+            p.MVP = 'Sem Estatisticas';
+          else
+            p.MVP = this.calcularMVP(p.estatisticas); 
+        })
 
       },
       error: (error: any)=>{
@@ -98,4 +105,61 @@ export class PartidasListaComponent implements OnInit {
   public detalhePartida(id:number):void{
     this.router.navigate([`partidas/detalhes/${id}`]);
   }
+  private calcularMVP(estatisticas: Estatistica[]): string | null {
+    if (!estatisticas || estatisticas.length === 0) {
+      return null; // Sem estatísticas, não há MVP
+    }
+  
+    let maiorPontuacao = -Infinity;
+    let nomeDoMVP = null;
+  
+    estatisticas.forEach(estatistica => {
+      const pontuacao = this.calcularPontuacao(estatistica);
+  
+      if (pontuacao > maiorPontuacao) {
+        maiorPontuacao = pontuacao;
+        nomeDoMVP = estatistica.jogador.jogadorNick; // Assume que `jogadorNome` é a propriedade com o nome do jogador
+      }
+    });
+  
+    return nomeDoMVP;
+  }
+  private calcularPontuacao(estatistica: Estatistica): number {
+    const tempoString = this.converteToTime(estatistica.tempo) || "0:00"; // Pega o valor ou um padrão "0:00"
+    const minutos = this.extrairMinutos(tempoString); // Extrai os minutos como um número
+
+    const kills = estatistica.kill || 0;
+    const mortes = estatistica.morte || 0;
+    const assistencias = estatistica.assistencia || 0;
+    const dano = estatistica.dano || 0;
+    const derrubados = estatistica.derrubado || 0;
+    const cura = estatistica.cura || 0;
+    const levantou = estatistica.levantados || 0;
+    const ressuscitou = estatistica.ressucitou || 0;
+  
+    return (
+      (kills * 4) +
+      (mortes * -2) +
+      (assistencias * 2) +
+      (dano / 100) +
+      (derrubados * 1) +
+      (cura / 50) +
+      (levantou * 3) +
+      (ressuscitou * 5) +
+      (minutos * 1)
+    );
+  }
+  private extrairMinutos(tempo: string): number {
+    const [minutos] = tempo.split(':').map(Number); // Divide a string e converte a primeira parte (minutos)
+    return minutos || 0; // Retorna 0 se os minutos não forem válidos
+  }
+  converteToTime(seconds: string): string {
+    const minutes = Math.floor(parseInt(seconds) / 60);
+    const remainingSeconds = parseInt(seconds) % 60;
+    return `${this.padZero(minutes)}:${this.padZero(remainingSeconds)}`;
+  }
+  private padZero(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
+  }
+
 }

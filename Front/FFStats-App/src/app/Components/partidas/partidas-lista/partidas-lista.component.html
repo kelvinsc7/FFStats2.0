@@ -26,6 +26,7 @@
           <th class="d-none d-md-table-cell">Call</th>
           <th class="d-none d-md-table-cell">Modo</th>
           <th>Posição</th>
+          <th>MVP</th>
           <th>Data</th>
           <th>Opções</th>
         </tr>
@@ -39,9 +40,10 @@
           <th class="d-none d-md-table-cell">{{item.call.callCidade}}</th>
           <th class="d-none d-md-table-cell">{{item.modo.modoDescricao}} {{item.sumodo.submodoDescricao}}</th>
           <th>{{item.posicao}}</th>
+          <th>{{item.MVP}}</th>
           <th>{{item.partidaData | DateTimeFormat}}</th>
           <th>
-            <button type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
+            <button aria-label="Excluir" type="button" class="btn btn-danger btn-md" tooltip="Excluir" (click)="openModal($event, template, item.id)">
               <i class=" fa fa-trash"></i>
             </button>
           </th>
