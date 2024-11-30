@@ -103,15 +103,34 @@ export class JogadoresEstatisticasComponent implements OnInit {
     this.derubados = totalDerrubados
   }
   calculaMaximoKill():void{
-
+    let maior =0
+    this.estatistica.forEach(e=>{
+      if(e.kill > maior)
+        maior = e.kill
+    })
+    this.maximoKill = maior
   }
   calculaTempo():void{
+    let totalTempoEmSegundos = 0
+    let mediaTempoEmSegundos = 0
 
+    this.estatistica.forEach(e=>{totalTempoEmSegundos += +e.tempo})
+    mediaTempoEmSegundos = totalTempoEmSegundos/this.partidas
+    this.tempoTotal = this.formatarTempo(totalTempoEmSegundos)
+    this.tempoMedio = this.formatarTempo(mediaTempoEmSegundos)
   }
   calculaReviveu():void{
     let totalReviveu = 0
     this.estatistica.forEach(e=>{ totalReviveu+=e.ressucitou})
     this.reviveu = totalReviveu
+  }
+  formatarTempo(segundos: number):string{
+    const minutes = Math.floor(segundos / 60);
+    const remainingSeconds = Math.trunc(segundos % 60);
+    return `${this.padZero(minutes)}:${this.padZero(remainingSeconds)}`;
+  }
+  private padZero(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
   }
 
 }
