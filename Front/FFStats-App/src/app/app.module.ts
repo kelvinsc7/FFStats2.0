@@ -84,6 +84,7 @@ import { SubmodoService } from './Services/submodoService.service';
 import { BuscaApiDetalhesComponent } from './Components/BuscaApi/BuscaApi-detalhes/BuscaApi-detalhes.component';
 import { ConfiguracaoService } from './Services/configuracao.service';
 import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/configuracao.component';
+import { JogadoresEstatisticasComponent } from './Components/Jogadores/jogadores-estatisticas/jogadores-estatisticas.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -118,7 +119,8 @@ defineLocale('pt-br', ptBrLocale);
     RegistrationComponent,
     BuscaApiComponent,
     BuscaApiDetalhesComponent,
-    ConfiguracaoComponent
+    ConfiguracaoComponent,
+    JogadoresEstatisticasComponent,
    ],
   imports: [
     BrowserModule,

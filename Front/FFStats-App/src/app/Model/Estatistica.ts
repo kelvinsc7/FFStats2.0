@@ -4,7 +4,7 @@ import { Partida } from "./Partida";
 export interface Estatistica {
   id: number;
   partidaId: number;
-  partida: Partida[];
+  partida: Partida;
   jogadorId: number;
   jogador: Jogador;
   kill: number;
