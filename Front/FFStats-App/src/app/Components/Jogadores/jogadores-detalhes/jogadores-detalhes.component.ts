@@ -31,6 +31,7 @@ export class JogadoresDetalhesComponent implements OnInit {
   jogadorBd ={} as Jogador; 
   playerStats  = {} as PlayerStats;
   activeTab: string = 'solo';
+  jogadorId = +this.router.snapshot.paramMap.get('id');
 
   get f():any{return this.form.controls;}
 

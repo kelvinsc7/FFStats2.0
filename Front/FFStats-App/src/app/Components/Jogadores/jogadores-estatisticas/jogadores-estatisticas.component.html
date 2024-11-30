@@ -1,0 +1,34 @@
+
+<div class="card-body" *ngIf="estatistica?.length > 0; else noData">
+  <div class="card-header">
+    <h2 class="mr-auto">
+      <i class="fa-solid fa-person-military-rifle"></i> Estatisticas de treino do jogador
+    </h2>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <p class="card-text"><b>Partidas: </b>{{this.partidas}}</p>
+      <p class="card-text"><b>Kills: </b>{{this.kills}}</p>
+      <p class="card-text"><b>Booyahs: </b>{{this.booyah}}</p>
+      <p class="card-text"><b>Booyahs(%): </b>{{this.percenteBooyah}}%</p>
+      <p class="card-text"><b>Mortes: </b>{{this.mortes}}</p>
+      <p class="card-text"><b>KD: </b> {{this.Kd}} </p><!-- Necessario calcular o KD -->
+    </div>
+    <div class="col-sm-4">
+      <p class="card-text"><b>Top 3: </b>{{this.topT}} </p>
+      <p class="card-text"><b>Top 3(%): </b>{{this.percentTopT}}% </p>
+      <p class="card-text"><b>Dano Total: </b>{{this.danoTotal}}</p>
+      <p class="card-text"><b>Média dano: </b>{{this.danoMedio}} </p>
+      <p class="card-text"><b>Derrubados: </b>{{this.derubados}} </p>
+      <p class="card-text"><b>Maximo Kill: </b>{{this.maximoKill}} </p>
+    </div>
+    <div class="col-sm-4">
+      <p class="card-text"><b>Tempo Total: </b>{{this.tempoTotal}} </p>
+      <p class="card-text"><b>Tempo médio: </b>{{this.tempoMedio}} </p><!-- Necessario calcular a média F=(ST/GP)/60 onde o inteiro é minutos e o resto é o segundos -->
+      <p class="card-text"><b>Reviveu: </b>{{this.reviveu}} </p>
+    </div>
+  </div>     
+</div>
+<ng-template #noData>
+  <p>Nenhuma estatística de treino encontrada.</p>
+</ng-template>
