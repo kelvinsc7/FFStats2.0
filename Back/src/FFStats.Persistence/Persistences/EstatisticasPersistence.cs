@@ -26,7 +26,7 @@ namespace FFStats.Persistence.Persistences
 
         public async Task<Estatisticas[]> GetEstatisticasByPartidaIdAsync(int partidaId)
         {
-            IQueryable<Estatisticas> query = _context.Estatisticas;
+            IQueryable<Estatisticas> query = _context.Estatisticas.Include(e=>e.Jogador);
 
             query = query.AsNoTracking().Where(e => e.partidaId == partidaId);
 

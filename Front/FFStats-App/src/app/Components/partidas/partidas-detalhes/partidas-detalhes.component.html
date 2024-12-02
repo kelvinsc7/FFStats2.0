@@ -31,21 +31,21 @@
        <div class="form-row">
         <div class="form-group col-md-4">
           <label><strong>Treino</strong></label>
-          <select [(ngModel)]="soTreino" class="form-control form-select" formControlName="treinoId">
+          <select aria-label="Treino" [(ngModel)]="soTreino" class="form-control form-select" formControlName="treinoId">
             <option value="0">Selecione uma opção</option>
             <option *ngFor="let tre of treino" [value]="tre.id"> {{tre.treinoDescricao}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Mapa</strong></label>
-          <select [(ngModel)]="soMapa" (ngModelChange)="onSelecionaMapa()" class="form-control form-select" formControlName="mapaId" >
+          <select aria-label="Mapa" [(ngModel)]="soMapa" (ngModelChange)="onSelecionaMapa()" class="form-control form-select" formControlName="mapaId" >
             <option value="0">Selecione o Mapa</option>
             <option *ngFor="let map of mapas" value={{map.id}}> {{map.mapaNome}}</option>
           </select>
         </div>
         <div class="form-group col-md-4">
           <label><strong>Call</strong></label>
-          <select [(ngModel)]="soCall" class="form-control form-select" formControlName="callId">
+          <select aria-label="Call" [(ngModel)]="soCall" class="form-control form-select" formControlName="callId">
             <option *ngIf='mapaSelecionado === 0' value="0">Selecione o Mapa</option>
             <option *ngIf='mapaSelecionado > 0' value="0">Selecione a call</option>
             <option *ngFor="let c of calls" value={{c.id}}> {{c.callCidade}}</option>
@@ -56,14 +56,14 @@
 
         <div class="form-group col-md-4">
          <label><strong>Modo:</strong></label>
-         <select [(ngModel)]="soModo" (ngModelChange)="onSelecionaModo()" class="form-control form-select" formControlName="modoId">
+         <select aria-label="Modo" [(ngModel)]="soModo" (ngModelChange)="onSelecionaModo()" class="form-control form-select" formControlName="modoId">
           <option value="0">Selecione o Modo</option>
           <option *ngFor="let m of modos" value={{m.id}}> {{m.modoDescricao}}</option>
         </select>
        </div>
        <div class="form-group col-md-4">
         <label><strong>Sub-Modo:</strong></label>
-        <select [(ngModel)]="soSubModo" class="form-control form-select" formControlName="submodoId">
+        <select aria-label="SubModo" [(ngModel)]="soSubModo" class="form-control form-select" formControlName="submodoId">
           <option value="0">Selecione o Sub-Modo</option>
           <option *ngFor="let sm of smodos || []" value={{sm.id}}>
             {{sm.submodoDescricao}}
@@ -74,160 +74,35 @@
      </div>
      <div class="card-footer">
        <div class="d-flex">
-         <button class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
+         <button  class="btn btn-outline-secondary mr-auto border" (click)="resetForm()">
            Cancelar Alteração
          </button>
          <button class="btn btn-success" [disabled]="!formPartida.valid" (click)="salvarPartida()">
            <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
            Salvar
          </button>
+         <button class="btn btn-primary ml-1" (click)="alterarEstatistica()">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          {{this.txtmodo}}
+        </button>
        </div>
      </div>
    </form>
 </div>
 
-<div class="card rounded shadow-sm mt-4" *ngIf="modoEditar">
-   <!-- <p> form value: {{formEstatistica.controls['estatisticas'].value | json}}</p>
-  <p> form valid: {{formEstatistica.controls['estatisticas'].status | json}}</p>  -->
-  <div class="p-3">
-    <div class="d-flex border-bottom">
-      <h2 class="mr-auto">
-        Estatisticas
-      </h2>
-      <h2>
-        <i class="fa-solid fa-chart-column"></i>
-      </h2>
-    </div>
-    <p>Clique em Estatisticas para adicionar e preencher novas Estatisticas</p>
-    <div class="form-row p-1">
-      <div [formGroup]="formEstatistica" class="col">
-        <div formArrayName="estatisticas" *ngFor="let esatistica of estatisticas.controls; let i=index">
-          <fieldset [formGroupName]="i" class="form-group">
-            <legend class="d-flex justify-content-between capitalize">
-              <button (click)="removerEstatistica(template ,i)" class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex"
-                tooltip="Excluir Estatisticas"
-                [adaptivePosition]="false"
-                >
-              <i class="fa fa-window-close my-1"></i>
-              <b class="ml-1 d-none d-sm-block">Excluir</b>
-            </button>
-          </legend>
-          <div class="row">
-            <div class="form-group col-md-9">
-              <label>Jogador</label>
-              <select class="form-control form-select" formControlName="jogadorId" >
-                <option value="0" >Selecione o Jogador</option>
-                <option *ngFor="let j of jogador" value={{j.id}}> {{j.jogadorNick}}</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label>Kills</label>
-              <input
-                [ngClass]="cssValidator(estatisticas.get(i+'.kill'))"
-               type="number" class="form-control" 
-               formControlName="kill" 
-               placeholder="0">
-               <div *ngIf="f.partidaDescricao.errors?.required" class="invalid-feedback"> Campo Obrigatório</div>
-            </div>
-            <div class="form-group col-md-3">
-              <label>Morte</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.morte'))"
-              type="number" class="form-control" 
-              formControlName="morte" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Assistencia</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.assistencia'))"
-              type="number" class="form-control" 
-              formControlName="assistencia" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Dano</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.dano'))"
-              type="number" currencyMask class="form-control" 
-              formControlName="dano" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Derrubados</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.derrubado'))"
-              type="number" class="form-control" 
-              formControlName="derrubado" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Cura</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.cura'))"
-              type="number" class="form-control" 
-              formControlName="cura" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Levantou</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.levantados'))"
-              type="number" class="form-control" 
-              formControlName="levantados" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Ressucitou</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.ressucitou'))"
-              type="number" class="form-control" 
-              formControlName="ressucitou" 
-              placeholder="0">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Tempo</label>
-              <input
-              [ngClass]="cssValidator(estatisticas.get(i+'.tempo'))"
-              type="text" class="form-control" 
-              pattern="^([0-5][0-9]):([0-5][0-9])$"
-              placeholder="00:00"
-              formControlName="tempo" 
-              (input)="onTempoInput($event)">
-              <div *ngIf="e.tempo?.required" class="invalid-feedback"> Campo Obrigatório</div>
-              <div *ngIf="e.tempo?.pattern" class="invalid-feedback"> Formato inválido</div>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-    </div>
-  </div>
-  <button *ngIf="buttonAdicionarDisabled()"  (click)="adicionarEstatisticas()" class="d-flex btn btn-outline-primary">
-    <i class="fa fa-plus-circle my-1"></i>
-    <b class="ml-1">Estatistica</b>
-  </button>
-</div>
-<div class="card-footer">
-  <div class="d-flex">
-    <button class="btn btn-outline-secondary mr-auto border">
-      Cancelar Alteração
-    </button>
-    <button class="btn btn-success" [disabled]="!formEstatistica.valid" (click)="salvarEstatisticas()">
-      Salvar Estatisticas
-    </button>
-  </div>
-</div>
-</div>
-<br>
 
 
-<ng-template #template>
+<app-estatisticas-visualizar [modo]="this.modo"></app-estatisticas-visualizar>
+<app-estatistica-editar [modo]="this.modo"></app-estatistica-editar>
+
+
+<!-- <ng-template #template>
   <div class="modal-body text-center">
     <p>Deseja realmente efetuar a exclusão da Estatistica ?</p>
     <button type="button" class="btn btn-primary mr-3" (click)="confirm()" >Sim</button>
     <button type="button" class="btn btn-danger" (click)="decline()" >Não</button>
   </div>
-</ng-template>
+</ng-template> -->
 
 
 
@@ -258,4 +133,4 @@ position: sticky;
 top: var(--default-height);
 }
 
-</style>>
+</style>

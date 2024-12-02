@@ -85,6 +85,8 @@ import { BuscaApiDetalhesComponent } from './Components/BuscaApi/BuscaApi-detalh
 import { ConfiguracaoService } from './Services/configuracao.service';
 import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/configuracao.component';
 import { JogadoresEstatisticasComponent } from './Components/Jogadores/jogadores-estatisticas/jogadores-estatisticas.component';
+import { EstatisticaEditarComponent } from './Components/partidas/partidas-detalhes/estatistica-editar/estatistica-editar.component';
+import { EstatisticasVisualizarComponent } from './Components/partidas/partidas-detalhes/estatisticas-visualizar/estatisticas-visualizar.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -121,6 +123,8 @@ defineLocale('pt-br', ptBrLocale);
     BuscaApiDetalhesComponent,
     ConfiguracaoComponent,
     JogadoresEstatisticasComponent,
+    EstatisticaEditarComponent,
+    EstatisticasVisualizarComponent
    ],
   imports: [
     BrowserModule,

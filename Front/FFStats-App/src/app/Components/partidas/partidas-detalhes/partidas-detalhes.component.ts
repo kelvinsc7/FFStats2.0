@@ -36,16 +36,16 @@ export class PartidasDetalhesComponent implements OnInit {
   //Variaveis
   modalRef: BsModalRef;
   currentDate: Date = new Date; //Data atual, usado no datapicker
-  maxFormsEstatistica = 4; //Variavel de controle de quantodade de estatisticas
   partidaId :number;
   soTreino: string = '0';
   soMapa: string = '0';
   soCall: string = '0';
   soModo: string = '0';
   soSubModo: string = '0';
-  soJogador : string ='0';
   isLoading = false;
   alteracsm = false;
+  modo = 'visualizar'
+  txtmodo = 'Editar Estatistica'
 
 
   treino:Treino[] = [];
@@ -53,10 +53,8 @@ export class PartidasDetalhesComponent implements OnInit {
   modos:Modo[] = [];
   smodos:Submodo[]=[];
   calls: Call[] = [];
-  jogador: Jogador[] = [];
   partida={} as Partida;
   formPartida!:FormGroup;
-  formEstatistica!:FormGroup;
   modeSave = 'postPartida';
 
   callFiltradas: Call[] = [];
@@ -66,7 +64,6 @@ export class PartidasDetalhesComponent implements OnInit {
   estatisticaAtual = {id:0, indice :0}
   //Configurações da pagina
   get f():any{return this.formPartida.controls;}
-  get e():any{return this.formEstatistica.controls}
   get bsConfig():any{
     return { isAnimated: true, adaptivePosition: true,
             dateInputFormat: 'DD/MM/YYYY',
@@ -84,7 +81,6 @@ export class PartidasDetalhesComponent implements OnInit {
     private callService: CallService,
     private modoService: ModoService,
     private submodoService: SubmodoService,
-    private jogadorService: JogadorService,
     private spiner: NgxSpinnerService,
     private toaster: ToastrService,
     private router: Router,
@@ -97,18 +93,15 @@ export class PartidasDetalhesComponent implements OnInit {
 
     //Metodos de inicialização
   ngOnInit() {
-    // Chamadas que podem ser feitas imediatamente
     this.getMapas();
-    //this.getCall();
     this.getModo();
-    //this.getSubModo();
-    this.getJogadores();
     this.getTreinos();
     this.validation();
     this.carregaDados();
     this.formPartida.valueChanges.subscribe(valores => console.log('Valores do formulário:', valores));
   }
-    public getMapas(): void{
+    
+  public getMapas(): void{
       this.mapaService.getMapas().subscribe(
         (mapa: Mapa[]) =>{
           this.mapas = mapa;
@@ -116,7 +109,7 @@ export class PartidasDetalhesComponent implements OnInit {
         (error: any)=>{
         },
       )
-    }
+  }
   public getCalls():Call[]{
     this.callService.getCalls().subscribe(
       (call: Call[]) =>{
@@ -148,16 +141,6 @@ export class PartidasDetalhesComponent implements OnInit {
     )
     return this.subModoFiltrados
   }
-  public getJogadores(): void{
-    this.jogadorService.getJogadores().subscribe(
-      (jg: Jogador[]) =>{
-        this.jogador = jg
-      },
-      (error:any)=>{
-
-      },
-    )
-  }
   public getTreinos(): void{
     this.treinoService.getTreinos().subscribe(
       (treino: Treino[]) =>{
@@ -177,30 +160,6 @@ export class PartidasDetalhesComponent implements OnInit {
       modoId:['',[Validators.required,]],
       submodoId:['',[Validators.required,]]
     });
-    this.formEstatistica = this.fb.group({
-      estatisticas: this.fb.array([]),
-      tempo: ['', [Validators.required, Validators.pattern('^[0-5][0-9]:[0-5][0-9]$')]] 
-    });
-  }
-  onTempoInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
-  
-    if (value.length > 2) {
-      value = `${value.substring(0, 2)}:${value.substring(2, 4)}`;
-    }
-  
-    input.value = value; // Atualiza o valor no input
-    this.formEstatistica.get('tempo')?.setValue(value); // Atualiza o FormControl
-  }
-  converteToTime(seconds: string): string {
-    const minutes = Math.floor(parseInt(seconds) / 60);
-    const remainingSeconds = parseInt(seconds) % 60;
-    return `${this.padZero(minutes)}:${this.padZero(remainingSeconds)}`;
-  }
-  converteToSeconds(time: string): number {
-    const [minutes, seconds] = time.split(':').map(Number);
-    return (minutes * 60) + seconds;
   }
   private padZero(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
@@ -229,12 +188,6 @@ export class PartidasDetalhesComponent implements OnInit {
         // Atualiza o formulário
         this.partida.partidaData = new Date(this.partida.partidaData);
         this.formPartida.patchValue(this.partida);
-  
-        // Carrega estatísticas
-        this.partida.estatisticas.forEach(estatistica => {
-          estatistica.tempo = this.converteToTime(estatistica.tempo);
-          this.estatisticas.push(this.criarEstatisticas(estatistica));
-        });
       } catch (error) {
         console.error(error);
         this.toaster.error('Erro ao carregar dados', 'Erro!');
@@ -245,9 +198,6 @@ export class PartidasDetalhesComponent implements OnInit {
   }
   get modoEditar(): boolean{
     return this.modeSave === 'putPartida'
-  }
-  get estatisticas(): FormArray{
-    return this.formEstatistica.get('estatisticas') as FormArray;
   }
   //Metodos da pagina
   //Atualizações
@@ -275,14 +225,6 @@ export class PartidasDetalhesComponent implements OnInit {
     this.getSubModo();
     return this.smodos.filter(submode => submode != null && submode.modoId === mode);
   }
-  //Estatisticas
-  adicionarEstatisticas(): void{
-    if (this.estatisticas.length < this.maxFormsEstatistica)
-      this.estatisticas.push(this.criarEstatisticas({id : 0} as Estatistica));
-  }
-  buttonAdicionarDisabled(): boolean{
-    return this.estatisticas.length < this.maxFormsEstatistica
-  }
   criarEstatisticas(estatistica: Estatistica): FormGroup{
     return this.fb.group({
       id: [estatistica.id],
@@ -300,16 +242,6 @@ export class PartidasDetalhesComponent implements OnInit {
   }
   public resetForm():void{
     this.formPartida.reset();
-  }
-  public removerEstatistica(template : TemplateRef<any>, indice : number):void{
-
-    this.estatisticaAtual.id = this.estatisticas.get(indice+'.id').value;
-    this.estatisticaAtual.indice = indice;
-    if(this.estatisticaAtual.id !== 0)
-      this.modalRef = this.modalService.show(template, {class:'modal-sm'})
-    else
-      this.estatisticas.removeAt(this.estatisticaAtual.indice);
-    
   }
   //Salvamentos
   public salvarPartida():void{
@@ -334,41 +266,18 @@ export class PartidasDetalhesComponent implements OnInit {
     }
     this.isLoading = false;
   }
-  public salvarEstatisticas():void{
-    this.spiner.show();
-    if (this.formEstatistica.controls['estatisticas'].valid){
-      this.formEstatistica.value.estatisticas.forEach(estatistica => {
-        estatistica.tempo = this.converteToSeconds(estatistica.tempo);
-      });
-      this.estatisticaService.saveEstatistica(this.partidaId, this.formEstatistica.value.estatisticas).subscribe(
-        () =>{
-          this.toaster.success('Estatisticas salvos com Sucesso!', 'Sucesso!');
-          //this.estatisticas.reset();
-        },
-        (error:any ) =>{
-          this.toaster.error('Erro ao tentar Salvar as Estatisticas', 'Error!');
-          console.error(error);
-        }
-      ).add(() => this.spiner.hide())
-    }
-  }
-  //Modal
-  public confirm():void{
-    this.modalRef.hide();
-    this.spiner.show();
-
-    this.estatisticaService.deleteEstatistica(this.partidaId, this.estatisticaAtual.id).subscribe(
-      ()=>{
-        this.toaster.success('Estatistica deletada com sucesso', 'Sucesso');
-        this.estatisticas.removeAt(this.estatisticaAtual.indice);
-      },
-      (error: any)=>{
-        this.toaster.error('Erro ao deletar a estatistica', 'Erro');
-        console.error(error);
-      }
-    ).add(() => this.spiner.hide())
-  }
   public decline():void{
     this.modalRef.hide();
-}
+  }
+  public alterarEstatistica():void{
+    if(this.modo ==='editar'){
+      this.modo = 'visualizar'
+      this.txtmodo = 'Editar Estatisticas'
+    }
+    else{
+      this.modo = 'editar'
+      this.txtmodo = 'Visualizar Estatisticas'
+
+    }
+  }
 }
