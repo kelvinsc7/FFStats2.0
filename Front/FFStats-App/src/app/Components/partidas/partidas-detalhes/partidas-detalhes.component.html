@@ -88,10 +88,10 @@
 </div>
 
 
-<div *ngIf="currentView === 'visualizar'">
+<div *ngIf="currentView === 'visualizar' && this.modeSave ==='putPartida'">
   <app-estatisticas-visualizar></app-estatisticas-visualizar>
 </div>
-<div *ngIf="currentView === 'editar'">
+<div *ngIf="currentView === 'editar' && this.modeSave ==='putPartida'">
   <app-estatistica-editar></app-estatistica-editar>
 </div>
 
