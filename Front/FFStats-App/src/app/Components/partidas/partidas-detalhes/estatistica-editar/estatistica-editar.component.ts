@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Jogador } from '@app/Model/Jogador';
 import { ActivatedRoute } from '@angular/router';
+import { PartidaService } from '@app/Services/partida.service';
 
 @Component({
   selector: 'app-estatistica-editar',
@@ -34,6 +35,7 @@ export class EstatisticaEditarComponent implements OnInit {
     private toaster: ToastrService,
     private jogadorService: JogadorService,
     private activatedRouter: ActivatedRoute,
+    private partidaService: PartidaService,
   ) { }
   public cssValidator(campoForm: FormControl | AbstractControl): any {
     return {'is-invalid': campoForm.errors && campoForm.touched}
@@ -147,16 +149,18 @@ export class EstatisticaEditarComponent implements OnInit {
         estatistica.tempo = this.converteToSeconds(estatistica.tempo);
       });
       this.estatisticaService.saveEstatistica(this.partidaId, this.formEstatistica.value.estatisticas).subscribe(
-        () =>{
+        (estatisticasSalvas) =>{
           this.toaster.success('Estatisticas salvos com Sucesso!', 'Sucesso!');
-          //this.estatisticas.reset();
+          this.partidaService.updateStats(estatisticasSalvas)
         },
         (error:any ) =>{
           this.toaster.error('Erro ao tentar Salvar as Estatisticas', 'Error!');
           console.error(error);
         }
       ).add(() => this.spiner.hide())
+      this.partidaService.setViewMode('visualizar');
     }
+    
   }
   converteToSeconds(time: string): number {
     const [minutes, seconds] = time.split(':').map(Number);

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Estatistica } from '@app/Model/Estatistica';
 import { EstatisticaService } from '@app/Services/estatistica.service';
 import { JogadorService } from '@app/Services/jogador.service';
+import { PartidaService } from '@app/Services/partida.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,13 +21,16 @@ export class EstatisticasVisualizarComponent implements OnInit {
   totalCura:number = 0
   totalLevantados:number = 0
   totalRessucitou:number = 0
+  currentView: string = 'visualizar';
+  isLoading = false;
   
   constructor(    
     private estatisticaService: EstatisticaService,
     private spiner: NgxSpinnerService,
     private toaster: ToastrService,
     private jogadorService: JogadorService,
-    private activatedRouter: ActivatedRoute,) {
+    private activatedRouter: ActivatedRoute,
+    private partidaService: PartidaService) {
    }
 
   ngOnInit() {
@@ -41,6 +45,11 @@ export class EstatisticasVisualizarComponent implements OnInit {
       try {
         // Aguarda a partida ser carregada
         this.stats = await this.estatisticaService.getEstatisticasByPartidaId(this.partidaId).toPromise();
+        this.partidaService.updatedStats$.subscribe((updatedStats) => {
+          if (updatedStats) {
+            this.stats = updatedStats;
+          }
+        });
         await this.carregaTotais();
         await this.carregaPercents()
       } catch (error) {
@@ -72,6 +81,15 @@ export class EstatisticasVisualizarComponent implements OnInit {
       e.porcentagem.percentLevantados = (e.levantados *100)/this.totalLevantados;
       e.porcentagem.percentRessucitou = (e.ressucitou *100)/this.totalRessucitou; 
     })
+  }
+  public alterarEstatistica():void{
+    if(this.currentView ==='editar'){
+      this.partidaService.setViewMode('visualizar');
+    }
+    else{
+      this.partidaService.setViewMode('editar');
+
+    }
   }
 
 }

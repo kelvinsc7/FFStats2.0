@@ -1,4 +1,4 @@
-<div class="card rounded shadow-sm mt-4" *ngIf="modo==='visualizar'">
+<div class="card rounded shadow-sm mt-4">
   <div class="p-3">
     <div class="d-flex border-bottom">
       <h2 class="mr-auto">
@@ -56,46 +56,53 @@
           <!-- Estatísticas -->
           <div class="col-8 d-flex">
             <!-- DMG -->
-            <div class="text-center me-3 col-2">
+            <div class="text-center me-3 col-2" [title]="item.porcentagem.percentDano.toFixed(2) + '%'">
               <div>{{item.dano}}</div>
-              <div class="progress" style="height: 10px;">
-                <div class="progress-bar" 
-                [ngStyle]="{ width: item.porcentagem.percentDano + '%' }" 
-                [title]="item.porcentagem.percentDano.toFixed(2) + '%'"
-                ></div>
+              <div class="progress progress-dano">
+                <div class="progress-bar progress-bar-dano" [ngStyle]="{ width: item.porcentagem.percentDano + '%' }"></div>
               </div>
             </div>
+            
             <!-- Derrubados -->
-            <div class="text-center me-3 col-2">
+            <div class="text-center me-3 col-2" [title]="item.porcentagem.percentDerrubado.toFixed(2) + '%'">
               <div>{{item.derrubado}}</div>
-              <div class="progress" style="height: 5px;">
-                <div class="progress-bar" style="width: 54%;"></div>
+              <div class="progress progress-derrubado">
+                <div class="progress-bar progress-bar-derrubado" [ngStyle]="{ width: item.porcentagem.percentDerrubado + '%' }"></div>
               </div>
             </div>
+            
             <!-- Cura -->
-            <div class="text-center me-3 col-2">
+            <div class="text-center me-3 col-2" [title]="item.porcentagem.percentCura.toFixed(2) + '%'">
               <div>{{item.cura}}</div>
-              <div class="progress" style="height: 5px;">
-                <div class="progress-bar" style="width: 18%;"></div>
+              <div class="progress progress-cura">
+                <div class="progress-bar progress-bar-cura" [ngStyle]="{ width: item.porcentagem.percentCura + '%' }"></div>
               </div>
             </div>
+            
             <!-- Levantados -->
-            <div class="text-center me-3 col-2">
+            <div class="text-center me-3 col-2" [title]="item.porcentagem.percentLevantados.toFixed(2) + '%'">
               <div>{{item.levantados}}</div>
-              <div class="progress" style="height: 5px;">
-                <div class="progress-bar" style="width: 40%;"></div>
+              <div class="progress progress-levantados">
+                <div class="progress-bar progress-bar-levantados" [ngStyle]="{ width: item.porcentagem.percentLevantados + '%' }"></div>
               </div>
             </div>
+            
             <!-- Sistema de Retorno -->
-            <div class="text-center me-3 col-2">
+            <div class="text-center me-3 col-2" [title]="item.porcentagem.percentRessucitou.toFixed(2) + '%'">
               <div>{{item.ressucitou}}</div>
-              <div class="progress" style="height: 5px;">
-                <div class="progress-bar" style="width: 0%;"></div>
+              <div class="progress progress-retorno">
+                <div class="progress-bar progress-bar-retorno" [ngStyle]="{ width: item.porcentagem.percentRessucitou + '%' }"></div>
               </div>
             </div>
           </div>
         </div>
         <!-- Fim da linha -->
       </div>
+    </div>
+    <div class="d-flex ml-auto">
+      <button class="btn btn-primary ml-1" *ngIf="this.currentView ==='visualizar'" (click)="alterarEstatistica()">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
+        Editar Estatisticas
+      </button>
     </div>
 </div>

@@ -44,7 +44,7 @@ export class PartidasDetalhesComponent implements OnInit {
   soSubModo: string = '0';
   isLoading = false;
   alteracsm = false;
-  modo = 'visualizar'
+  currentView: string = 'visualizar';
   txtmodo = 'Editar Estatistica'
 
 
@@ -93,6 +93,9 @@ export class PartidasDetalhesComponent implements OnInit {
 
     //Metodos de inicialização
   ngOnInit() {
+    this.partidaService.viewMode$.subscribe((mode) => {
+      this.currentView = mode;
+    });
     this.getMapas();
     this.getModo();
     this.getTreinos();
@@ -270,13 +273,11 @@ export class PartidasDetalhesComponent implements OnInit {
     this.modalRef.hide();
   }
   public alterarEstatistica():void{
-    if(this.modo ==='editar'){
-      this.modo = 'visualizar'
-      this.txtmodo = 'Editar Estatisticas'
+    if(this.currentView ==='editar'){
+      this.partidaService.setViewMode('visualizar');
     }
     else{
-      this.modo = 'editar'
-      this.txtmodo = 'Visualizar Estatisticas'
+      this.partidaService.setViewMode('editar');
 
     }
   }

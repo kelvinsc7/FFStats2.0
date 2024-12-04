@@ -81,19 +81,19 @@
            <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
            Salvar
          </button>
-         <button class="btn btn-primary ml-1" (click)="alterarEstatistica()">
-          <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
-          {{this.txtmodo}}
-        </button>
+         
        </div>
      </div>
    </form>
 </div>
 
 
-
-<app-estatisticas-visualizar [modo]="this.modo"></app-estatisticas-visualizar>
-<app-estatistica-editar [modo]="this.modo"></app-estatistica-editar>
+<div *ngIf="currentView === 'visualizar'">
+  <app-estatisticas-visualizar></app-estatisticas-visualizar>
+</div>
+<div *ngIf="currentView === 'editar'">
+  <app-estatistica-editar></app-estatistica-editar>
+</div>
 
 
 <!-- <ng-template #template>

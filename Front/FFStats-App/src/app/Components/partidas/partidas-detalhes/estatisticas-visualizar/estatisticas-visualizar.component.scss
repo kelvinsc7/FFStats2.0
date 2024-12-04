@@ -1,0 +1,36 @@
+/* Altura e cor padrão do fundo das barras de progresso */
+.progress {
+    height: 15px;
+    background-color: #4C4950;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* Cor específica para cada barra */
+  .progress-bar-dano {
+    background-color: #e21d0f;
+  }
+  
+  .progress-bar-derrubado {
+    background-color: #AD4B1D;
+  }
+  
+  .progress-bar-cura {
+    background-color: #448C4D;
+  }
+  
+  .progress-bar-levantados {
+    background-color: #637BF5;
+  }
+  
+  .progress-bar-retorno {
+    background-color: #3995C6;
+  }
