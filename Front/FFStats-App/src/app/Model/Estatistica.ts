@@ -16,4 +16,13 @@ export interface Estatistica {
   levantados: number;
   ressucitou: number;
   tempo: string;
+  porcentagem: percenteEstatististicas;
+
+}
+export interface percenteEstatististicas{
+  percentDano?:number;
+  percentDerrubado?: number;
+  percentCura?:number;
+  percentLevantados?: number;
+  percentRessucitou?: number;
 }

@@ -3,13 +3,26 @@ import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Partida } from '../Model/Partida';
 import { environment } from 'src/environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { Estatistica } from '@app/Model/Estatistica';
 
 @Injectable(
   //{providedIn: 'root'}
   )
 export class PartidaService {
+  private viewMode = new BehaviorSubject<string>('visualizar');
+  viewMode$ = this.viewMode.asObservable();
   baseURL = environment.apiBaseUrl+'/api/partida';
   constructor(private http: HttpClient) { }
+
+  private updatedStats = new BehaviorSubject<Estatistica[]>(null);
+  updatedStats$ = this.updatedStats.asObservable();
+  setViewMode(mode: string): void {
+    this.viewMode.next(mode);
+  }
+  updateStats(stats: Estatistica[]): void {
+    this.updatedStats.next(stats);
+  }
 
   getPartidas(): Observable<Partida[]>{
     return this.http.get<Partida[]>(this.baseURL).pipe(take(1));
