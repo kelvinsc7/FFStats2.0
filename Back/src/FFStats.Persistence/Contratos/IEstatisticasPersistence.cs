@@ -19,6 +19,7 @@ namespace FFStats.Persistence.Contratos
          /// <returns>Apenas uma estatistica</returns>
          
          Task<Estatisticas[]> GetEstatisticasByJogadorIdAsync(int partidaId);
+         Task<Estatisticas[]> GetAllEstatisticas();
          Task<Estatisticas> GetEstatisticasByIdsAsync(int partidaId, int estatisticaId );
     }
 }

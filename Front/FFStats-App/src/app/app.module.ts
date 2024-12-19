@@ -87,6 +87,7 @@ import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/c
 import { JogadoresEstatisticasComponent } from './Components/Jogadores/jogadores-estatisticas/jogadores-estatisticas.component';
 import { EstatisticaEditarComponent } from './Components/partidas/partidas-detalhes/estatistica-editar/estatistica-editar.component';
 import { EstatisticasVisualizarComponent } from './Components/partidas/partidas-detalhes/estatisticas-visualizar/estatisticas-visualizar.component';
+import { DashPartidasComponent } from './Components/dashboard/dash-partidas/dash-partidas.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -124,7 +125,8 @@ defineLocale('pt-br', ptBrLocale);
     ConfiguracaoComponent,
     JogadoresEstatisticasComponent,
     EstatisticaEditarComponent,
-    EstatisticasVisualizarComponent
+    EstatisticasVisualizarComponent,
+    DashPartidasComponent
    ],
   imports: [
     BrowserModule,

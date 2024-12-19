@@ -1,0 +1,137 @@
+<div class="card rounded shadow-md container">
+  <div class="row">
+    <div class="card-header">
+      <div class="row">
+        <h2 class="mr-auto col-8">
+          <i class="fa-shield-halved fa-solid"></i> Partida
+        </h2>
+        <select class="form-select form-select-lg col-3 ml-auto" aria-label="Selecione filtragem">
+          <option selected value="1">Geral</option>
+          <option value="2">Mês</option>
+          <option value="3">Último Treino</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="container mt-3">
+    <div class="row gx-3 gy-3"> <!-- Gutter horizontal e vertical -->
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.totalPartidas}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Partidas</h6>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.totalKills}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Kills</h6>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.totalMortes}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Mortes</h6>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.totalDano}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Dano</h6>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.tempoTotal}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Tempo Total</h6>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="rounded-pill border shadow p-3 bg-white text-center">
+          <h3 class="text-success">{{this.totalBooyah}}</h3>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Booyah</h6>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Taxa de Vitória</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <p><strong class="text-center">Booyah: </strong><b class="text-success">{{this.percentBooyah}}%</b></p>
+                <p><strong class="text-center">Top 3: </strong><b class="text-primary">{{this.percentTop3}}%</b></p>
+                <p><strong class="text-center">Top 5: </strong><b class="text-secondary">{{this.percentTop5}}%</b></p>
+                <p><strong class="text-center">Maior quantidade de kill: </strong><b class="text-secondary">{{this.maiorKill}}</b></p>
+                <strong>
+                  <div id="labelInfo" class="text-center mt-3 text-success fs-2 bold" >
+                    <!-- Informações aparecem aqui -->
+                  </div>
+                </strong>
+              </div>
+              <div class="col-6">
+                <div class="chart-container-taxaVitoria" >
+                  <canvas id="booyahChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Comparação de Estatísticas (10 partidas)</h4>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="comparacaoEstatisticasChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>K/D</h4>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoKD"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Tempo Médio</h4>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoTempoPartidas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Histórico de Resultados</h4>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-historico" >
+              <canvas id="historicoChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

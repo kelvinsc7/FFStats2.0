@@ -20,6 +20,21 @@ namespace FFStats.API.Controllers
         {
             this._EstatisticasService = EstatisticasService;
         }
+        [HttpGet()]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var Estatisticas = await _EstatisticasService.GetAllEstatisticas();
+                if(Estatisticas == null) return NotFound("Nenhuma Estatisticas Encontrada!");
+
+                return  Ok(Estatisticas);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro Ao tentar Recuperar Estatisticas. Erro: {ex.Message}");
+            }
+        }
 
         [HttpGet("{partidaId}")]
         public async Task<IActionResult> Get(int partidaId)

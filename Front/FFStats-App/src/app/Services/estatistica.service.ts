@@ -11,6 +11,9 @@ export class EstatisticaService {
   baseURL = environment.apiBaseUrl+'/api/estatisticas';
   constructor(private http: HttpClient) { }
 
+  getAllEstatisticas(): Observable<Estatistica[]>{
+    return this.http.get<Estatistica[]>(`${this.baseURL}`).pipe(take(1));
+  }
   getEstatisticasByPartidaId(eventoId:number): Observable<Estatistica[]>{
     return this.http.get<Estatistica[]>(`${this.baseURL}/${eventoId}`).pipe(take(1));
   }
