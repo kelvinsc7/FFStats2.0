@@ -13,6 +13,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
@@ -42,6 +44,8 @@ import { JogadorService } from './Services/jogador.service';
 
 //Area Dashboard Components
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
+import { DashPartidasComponent } from './Components/dashboard/dash-partidas/dash-partidas.component';
+import { DashJogadoresComponent } from './Components/dashboard/dash-jogadores/dash-jogadores.component';
 
 //Area Mapas Components
 import { MapasComponent } from './Components/mapas/mapas.component';
@@ -87,7 +91,6 @@ import { ConfiguracaoComponent } from './Components/Configuracoes/configuracao/c
 import { JogadoresEstatisticasComponent } from './Components/Jogadores/jogadores-estatisticas/jogadores-estatisticas.component';
 import { EstatisticaEditarComponent } from './Components/partidas/partidas-detalhes/estatistica-editar/estatistica-editar.component';
 import { EstatisticasVisualizarComponent } from './Components/partidas/partidas-detalhes/estatisticas-visualizar/estatisticas-visualizar.component';
-import { DashPartidasComponent } from './Components/dashboard/dash-partidas/dash-partidas.component';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -126,13 +129,17 @@ defineLocale('pt-br', ptBrLocale);
     JogadoresEstatisticasComponent,
     EstatisticaEditarComponent,
     EstatisticasVisualizarComponent,
-    DashPartidasComponent
+    DashPartidasComponent,
+    DashJogadoresComponent,
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    TooltipModule,
+    MatButtonModule,  
+    MatTooltipModule,                 
     CollapseModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,

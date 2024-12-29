@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, take } from 'rxjs';
+import { BehaviorSubject, Observable, of, take, tap } from 'rxjs';
 import { Estatistica } from '../Model/Estatistica';
 import { environment } from 'src/environments/environment';
 
@@ -9,7 +9,25 @@ import { environment } from 'src/environments/environment';
   )
 export class EstatisticaService {
   baseURL = environment.apiBaseUrl+'/api/estatisticas';
+  private estatisticasSubject = new BehaviorSubject<Estatistica[] | null>(null);
   constructor(private http: HttpClient) { }
+  
+  loadEstatisticas(): Observable<Estatistica[]> {
+    const cachedEstatisticas = this.estatisticasSubject.getValue();
+    if (cachedEstatisticas) {
+      // Retorna o cache se os dados já estiverem carregados
+      return of(cachedEstatisticas);
+    }
+
+    // Carrega os dados da API e armazena no BehaviorSubject
+    return this.http.get<Estatistica[]>(this.baseURL).pipe(
+      tap((estatisticas) => this.estatisticasSubject.next(estatisticas))
+    );
+  }
+  getEstatisticas(): Observable<Estatistica[]> {
+    // Sempre retorna o observable do BehaviorSubject
+    return this.estatisticasSubject.asObservable();
+  }
 
   getAllEstatisticas(): Observable<Estatistica[]>{
     return this.http.get<Estatistica[]>(`${this.baseURL}`).pipe(take(1));
@@ -22,7 +40,14 @@ export class EstatisticaService {
   }
   saveEstatistica(partidaId:number, estatistica: Estatistica[]): Observable<Estatistica[]>{
     return this.http.put<Estatistica[]>(`${this.baseURL}/${partidaId}`, estatistica).pipe(take(1));
+    this.reloadEstatisticas();
   }
+  reloadEstatisticas(): void {
+    this.http.get<Estatistica[]>(this.baseURL).pipe(
+      tap((estatisticas) => this.estatisticasSubject.next(estatisticas))
+    ).subscribe();
+  }
+
   deleteEstatistica(partidaID: number, estatisticaId: number): Observable<any>{
     return this.http.delete(`${this.baseURL}/${partidaID}/${estatisticaId}`).pipe(take(1));
   }

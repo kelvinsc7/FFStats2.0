@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Estatistica } from '@app/Model/Estatistica';
 import { Partida } from '@app/Model/Partida';
 import { EstatisticaService } from '@app/Services/estatistica.service';
@@ -14,7 +14,8 @@ import { forkJoin } from 'rxjs';
 })
 export class DashPartidasComponent implements OnInit {
 
-  
+  @Input() estatisticasCarregadas: boolean = false;
+
   estatisticas:Estatistica[];
   estatisticasFiltradas:Estatistica[];
   partidas:Partida[];
@@ -83,7 +84,7 @@ export class DashPartidasComponent implements OnInit {
     // Usa forkJoin para garantir que ambas as chamadas sejam concluídas antes de prosseguir
     forkJoin({
       partidas: this.partidaService.getPartidas(),
-      estatisticas: this.estatisticaService.getAllEstatisticas()
+      estatisticas: this.estatisticaService.loadEstatisticas()
     }).subscribe({
       next: ({ partidas, estatisticas }) => {
         this.partidas = partidas;
@@ -186,6 +187,28 @@ export class DashPartidasComponent implements OnInit {
       .filter(p => p.posicao >= 1 && p.posicao <= 5) // Filtra posições 1, 2, 3, 4 e 5
       .reduce((acc, cur) => acc + parseFloat(cur.total), 0).toFixed(2);
   }
+  private obterDadosDeTempo(): { labels: string[], tempos: string[], temposNumericos: number[] } {
+    if (!this.partidas || this.partidas.length === 0) {
+      return { labels: [], tempos: [], temposNumericos: [] };
+    }
+  
+    // Extraindo tempos de estatísticas
+    const temposNumericos = this.partidas.map(partida =>
+      Math.max(...partida.estatisticas.map(estatistica => parseInt(estatistica.tempo)))
+    );
+  
+    // Formata os tempos para mm:ss
+    const tempos = temposNumericos.map(tempo => this.converteToTime(tempo));
+  
+    // Cria os labels para as partidas
+    const labels = this.partidas.map((partida, index) => partida.partidaDescricao);
+  
+    return { labels, tempos, temposNumericos };
+  }
+  private calcularMediaTempos(tempos: number[]): number {
+    const total = tempos.reduce((soma, tempo) => soma + tempo, 0);
+    return total / tempos.length; // Calcula a média
+  }
   converteToTimeHora(seconds: number): string {
     const hours = Math.floor(seconds / 3600); // Calcula as horas
     const minutes = Math.floor((seconds % 3600) / 60); // Calcula os minutos restantes
@@ -201,28 +224,6 @@ export class DashPartidasComponent implements OnInit {
   
   private padZero(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
-  }
-  private obterDadosDeTempo(): { labels: string[], tempos: string[], temposNumericos: number[] } {
-    if (!this.partidas || this.partidas.length === 0) {
-      return { labels: [], tempos: [], temposNumericos: [] };
-    }
-  
-    // Extraindo tempos de estatísticas
-    const temposNumericos = this.partidas.map(partida =>
-      Math.max(...partida.estatisticas.map(estatistica => parseInt(estatistica.tempo)))
-    );
-  
-    // Formata os tempos para mm:ss
-    const tempos = temposNumericos.map(tempo => this.converteToTime(tempo));
-  
-    // Cria os labels para as partidas
-    const labels = this.partidas.map((partida, index) => `Partida ${index + 1}`);
-  
-    return { labels, tempos, temposNumericos };
-  }
-  private calcularMediaTempos(tempos: number[]): number {
-    const total = tempos.reduce((soma, tempo) => soma + tempo, 0);
-    return total / tempos.length; // Calcula a média
   }
 
   //Gera Graficos
@@ -316,68 +317,6 @@ export class DashPartidasComponent implements OnInit {
     
       if (points.length === 0) {
         labelInfo.innerHTML = ''; // Limpa a label ao sair do hover
-      }
-    });
-  }
-  graficoHistoricoPartidas(){
-    const ctx = document.getElementById('historicoChart') as HTMLCanvasElement;
-    const labels = this.partidas.map(partida => partida.partidaDescricao); // Label do eixo X
-    const data = this.partidas.map(partida => partida.posicao);
-
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data, 
-          fill:false,
-          borderColor:'rgb(75, 192, 192)',
-          tension: 0.2,
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            reverse: true,
-            min: 0.5, // Adiciona uma margem para evitar corte do valor 1
-            max: 15, // Adiciona uma margem superior também
-            ticks: {
-              stepSize: 1, // Exibe os valores inteiros
-              callback: function(value) {
-                return Number(value).toFixed(0);
-              }
-            },
-            title: {
-              display: true,
-              text: 'Posição'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Partidas'
-            },
-          }
-        },
-        plugins: {
-          legend: {
-            display: false // Oculta as labels diretamente no gráfico
-          },
-          datalabels:{
-            display:false
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const partidaDescricao = labels[context.dataIndex];
-                const posicao = data[context.dataIndex];
-                return `Partida: ${partidaDescricao}, Posição: ${posicao}`;
-              }
-            }
-          }
-        },
-        responsive: true,
-        maintainAspectRatio: false
       }
     });
   }
@@ -564,7 +503,6 @@ export class DashPartidasComponent implements OnInit {
     // Garante que o texto é desenhado apenas uma vez após o render
     chart.render();
   }
-  
   graficoTempoPartidas() {
     const { labels, temposNumericos } = this.obterDadosDeTempo();
   
@@ -622,7 +560,7 @@ export class DashPartidasComponent implements OnInit {
           y: {
             title: {
               display: true,
-              text: 'Tempo (segundos)',
+              text: 'Tempo máximo',
             },
             ticks: {
               callback: (value) => this.converteToTime(value as number), // Formata o eixo Y para mm:ss
@@ -633,12 +571,74 @@ export class DashPartidasComponent implements OnInit {
       }
     });
   
-    // Armazena os dados personalizados diretamente no gráfico
-    // chart.customData = {
-    //   linhaMedia: {
-    //     mediaTempo: mediaTempo, // Valor da média
-    //     label: this.converteToTime(mediaTempo) // Texto formatado para a linha
+    //armazena os dados personalizados diretamente no gráfico
+    // chart.customdata = {
+    //   linhamedia: {
+    //     mediatempo: mediatempo, // valor da média
+    //     label: this.convertetotime(mediatempo) // texto formatado para a linha
     //   }
     // };
   }
+  graficoHistoricoPartidas(){
+    const ctx = document.getElementById('historicoChart') as HTMLCanvasElement;
+    const labels = this.partidas.map(partida => partida.partidaDescricao); // Label do eixo X
+    const data = this.partidas.map(partida => partida.posicao);
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data, 
+          fill:false,
+          borderColor:'rgb(75, 192, 192)',
+          tension: 0.2,
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            reverse: true,
+            min: 0.5, // Adiciona uma margem para evitar corte do valor 1
+            max: 15, // Adiciona uma margem superior também
+            ticks: {
+              stepSize: 1, // Exibe os valores inteiros
+              callback: function(value) {
+                return Number(value).toFixed(0);
+              }
+            },
+            title: {
+              display: true,
+              text: 'Posição'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Partidas'
+            },
+          }
+        },
+        plugins: {
+          legend: {
+            display: false // Oculta as labels diretamente no gráfico
+          },
+          datalabels:{
+            display:false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const partidaDescricao = labels[context.dataIndex];
+                const posicao = data[context.dataIndex];
+                return `Partida: ${partidaDescricao}, Posição: ${posicao}`;
+              }
+            }
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
   }
+}

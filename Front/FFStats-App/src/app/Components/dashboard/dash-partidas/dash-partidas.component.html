@@ -1,19 +1,28 @@
-<div class="card rounded shadow-md container">
+<div class="card rounded shadow-md container mb-2">
   <div class="row">
     <div class="card-header">
       <div class="row">
         <h2 class="mr-auto col-8">
           <i class="fa-shield-halved fa-solid"></i> Partida
         </h2>
-        <select class="form-select form-select-lg col-3 ml-auto" aria-label="Selecione filtragem">
+        <select class="form-select form-select-lg col-2 ml-auto" aria-label="Selecione filtragem">
           <option selected value="1">Geral</option>
           <option value="2">Mês</option>
           <option value="3">Último Treino</option>
         </select>
+        <button
+          class="btn btn-outline-secondary col-1 ml-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#partidaBody"
+          aria-expanded="true"
+          aria-controls="partidaBody">
+          <i class="fa fa-chevron-down"></i>
+        </button>
       </div>
     </div>
   </div>
-  <div class="container mt-3">
+  <div id="partidaBody" class="collapse container mt-3">
     <div class="row gx-3 gy-3"> <!-- Gutter horizontal e vertical -->
       <div class="col-2">
         <div class="rounded-pill border shadow p-3 bg-white text-center">

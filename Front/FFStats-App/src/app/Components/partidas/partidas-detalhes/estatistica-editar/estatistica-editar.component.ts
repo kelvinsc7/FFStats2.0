@@ -152,6 +152,7 @@ export class EstatisticaEditarComponent implements OnInit {
         (estatisticasSalvas) =>{
           this.toaster.success('Estatisticas salvos com Sucesso!', 'Sucesso!');
           this.partidaService.updateStats(estatisticasSalvas)
+          //this.estatisticaService.refreshConfiguracao(estatisticasSalvas);
         },
         (error:any ) =>{
           this.toaster.error('Erro ao tentar Salvar as Estatisticas', 'Error!');

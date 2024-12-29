@@ -1,2 +1,3 @@
 <app-Titulo [titulo]="'Dashboard'" [botaolistar]="false"></app-Titulo>
-<app-dash-partidas></app-dash-partidas>
+<app-dash-partidas *ngIf="estatisticasCarregadas" [estatisticasCarregadas]="estatisticasCarregadas"></app-dash-partidas>
+<app-dash-jogadores *ngIf="estatisticasCarregadas" [estatisticasCarregadas]="estatisticasCarregadas"></app-dash-jogadores>
