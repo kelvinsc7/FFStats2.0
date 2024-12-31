@@ -3,9 +3,19 @@ import { Estatistica } from '@app/Model/Estatistica';
 import { Jogador } from '@app/Model/Jogador';
 import { EstatisticaService } from '@app/Services/estatistica.service';
 import { JogadorService } from '@app/Services/jogador.service';
+import { funcoes } from '@app/Util/funcoes';
 import { Chart } from 'chart.js';
 import { forkJoin } from 'rxjs';
 
+export interface jogadorPrecisao {
+  jogadorId: number;
+  nick: string;
+  danoCausado: number;
+  kills: number;
+  precisao:number
+  mediaTempo:string
+  mediaTempoNumerico:number
+}
 
 @Component({
   selector: 'app-dash-jogadores',
@@ -13,7 +23,7 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./dash-jogadores.component.scss']
 })
 export class DashJogadoresComponent implements OnInit {
-
+  
   @Input() estatisticasCarregadas: boolean = false;
 
   estatisticas :Estatistica[];
@@ -22,6 +32,7 @@ export class DashJogadoresComponent implements OnInit {
   topAssistencia:string;
   topDano:string;
   topKd:string;
+  precisao:jogadorPrecisao[];
 
   tolltipTopKill:string;
   tolltipTopAssistencia:string;
@@ -36,6 +47,8 @@ export class DashJogadoresComponent implements OnInit {
   graficoCura: Chart | null = null;
   graficoLevantados: Chart | null = null;
   graficoRecussitou: Chart | null = null;
+  graficoPrecisao: Chart | null = null;
+  graficoMediaTempo: Chart | null = null;
   
   constructor(
     private estatisticaService: EstatisticaService,
@@ -63,6 +76,9 @@ export class DashJogadoresComponent implements OnInit {
           this.gerarGraficoCura();
           this.gerarGraficoLevantados();
           this.gerarGraficoRecussitados();
+          this.calcularPrecisao();
+          this.gerarGraficoPrecisao();
+          this.gerarGraficoMediaTempo()
         },
         error: (error: any) => {
           console.error('Erro ao carregar dados:', error);
@@ -147,6 +163,42 @@ export class DashJogadoresComponent implements OnInit {
       est.forEach(item => { totalMortes += item.morte; }); 
       return totalMortes; 
       
+    }
+    calcularPrecisao() {
+      const DANO_POR_KILL = 200;
+      const mapaJogadores = new Map<number, { danoCausado: number; kills: number; tempoTotal: number; partidas: number }>();
+    
+      this.estatisticas.forEach((estatistica) => {
+        const { jogadorId, kill, dano, tempo } = estatistica; // Certifique-se de que `tempoSobrevivencia` está presente
+    
+        if (!mapaJogadores.has(jogadorId)) {
+          mapaJogadores.set(jogadorId, { danoCausado: 0, kills: 0, tempoTotal: 0, partidas: 0 });
+        }
+    
+        const dadosJogador = mapaJogadores.get(jogadorId)!;
+        dadosJogador.danoCausado += dano;
+        dadosJogador.kills += kill;
+        dadosJogador.tempoTotal += parseInt(tempo); // Soma o tempo de sobrevivência
+        dadosJogador.partidas++; // Conta o número de partidas
+      });
+    
+      const jogadoresPrecisao: jogadorPrecisao[] = this.jogadores.map((jogador) => {
+        const dados = mapaJogadores.get(jogador.id) || { danoCausado: 0, kills: 0, tempoTotal: 0, partidas: 0 };
+        const precisao = dados.kills / (dados.danoCausado / DANO_POR_KILL) || 0; // Evitar divisão por zero
+        const mediaTempo = dados.partidas > 0 ? dados.tempoTotal / dados.partidas : 0; // Calcula a média de tempo
+    
+        return {
+          jogadorId: jogador.id,
+          nick: jogador.jogadorNick,
+          danoCausado: dados.danoCausado,
+          kills: dados.kills,
+          precisao: Number(precisao.toFixed(2)), // Limita a precisão a 2 casas decimais
+          mediaTempo: funcoes.converteToTime(mediaTempo), // Agora representa a média de tempo
+          mediaTempoNumerico:mediaTempo
+        };
+      });
+    
+      this.precisao = jogadoresPrecisao;
     }
 
     gerarGraficoKills() {
@@ -770,6 +822,129 @@ export class DashJogadoresComponent implements OnInit {
         hover: {
           mode: 'nearest',
         }
+        },
+      });
+    }
+    gerarGraficoPrecisao() {
+      // Obtem os nicks dos jogadores e os valores de precisão
+      const labels = this.precisao.map((j) => j.nick);
+      const dadosPrecisao = this.precisao.map((j) => j.precisao);
+  
+      // Configuração do gráfico de barras
+      this.graficoPrecisao = new Chart('graficoPrecisao', {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Precisão dos Jogadores',
+              data: dadosPrecisao,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)', // Cor de preenchimento das barras
+              borderColor: 'rgba(75, 192, 192, 1)', // Cor da borda das barras
+              borderWidth: 1, // Largura da borda
+            },
+          ],
+        },
+        options: {
+          responsive: true, // Gráfico responsivo
+          plugins: {
+            legend: {
+              display: true, // Exibe a legenda
+              position: 'top',
+              align: 'center',
+              labels: {
+                font: {
+                  size: 10,
+                  family: "'Arial', sans-serif",
+                  style: 'italic',
+                  weight: 'bold',
+                },
+                color: '#444',
+                boxWidth: 30,
+                boxHeight: 10,
+                padding: 10,
+                usePointStyle: true,
+                pointStyle: 'circle',
+              }
+            },
+            datalabels:{
+              display:false
+            },
+            tooltip: {
+              enabled: true, // Habilita tooltips
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true, // Eixo Y inicia do zero
+            },
+          },
+        },
+      });
+    }
+    gerarGraficoMediaTempo() {
+      // Obtem os nicks dos jogadores e os valores de precisão
+      const labels = this.precisao.map((j) => j.nick);
+      const mediaTempo = this.precisao.map((j) => j.mediaTempoNumerico);
+  
+      // Configuração do gráfico de barras
+      this.graficoMediaTempo = new Chart('graficoMediaTempo', {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Tempo Médio (mm:ss)',
+              data: mediaTempo,
+              backgroundColor: 'rgba(37, 212, 37, 0.6)', // Cor de preenchimento das barras
+              borderColor: 'rgba(29, 163, 29, 0.6)', // Cor da borda das barras
+              borderWidth: 1, // Largura da borda
+            },
+          ],
+        },
+        options: {
+          responsive: true, // Gráfico responsivo
+          plugins: {
+            tooltip: {
+              enabled: true, // Habilita tooltips
+              callbacks: {
+                label: (context) => {
+                  const seconds = context.raw as number;
+                  return `Tempo: ${funcoes.converteToTime(seconds)}`; // Mostra o tempo formatado
+                }
+              }
+            },
+            legend: {
+              display: true, // Exibe a legenda
+              position: 'top',
+              align: 'center',
+              labels: {
+                font: {
+                  size: 10,
+                  family: "'Arial', sans-serif",
+                  style: 'italic',
+                  weight: 'bold',
+                },
+                color: '#444',
+                boxWidth: 30,
+                boxHeight: 10,
+                padding: 10,
+                usePointStyle: true,
+                pointStyle: 'circle',
+              }
+            },
+            datalabels:{
+              display:false
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true, // Eixo Y inicia do zero
+              ticks: {
+                callback: (value) => funcoes.converteToTime(value as number), // Formata o eixo Y para mm:ss
+              },
+            },
+          },
         },
       });
     }
