@@ -133,5 +133,22 @@ namespace FFStats.Application.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<estatisticasDto[]> GetAllEstatisticas()
+        {
+            try
+            {
+                var estatisticas = await _EstatisticasPersistence.GetAllEstatisticas();
+                if (estatisticas == null) return null;
+
+                var resultado = _mapper.Map<estatisticasDto[]>(estatisticas);
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

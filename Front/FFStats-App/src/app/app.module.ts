@@ -13,6 +13,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
@@ -42,6 +44,8 @@ import { JogadorService } from './Services/jogador.service';
 
 //Area Dashboard Components
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
+import { DashPartidasComponent } from './Components/dashboard/dash-partidas/dash-partidas.component';
+import { DashJogadoresComponent } from './Components/dashboard/dash-jogadores/dash-jogadores.component';
 
 //Area Mapas Components
 import { MapasComponent } from './Components/mapas/mapas.component';
@@ -124,13 +128,18 @@ defineLocale('pt-br', ptBrLocale);
     ConfiguracaoComponent,
     JogadoresEstatisticasComponent,
     EstatisticaEditarComponent,
-    EstatisticasVisualizarComponent
+    EstatisticasVisualizarComponent,
+    DashPartidasComponent,
+    DashJogadoresComponent,
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    TooltipModule,
+    MatButtonModule,  
+    MatTooltipModule,                 
     CollapseModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,

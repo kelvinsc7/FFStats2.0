@@ -40,5 +40,13 @@ namespace FFStats.Persistence.Persistences
 
             return await query.ToArrayAsync();
         }
+
+        public async Task<Estatisticas[]> GetAllEstatisticas()
+        {
+            IQueryable<Estatisticas> query = _context.Estatisticas.Include(e=>e.Partida);
+
+            query = query.AsNoTracking();
+            return await query.ToArrayAsync();
+        }
     }
 }

@@ -1,0 +1,179 @@
+<div class="card rounded shadow-md container">
+  <div class="row">
+    <div class="card-header">
+      <div class="row">
+        <h2 class="mr-auto col-8">
+          <i class="fa-solid fa-person-military-rifle"></i> Jogadores
+        </h2>
+        <select class="form-select form-select-lg col-2 ml-auto" aria-label="Selecione filtragem">
+          <option selected value="1">Geral</option>
+          <option value="2">Mês</option>
+          <option value="3">Último Treino</option>
+        </select>
+        <button
+          class="btn btn-outline-secondary col-1 ml-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#jogadorBody"
+          aria-expanded="true"
+          aria-controls="partidaBody">
+          <i class="fa fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="jogadorBody" class="collapse show container mt-3">
+    <div class="row">
+      <div class="col-3">
+        <div class="rounded-pill p-3 border shadow  bg-white text-center" [matTooltip]="this.tolltipTopKill">
+          <h4 class="text-success" >{{this.topKill}}</h4>
+          <h6 class="card-subtitle text-body-secondary">Top Kill </h6>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="rounded-pill p-3 border shadow bg-white text-center" [matTooltip]="this.tolltipTopAssistencia">
+          <h4 class="text-success" >{{this.topAssistencia}}</h4>
+          <h6 class="card-subtitle  text-body-secondary">Top Assistência</h6>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="rounded-pill p-3 border shadow bg-white text-center" [matTooltip]="this.tolltipTopDano">
+          <h4 class="text-success" >{{this.topDano}}</h4>
+          <h6 class="card-subtitle  text-body-secondary">Top Dano </h6>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="rounded-pill p-3 border shadow bg-white text-center" [matTooltip]="this.tolltipTopKd">
+          <h4 class="text-success" >{{this.topKd}}</h4>
+          <h6 class="card-subtitle  text-body-secondary">Top K/D </h6>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Kill</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoKillsJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Mortes</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoMortesJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Assistência</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoAssistenciaJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Dano</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoDanoJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Derrubados</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoDerrubadosJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Cura</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoCuraJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Levantados</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoLevantadosJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Ressucitou</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoRecussitouJogadores"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-3 gy-3 mt-2">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Melhor Precisão</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoPrecisao"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2>Média de tempo</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-container-comparacao" >
+              <canvas id="graficoMediaTempo"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
